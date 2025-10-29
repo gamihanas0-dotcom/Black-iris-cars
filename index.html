@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Iris Cars - Rent in Morocco</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons for aesthetic components -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Custom Font and base styles */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafafa;
+        }
+        /* New custom theme colors */
+        .primary-dark { background-color: #2a2a2a; }
+        .text-primary-dark { color: #2a2a2a; }
+        .accent-red { background-color: #cc0000; }
+        .hover\:accent-red-dark:hover { background-color: #990000; }
+        .text-accent-red { color: #cc0000; }
+        #hero-section {
+            background-image: url('https://placehold.co/1200x600/2a2a2a/ffffff?text=Black+Iris+Cars+-+Morocco');
+            background-size: cover;
+            background-position: center;
+        }
+        .feature-icon { color: #cc0000; }
+
+        /* CRITICAL FIX: Ensure date/time input text is visible (black) */
+        input[type="datetime-local"] {
+            color: #000000 !important;
+            background-color: #ffffff !important;
+        }
+        /* Optional: Style for input calendar icon */
+        input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+            filter: invert(0); /* Ensure icon is visible on white background */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo Area -->
+                <a href="#" class="flex items-center">
+                    <img src="https://placehold.co/40x40/000000/ffffff?text=Logo" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-car-front\'><path d=\'M19 17h2c.6 0 1-.4 1-1v-2a1 1 0 0 0-1-1h-1M5 17H3c-.6 0-1-.4-1-1v-2a1 1 0 0 1 1-1h1\'/><path d=\'m18 14 4 2v3H2v-3l4-2\'/><path d=\'M10 9V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2\'/><path d=\'M14 9V7a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2\'/><path d=\'M2 14h20\'/><path d=\'M7 17v-2\'/><path d=\'M17 17v-2\'/></svg>\';" alt="Black Iris Cars Logo" class="w-10 h-10 mr-2 rounded-full border border-gray-100">
+                    <span class="text-2xl font-extrabold text-primary-dark">Black Iris Cars</span>
+                </a>
+
+                <!-- Desktop Nav Links -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#featured" class="text-gray-600 hover:text-accent-red transition duration-150">Our Fleet</a>
+                    <a href="#why-us" class="text-gray-600 hover:text-accent-red transition duration-150">Why Choose Us</a>
+                    <a href="#testimonials" class="text-gray-600 hover:text-accent-red transition duration-150">Reviews</a>
+                    <a href="#contact" class="text-gray-600 hover:text-accent-red transition duration-150">Contact</a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="md:hidden text-gray-600 hover:text-accent-red p-2 rounded-lg transition duration-150">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#featured" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-red">Our Fleet</a>
+                <a href="#why-us" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-red">Why Choose Us</a>
+                <a href="#testimonials" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-red">Reviews</a>
+                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-red">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section with Booking Form -->
+    <section id="hero-section" class="py-20 md:py-32 relative text-white">
+        <div class="absolute inset-0 primary-dark opacity-70"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4">
+                    Explore Morocco. Drive Luxury.
+                </h1>
+                <p class="text-xl sm:text-2xl font-light mb-8">
+                    Premium cars available across all major Moroccan cities.
+                </p>
+            </div>
+
+            <!-- Booking Form Card -->
+            <div class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl mt-10 max-w-4xl mx-auto">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Quick Reservation</h2>
+                <form id="rental-form" class="space-y-4 md:space-y-0 md:grid md:grid-cols-5 md:gap-4">
+                    <!-- Location -->
+                    <div class="col-span-2">
+                        <label for="location" class="block text-sm font-medium text-gray-700">Pick-up City</label>
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <i data-lucide="map-pin" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+                            <select id="location" name="location" required class="pl-10 block w-full rounded-lg border-gray-300 focus:ring-accent-red focus:border-accent-red p-3 border">
+                                <option value="">Select a city in Morocco</option>
+                                <option value="Agadir">Agadir</option>
+                                <option value="Casablanca">Casablanca</option>
+                                <option value="Fes">Fes</option>
+                                <option value="Kenitra">Kenitra</option>
+                                <option value="Marrakech">Marrakech</option>
+                                <option value="Rabat">Rabat</option>
+                                <option value="Salé">Salé</option>
+                                <option value="Tangier">Tangier</option>
+                                <option value="Temara">Temara</option>
+                                <option value="Tetouan">Tetouan</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Pickup Date/Time -->
+                    <div>
+                        <label for="pickup-date" class="block text-sm font-medium text-gray-700">Pick-up Date</label>
+                        <input type="datetime-local" id="pickup-date" name="pickup-date" required class="mt-1 block w-full rounded-lg border-gray-300 focus:ring-accent-red focus:border-accent-red p-3 border">
+                    </div>
+
+                    <!-- Return Date/Time -->
+                    <div>
+                        <label for="return-date" class="block text-sm font-medium text-gray-700">Return Date</label>
+                        <input type="datetime-local" id="return-date" name="return-date" required class="mt-1 block w-full rounded-lg border-gray-300 focus:ring-accent-red focus:border-accent-red p-3 border">
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="col-span-1 flex items-end">
+                        <button type="submit" class="w-full accent-red text-white font-semibold py-3 rounded-lg hover:accent-red-dark transition duration-300 shadow-md">
+                            Search Cars
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Search Result Message Box (Used for validation errors only now) -->
+                <div id="result-message" class="hidden mt-6 p-4 rounded-xl bg-red-100 border border-red-400 text-red-700 transition duration-500 ease-in-out">
+                    <!-- Message content will be injected here -->
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Rest of the sections remain the same for navigation anchors (Fleet, Why Us, Testimonials, Contact) -->
+    <!-- Note: These sections are included here for completeness but the main logic is in the form above -->
+
+    <!-- Featured Vehicles Section (The content is duplicated in available_cars.html) -->
+    <section id="featured" class="py-16 md:py-24 bg-white">
+        <!-- Content here remains for display on the home page -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-extrabold text-primary-dark text-center mb-12">
+                Our Fleet
+            </h2>
+
+            <!-- Placeholder Grid of Cars -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                 <div class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-gray-100">
+                    <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Clio+5" alt="Black Renault Clio 5" class="w-full h-48 object-cover">
+                    <div class="p-6"><h3 class="text-xl font-bold text-gray-800">Renault Clio 5</h3><p class="text-gray-500 text-sm">300 MAD/day</p></div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-gray-100">
+                    <img src="https://placehold.co/600x400/808080/ffffff?text=Grey+Clio+5" alt="Grey Renault Clio 5" class="w-full h-48 object-cover">
+                    <div class="p-6"><h3 class="text-xl font-bold text-gray-800">Renault Clio 5</h3><p class="text-gray-500 text-sm">300 MAD/day</p></div>
+                </div>
+                 <div class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-gray-100">
+                    <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Peugeot+208" alt="Black Peugeot 208" class="w-full h-48 object-cover">
+                    <div class="p-6"><h3 class="text-xl font-bold text-gray-800">Peugeot 208</h3><p class="text-gray-500 text-sm">300 MAD/day</p></div>
+                </div>
+                 <div class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-gray-100">
+                    <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Clio+5+Auto" alt="Black Clio 5 Automatic" class="w-full h-48 object-cover">
+                    <div class="p-6"><h3 class="text-xl font-bold text-gray-800">Renault Clio 5 (Auto)</h3><p class="text-gray-500 text-sm">350 MAD/day</p></div>
+                </div>
+            </div>
+            <div class="text-center mt-8">
+                <a href="available_cars.html" class="accent-red text-white font-semibold py-3 px-8 rounded-lg hover:accent-red-dark transition duration-300 shadow-md">
+                    View All Cars
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Why Choose Us Section -->
+    <section id="why-us" class="py-16 md:py-24 primary-dark text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-extrabold text-center mb-12">
+                The Black Iris Promise
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+                <div class="p-6 rounded-xl bg-gray-800 shadow-xl border-t-4 border-accent-red">
+                    <i data-lucide="key-round" class="w-12 h-12 mx-auto mb-4 text-accent-red"></i>
+                    <h3 class="text-xl font-semibold mb-2">Effortless Pickup</h3>
+                    <p class="text-gray-400">Fast service at all major Moroccan airports.</p>
+                </div>
+                <div class="p-6 rounded-xl bg-gray-800 shadow-xl border-t-4 border-accent-red">
+                    <i data-lucide="shield-check" class="w-12 h-12 mx-auto mb-4 text-accent-red"></i>
+                    <h3 class="text-xl font-semibold mb-2">Insured & Ready</h3>
+                    <p class="text-gray-400">Comprehensive insurance included for peace of mind.</p>
+                </div>
+                <div class="p-6 rounded-xl bg-gray-800 shadow-xl border-t-4 border-accent-red">
+                    <i data-lucide="headset" class="w-12 h-12 mx-auto mb-4 text-accent-red"></i>
+                    <h3 class="text-xl font-semibold mb-2">24/7 Local Support</h3>
+                    <p class="text-gray-400">Dedicated support line available around the clock.</p>
+                </div>
+                <div class="p-6 rounded-xl bg-gray-800 shadow-xl border-t-4 border-accent-red">
+                    <i data-lucide="map" class="w-12 h-12 mx-auto mb-4 text-accent-red"></i>
+                    <h3 class="text-xl font-semibold mb-2">Morocco Ready</h3>
+                    <p class="text-gray-400">Vehicles maintained for all Moroccan terrains and climate.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-16 md:py-24 bg-fafafa">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-extrabold text-primary-dark text-center mb-12">
+                What Our Clients Say
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-accent-red">
+                    <i data-lucide="quote" class="w-8 h-8 text-gray-300 mb-3"></i>
+                    <p class="text-gray-700 italic mb-4">"Rented from Casablanca airport. The process was smooth, and the car performed flawlessly across the Atlas Mountains. Excellent service!"</p>
+                    <p class="font-semibold text-primary-dark">— Youssef H., Rabat</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-accent-red">
+                    <i data-lucide="quote" class="w-8 h-8 text-gray-300 mb-3"></i>
+                    <p class="text-gray-700 italic mb-4">"Friendly staff in Marrakech, and the price was transparent—no hidden costs. Black Iris Cars made my trip worry-free."</p>
+                    <p class="font-semibold text-primary-dark">— Fatima E., USA</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-accent-red">
+                    <i data-lucide="quote" class="w-8 h-8 text-gray-300 mb-3"></i>
+                    <p class="text-gray-700 italic mb-4">"Needed a last-minute SUV in Tangier. The booking was confirmed instantly. The vehicle was clean and modern. Highly recommend this company."</p>
+                    <p class="font-semibold text-primary-dark">— Amine B., UK</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="primary-dark text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 border-b border-gray-700 pb-8 mb-8">
+                <!-- Logo/Branding -->
+                <div>
+                    <h3 class="text-2xl font-extrabold mb-4 text-accent-red">Black Iris Cars</h3>
+                    <p class="text-gray-400 text-sm">Your reliable partner for car rentals across Morocco.</p>
+                </div>
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Navigation</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#featured" class="hover:text-accent-red transition duration-150">Our Fleet</a></li>
+                        <li><a href="#why-us" class="hover:text-accent-red transition duration-150">Our Promise</a></li>
+                        <li><a href="#testimonials" class="hover:text-accent-red transition duration-150">Customer Reviews</a></li>
+                    </ul>
+                </div>
+                <!-- Contact Info (Simplified) -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact & Booking</h4>
+                    <p class="text-sm text-gray-400 mb-2 flex items-center"><i data-lucide="phone" class="w-4 h-4 mr-2 text-accent-red"></i> Call: 0602020402</p>
+                    <p class="text-sm text-gray-400 mb-2 flex items-center"><i data-lucide="mail" class="w-4 h-4 mr-2 text-accent-red"></i> <a href="mailto:blackiriscars@gmail.com" class="hover:text-accent-red">blackiriscars@gmail.com</a></p>
+                    <a href="https://wa.me/212602020402" target="_blank" class="text-sm text-white px-3 py-1 mt-2 inline-flex items-center rounded-lg bg-green-500 hover:bg-green-600 transition duration-150">
+                        <i data-lucide="message-circle" class="w-4 h-4 mr-2"></i> WhatsApp 0602020402
+                    </a>
+                </div>
+            </div>
+            <div class="text-center text-sm text-gray-500 pt-4">
+                &copy; 2024 Black Iris Cars. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Mobile Menu Toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+
+        // Form Submission Handler: Redirects to the available_cars.html page
+        const rentalForm = document.getElementById('rental-form');
+        const resultMessage = document.getElementById('result-message');
+
+        rentalForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const location = document.getElementById('location').value;
+            const pickupDate = document.getElementById('pickup-date').value;
+            const returnDate = document.getElementById('return-date').value;
+
+            // Simple validation check
+            if (!location || !pickupDate || !returnDate) {
+                // Show validation error on the same page
+                resultMessage.classList.remove('hidden');
+                resultMessage.innerHTML = '<strong>Error!</strong> Please select a pick-up city and complete date range.';
+
+                setTimeout(() => {
+                    resultMessage.classList.add('hidden');
+                }, 5000);
+            } else {
+                // Store search parameters in localStorage for the next page
+                localStorage.setItem('rentalLocation', location);
+                localStorage.setItem('rentalPickupDate', pickupDate);
+                localStorage.setItem('rentalReturnDate', returnDate);
+
+                // Redirect to the available cars page
+                window.location.href = 'available_cars.html';
+            }
+        });
+
+    </script>
+</body>
+</html>
+
