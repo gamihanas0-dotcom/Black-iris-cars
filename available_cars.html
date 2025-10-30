@@ -3,321 +3,554 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Available Cars - Black Iris Cars</title>
-    <!-- Load Tailwind CSS -->
+    <title>Available Cars | Black Iris Cars</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Lucide Icons for aesthetic components -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Custom Font and base styles */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        /* Custom Font Poppins */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #fafafa;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7f9; 
+            transition: all 0.3s ease; /* For smooth RTL transition */
         }
-        /* New custom theme colors */
-        .primary-dark { background-color: #2a2a2a; }
-        .text-primary-dark { color: #2a2a2a; }
-        .accent-red { background-color: #cc0000; }
-        .hover\:accent-red-dark:hover { background-color: #990000; }
-        .text-accent-red { color: #cc0000; }
-        .feature-icon { color: #cc0000; }
+        /* Monochrome Theme Colors + Royal Blue Accent */
+        .primary-dark { background-color: #1a1a1a; } 
+        .text-primary-dark { color: #1a1a1a; }
+        .accent-blue { background-color: #4169e1; } /* Royal Blue */
+        .hover\:accent-blue-dark:hover { background-color: #2b4daa; } /* Darker Royal Blue */
+        .text-accent-blue { color: #4169e1; }
 
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
+        /* Style for filter sidebar on mobile */
+        #filter-sidebar {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(-100%);
         }
+        #filter-sidebar.open {
+            transform: translateX(0);
+        }
+        
+        /* Ensure inputs are legible and use dark accent */
+        input[type="checkbox"]:checked {
+            background-color: #1a1a1a;
+            border-color: #1a1a1a;
+        }
+
+        /* Modal specific styling for animation */
+        #contact-modal {
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* RTL adjustments for Arabic */
+        [dir="rtl"] .ltr\:mr-2 { margin-right: 0; margin-left: 0.5rem; }
+        [dir="rtl"] .ltr\:text-left { text-align: right; }
+        [dir="rtl"] .ltr\:justify-start { justify-content: flex-end; }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased" dir="ltr">
 
-    <!-- Header & Navigation -->
     <header class="bg-white shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <!-- Logo Area -->
                 <a href="index.html" class="flex items-center">
-                    <img src="https://placehold.co/40x40/000000/ffffff?text=Logo" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-car-front\'><path d=\'M19 17h2c.6 0 1-.4 1-1v-2a1 1 0 0 0-1-1h-1\'/><path d=\'m18 14 4 2v3H2v-3l4-2\'/><path d=\'M10 9V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2\'/><path d=\'M14 9V7a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2\'/><path d=\'M2 14h20\'/><path d=\'M7 17v-2\'/><path d=\'M17 17v-2\'/></svg>\';" alt="Black Iris Cars Logo" class="w-10 h-10 mr-2 rounded-full border border-gray-100">
+                    <img src="https://i.postimg.cc/B6LWwXNL/923d79fe-5117-4849-9761-57e1fe5a8d96.jpg" alt="Black Iris Cars Logo" class="w-10 h-10 mr-2 rounded-full border border-gray-100">
                     <span class="text-2xl font-extrabold text-primary-dark">Black Iris Cars</span>
                 </a>
 
-                <!-- Desktop Nav Links -->
-                <nav class="hidden md:flex space-x-8">
-                    <a href="index.html" class="text-gray-600 hover:text-accent-red transition duration-150">New Search</a>
-                    <a href="#contact-footer" class="text-gray-600 hover:text-accent-red transition duration-150">Contact</a>
-                </nav>
+                <div class="flex items-center space-x-4">
+                     <select id="language-selector" class="rounded-lg border-gray-300 focus:ring-primary-dark focus:border-primary-dark text-sm p-2 border text-primary-dark">
+                        <option value="en">English</option>
+                        <option value="fr">Français</option>
+                        <option value="ar">العربية</option>
+                    </select>
 
-                <!-- Mobile Menu Button -->
-                <button id="mobile-menu-button" class="md:hidden text-gray-600 hover:text-accent-red p-2 rounded-lg transition duration-150">
-                    <i data-lucide="menu" class="w-6 h-6"></i>
-                </button>
-            </div>
-        </div>
+                    <nav class="hidden md:flex space-x-8">
+                        <a href="index.html#featured" class="text-gray-600 hover:text-accent-blue transition duration-150" data-i18n="nav-fleet">Our Fleet</a>
+                        <a href="index.html#why-us" class="text-gray-600 hover:text-accent-blue transition duration-150" data-i18n="nav-why">Why Choose Us</a>
+                        <a href="index.html#contact" class="text-gray-600 hover:text-accent-blue transition duration-150" data-i18n="nav-contact">Contact</a>
+                    </nav>
 
-        <!-- Mobile Menu (Hidden by default) -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-red">New Search</a>
-                <a href="#contact-footer" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-red">Contact</a>
+                    <button id="filter-menu-button" aria-label="Toggle filter menu" class="md:hidden text-gray-600 hover:text-accent-blue p-2 rounded-lg transition duration-150">
+                        <i data-lucide="filter" class="w-6 h-6"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- Available Cars Section -->
-    <section id="available-cars" class="py-16 md:py-24 bg-fafafa">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-4xl font-extrabold text-primary-dark text-center mb-4">
-                Available Cars
-            </h1>
-            
-            <!-- Dynamic Search Summary -->
-            <div id="search-summary" class="text-center mb-12 p-4 bg-gray-100 rounded-lg shadow-md max-w-2xl mx-auto">
-                <!-- Content injected by JavaScript -->
-                <div class="text-gray-600">Loading search criteria...</div>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-primary-dark mb-4" data-i18n="h1-available">
+            Available Rental Cars
+        </h1>
+
+        <div class="md:grid md:grid-cols-4 lg:grid-cols-5 md:gap-8">
+
+            <div id="filter-sidebar" class="fixed top-0 left-0 h-full w-3/4 max-w-xs md:max-w-none bg-white p-6 shadow-2xl z-40 md:relative md:col-span-1 lg:col-span-1 md:h-auto md:p-0 md:shadow-none md:bg-transparent md:transform-none">
+                
+                <button id="filter-close-button" class="md:hidden absolute top-4 right-4 text-gray-800 hover:text-gray-600">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+                
+                <h3 class="text-2xl font-bold text-primary-dark mb-6 border-b pb-3" data-i18n="h3-filter">Filter Options</h3>
+                
+                <form class="space-y-6">
+                    <div>
+                        <label for="price-range" class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="label-price">Price Range (DH/day)</label>
+                        <input type="range" id="price-range" min="200" max="1500" value="1500" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer text-primary-dark">
+                        <span id="price-value" class="text-sm text-gray-600 mt-1 block">Up to 1500 DH</span>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-semibold text-gray-700 mb-2">Transmission</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center text-gray-600 ltr:justify-start">
+                                <input type="checkbox" name="transmission" value="automatic" class="rounded text-primary-dark focus:ring-primary-dark ltr:mr-2"> <span data-i18n="automatic">Automatic</span>
+                            </label>
+                            <label class="flex items-center text-gray-600 ltr:justify-start">
+                                <input type="checkbox" name="transmission" value="manual" class="rounded text-primary-dark focus:ring-primary-dark ltr:mr-2"> <span data-i18n="manual">Manual</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-semibold text-gray-700 mb-2">Vehicle Type</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center text-gray-600 ltr:justify-start">
+                                <input type="checkbox" name="car-type" value="sedan" class="rounded text-primary-dark focus:ring-primary-dark ltr:mr-2"> Sedan / Hatchback
+                            </label>
+                            <label class="flex items-center text-gray-600 ltr:justify-start">
+                                <input type="checkbox" name="car-type" value="suv" class="rounded text-primary-dark focus:ring-primary-dark ltr:mr-2"> SUV / Crossover
+                            </label>
+                            <label class="flex items-center text-gray-600 ltr:justify-start">
+                                <input type="checkbox" name="car-type" value="van" class="rounded text-primary-dark focus:ring-primary-dark ltr:mr-2"> Van / Minivan
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="button" class="w-full accent-blue text-white font-semibold py-2 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md mt-4">
+                        Apply Filters
+                    </button>
+                </form>
             </div>
 
-            <!-- Car Fleet Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <div class="md:col-span-3 lg:col-span-4 space-y-6" id="results-container">
                 
-                <!-- Car Card 1: Black Clio 5 Manual (300 MAD) -->
-                <div class="car-card bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden border-2 border-gray-100 hover:border-accent-red" 
-                     data-car="Renault Clio 5 (Manual, Black)" 
-                     data-price="300" 
-                     data-features="Manual, A/C, 5 Seats">
-                    <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Clio+5" alt="Black Renault Clio 5" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-1">Renault Clio 5 (Manual)</h3>
-                        <p class="text-gray-500 mb-4 text-sm">Color: Black, Fuel-Efficient</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-3xl font-extrabold text-accent-red">300 MAD</span>
-                            <span class="text-gray-500 text-sm">/ day</span>
+                <div class="flex justify-between items-center bg-white p-3 rounded-lg shadow-sm border border-gray-100">
+                    <p class="text-sm text-gray-600" data-i18n="sort-count">Showing 12 available cars</p>
+                    <div class="flex items-center">
+                        <label for="sort-by" class="text-sm font-medium text-gray-700 ltr:mr-2 hidden sm:block" data-i18n="label-sort">Sort By:</label>
+                        <select id="sort-by" class="rounded-lg border-gray-300 focus:ring-primary-dark focus:border-primary-dark text-sm p-2 border">
+                            <option value="price-low" data-i18n="option-low">Price: Low to High</option>
+                            <option value="price-high" data-i18n="option-high">Price: High to Low</option>
+                            <option value="popularity" data-i18n="option-popular">Most Popular</option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                    <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
+                        <img src="https://placehold.co/600x400/808080/ffffff?text=Grey+Tucson" alt="Grey Hyundai Tucson Automatic" class="w-full h-full object-contain">
+                    </div>
+                    <div class="p-6 md:w-2/3 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Hyundai Tucson (<span data-i18n="automatic">Automatic</span>)</h3>
+                            <p class="text-gray-500 mb-4">Luxury compact SUV, space and comfort for long journeys, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="car" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="automatic">Automatic</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats">5 Seats</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="luggage" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> Premium SUV</span>
+                            </div>
                         </div>
-                        <ul class="flex flex-wrap justify-between text-sm text-gray-600 border-t pt-4 mb-4">
-                            <li class="flex items-center w-1/2 mb-1"><i data-lucide="users" class="w-4 h-4 mr-1 feature-icon"></i> 5 Seats</li>
-                            <li class="flex items-center w-1/2 mb-1"><i data-lucide="fuel" class="w-4 h-4 mr-1 feature-icon"></i> Manual</li>
-                            <li class="flex items-center w-full"><i data-lucide="snowflake" class="w-4 h-4 mr-1 feature-icon"></i> A/C</li>
-                        </ul>
-                        <button onclick="openBookingModal(this)" class="w-full accent-red text-white font-semibold py-3 rounded-lg hover:accent-red-dark transition duration-300 shadow-md flex items-center justify-center">
-                            <i data-lucide="calendar-check" class="w-5 h-5 mr-2"></i> Book It
-                        </button>
+                        <div class="flex justify-between items-center border-t pt-4">
+                            <div class="flex flex-col">
+                                <span class="text-xl font-extrabold text-primary-dark">850 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
+                            </div>
+                            <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
+                                    data-car-name="Hyundai Tucson (Grey, Automatic)" 
+                                    data-car-price="850 DH">
+                                Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                    <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
+                        <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Tucson" alt="Black Hyundai Tucson Automatic" class="w-full h-full object-contain">
+                    </div>
+                    <div class="p-6 md:w-2/3 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Hyundai Tucson (<span data-i18n="automatic">Automatic</span>)</h3>
+                            <p class="text-gray-500 mb-4">Stylish and powerful SUV, perfect for Moroccan highways, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="car" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="automatic">Automatic</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats">5 Seats</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="luggage" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> Premium SUV</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center border-t pt-4">
+                            <div class="flex flex-col">
+                                <span class="text-xl font-extrabold text-primary-dark">850 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
+                            </div>
+                            <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
+                                    data-car-name="Hyundai Tucson (Black, Automatic)" 
+                                    data-car-price="850 DH">
+                                Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                    <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
+                        <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Sportage" alt="Black Kia Sportage Automatic" class="w-full h-full object-contain">
+                    </div>
+                    <div class="p-6 md:w-2/3 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Kia Sportage (<span data-i18n="automatic">Automatic</span>)</h3>
+                            <p class="text-gray-500 mb-4">Top-rated crossover with excellent handling, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="car" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="automatic">Automatic</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats">5 Seats</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="luggage" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> Premium SUV</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center border-t pt-4">
+                            <div class="flex flex-col">
+                                <span class="text-xl font-extrabold text-primary-dark">850 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
+                            </div>
+                            <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
+                                    data-car-name="Kia Sportage (Black, Automatic)" 
+                                    data-car-price="850 DH">
+                                Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                    <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
+                        <img src="https://placehold.co/600x400/003300/ffffff?text=Green+Duster" alt="Green Dacia Duster Manual" class="w-full h-full object-contain">
+                    </div>
+                    <div class="p-6 md:w-2/3 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Dacia Duster (<span data-i18n="manual">Manual</span>)</h3>
+                            <p class="text-gray-500 mb-4">Tough and reliable compact SUV, great value, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="gauge" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="manual">Manual</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats">5 Seats</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="map" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> Off-Road Ready</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center border-t pt-4">
+                            <div class="flex flex-col">
+                                <span class="text-xl font-extrabold text-primary-dark">500 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
+                            </div
+                            <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
+                                    data-car-name="Dacia Duster (Green, Manual)" 
+                                    data-car-price="500 DH">
+                                Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                    <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
+                        <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Clio+5" alt="Black Renault Clio 5 Manual" class="w-full h-full object-contain">
+                    </div>
+                    <div class="p-6 md:w-2/3 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Renault Clio 5 (<span data-i18n="manual">Manual</span>)</h3>
+                            <p class="text-gray-500 mb-4">Modern, Fuel Efficient, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="gauge" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="manual">Manual</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats">5 Seats</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="car" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> Hatchback</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center border-t pt-4">
+                            <div class="flex flex-col">
+                                <span class="text-xl font-extrabold text-primary-dark">300 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
+                            </div>
+                            <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
+                                    data-car-name="Renault Clio 5 (Black, Manual)" 
+                                    data-car-price="300 DH">
+                                Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                    <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
+                        <img src="https://placehold.co/600x400/808080/ffffff?text=Grey+Clio+5" alt="Grey Renault Clio 5 Manual" class="w-full h-full object-contain">
+                    </div>
+                    <div class="p-6 md:w-2/3 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Renault Clio 5 (<span data-i18n="manual">Manual</span>)</h3>
+                            <p class="text-gray-500 mb-4">Stylish and efficient for the urban traveler, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="gauge" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="manual">Manual</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats">5 Seats</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="car" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> Hatchback</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center border-t pt-4">
+                            <div class="flex flex-col">
+                                <span class="text-xl font-extrabold text-primary-dark">300 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
+                            </div>
+                            <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
+                                    data-car-name="Renault Clio 5 (Grey, Manual)" 
+                                    data-car-price="300 DH">
+                                Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                    <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
+                        <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Peugeot+208" alt="Black Peugeot 208 Manual" class="w-full h-full object-contain">
+                    </div>
+                    <div class="p-6 md:w-2/3 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Peugeot 208 (<span data-i18n="manual">Manual</span>)</h3>
+                            <p class="text-gray-500 mb-4">A comfortable and popular compact car, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="gauge" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="manual">Manual</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats">5 Seats</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="car" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> Hatchback</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center border-t pt-4">
+                            <div class="flex flex-col">
+                                <span class="text-xl font-extrabold text-primary-dark">300 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
+                            </div>
+                            <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
+                                    data-car-name="Peugeot 208 (Black, Manual)" 
+                                    data-car-price="300 DH">
+                                Book Now
+                            </button>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Car Card 2: Grey Clio 5 Manual (300 MAD) -->
-                <div class="car-card bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden border-2 border-gray-100 hover:border-accent-red"
-                     data-car="Renault Clio 5 (Manual, Grey)" 
-                     data-price="300" 
-                     data-features="Manual, A/C, 5 Seats">
-                    <img src="https://placehold.co/600x400/808080/ffffff?text=Grey+Clio+5" alt="Grey Renault Clio 5" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-1">Renault Clio 5 (Manual)</h3>
-                        <p class="text-gray-500 mb-4 text-sm">Color: Grey, Excellent for city</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-3xl font-extrabold text-accent-red">300 MAD</span>
-                            <span class="text-gray-500 text-sm">/ day</span>
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                    <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
+                        <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Clio+5+Auto" alt="Black Renault Clio 5 Automatic" class="w-full h-full object-contain">
+                    </div>
+                    <div class="p-6 md:w-2/3 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Renault Clio 5 (<span data-i18n="automatic">Automatic</span>)</h3>
+                            <p class="text-gray-500 mb-4">The comfort of automatic driving, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="car" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="automatic">Automatic</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats">5 Seats</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="hand-coins" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> Premium Model</span>
+                            </div>
                         </div>
-                        <ul class="flex flex-wrap justify-between text-sm text-gray-600 border-t pt-4 mb-4">
-                            <li class="flex items-center w-1/2 mb-1"><i data-lucide="users" class="w-4 h-4 mr-1 feature-icon"></i> 5 Seats</li>
-                            <li class="flex items-center w-1/2 mb-1"><i data-lucide="fuel" class="w-4 h-4 mr-1 feature-icon"></i> Manual</li>
-                            <li class="flex items-center w-full"><i data-lucide="snowflake" class="w-4 h-4 mr-1 feature-icon"></i> A/C</li>
-                        </ul>
-                        <button onclick="openBookingModal(this)" class="w-full accent-red text-white font-semibold py-3 rounded-lg hover:accent-red-dark transition duration-300 shadow-md flex items-center justify-center">
-                            <i data-lucide="calendar-check" class="w-5 h-5 mr-2"></i> Book It
-                        </button>
+                        <div class="flex justify-between items-center border-t pt-4">
+                            <div class="flex flex-col">
+                                <span class="text-xl font-extrabold text-primary-dark">350 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
+                            </div>
+                            <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
+                                    data-car-name="Renault Clio 5 (Black, Automatic)" 
+                                    data-car-price="350 DH">
+                                Book Now
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Car Card 3: Black Peugeot 208 Manual (300 MAD) -->
-                <div class="car-card bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden border-2 border-gray-100 hover:border-accent-red" 
-                     data-car="Peugeot 208 (Manual, Black)" 
-                     data-price="300" 
-                     data-features="Manual, A/C, 5 Seats">
-                    <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Peugeot+208" alt="Black Peugeot 208" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-1">Peugeot 208 (Manual)</h3>
-                        <p class="text-gray-500 mb-4 text-sm">Color: Black, Sporty & Compact</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-3xl font-extrabold text-accent-red">300 MAD</span>
-                            <span class="text-gray-500 text-sm">/ day</span>
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                    <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
+                        <img src="https://placehold.co/600x400/000000/ffffff?text=Black+P208+Auto" alt="Black Peugeot 208 Automatic" class="w-full h-full object-contain">
+                    </div>
+                    <div class="p-6 md:w-2/3 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Peugeot 208 (<span data-i18n="automatic">Automatic</span>)</h3>
+                            <p class="text-gray-500 mb-4">Smooth automatic driving in a stylish compact, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="car" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="automatic">Automatic</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats">5 Seats</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="hand-coins" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> Modern Hatchback</span>
+                            </div>
                         </div>
-                        <ul class="flex flex-wrap justify-between text-sm text-gray-600 border-t pt-4 mb-4">
-                            <li class="flex items-center w-1/2 mb-1"><i data-lucide="users" class="w-4 h-4 mr-1 feature-icon"></i> 5 Seats</li>
-                            <li class="flex items-center w-1/2 mb-1"><i data-lucide="fuel" class="w-4 h-4 mr-1 feature-icon"></i> Manual</li>
-                            <li class="flex items-center w-full"><i data-lucide="snowflake" class="w-4 h-4 mr-1 feature-icon"></i> A/C</li>
-                        </ul>
-                        <button onclick="openBookingModal(this)" class="w-full accent-red text-white font-semibold py-3 rounded-lg hover:accent-red-dark transition duration-300 shadow-md flex items-center justify-center">
-                            <i data-lucide="calendar-check" class="w-5 h-5 mr-2"></i> Book It
-                        </button>
+                        <div class="flex justify-between items-center border-t pt-4">
+                            <div class="flex flex-col">
+                                <span class="text-xl font-extrabold text-primary-dark">350 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
+                            </div>
+                            <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
+                                    data-car-name="Peugeot 208 (Black, Automatic)" 
+                                    data-car-price="350 DH">
+                                Book Now
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Car Card 4: Black Clio 5 Automatic (350 MAD) -->
-                <div class="car-card bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden border-2 border-gray-100 hover:border-accent-red" 
-                     data-car="Renault Clio 5 (Automatic, Black)" 
-                     data-price="350" 
-                     data-features="Automatic, A/C, 5 Seats">
-                    <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Clio+5+Auto" alt="Black Renault Clio 5 Automatic" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-1">Renault Clio 5 (Auto)</h3>
-                        <p class="text-gray-500 mb-4 text-sm">Color: Black, Effortless driving</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-3xl font-extrabold text-accent-red">350 MAD</span>
-                            <span class="text-gray-500 text-sm">/ day</span>
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                    <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
+                        <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Logan" alt="Black Dacia Logan Manual" class="w-full h-full object-contain">
+                    </div>
+                    <div class="p-6 md:w-2/3 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Dacia Logan (<span data-i18n="manual">Manual</span>)</h3>
+                            <p class="text-gray-500 mb-4">Robust and spacious sedan, excellent value, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="gauge" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="manual">Manual</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats">5 Seats</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="luggage" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> Large Trunk</span>
+                            </div>
                         </div>
-                        <ul class="flex flex-wrap justify-between text-sm text-gray-600 border-t pt-4 mb-4">
-                            <li class="flex items-center w-1/2 mb-1"><i data-lucide="users" class="w-4 h-4 mr-1 feature-icon"></i> 5 Seats</li>
-                            <li class="flex items-center w-1/2 mb-1"><i data-lucide="fuel" class="w-4 h-4 mr-1 feature-icon"></i> Automatic</li>
-                            <li class="flex items-center w-full"><i data-lucide="snowflake" class="w-4 h-4 mr-1 feature-icon"></i> A/C</li>
-                        </ul>
-                        <button onclick="openBookingModal(this)" class="w-full accent-red text-white font-semibold py-3 rounded-lg hover:accent-red-dark transition duration-300 shadow-md flex items-center justify-center">
-                            <i data-lucide="calendar-check" class="w-5 h-5 mr-2"></i> Book It
-                        </button>
+                        <div class="flex justify-between items-center border-t pt-4">
+                            <div class="flex flex-col">
+                                <span class="text-xl font-extrabold text-primary-dark">300 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
+                            </div>
+                            <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
+                                    data-car-name="Dacia Logan (Black, Manual)" 
+                                    data-car-price="300 DH">
+                                Book Now
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Car Card 5: Black Dacia Logan (300 MAD) -->
-                <div class="car-card bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden border-2 border-gray-100 hover:border-accent-red" 
-                     data-car="Dacia Logan (Black)" 
-                     data-price="300" 
-                     data-features="Manual, A/C, 5 Seats">
-                    <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Dacia+Logan" alt="Black Dacia Logan" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-1">Dacia Logan</h3>
-                        <p class="text-gray-500 mb-4 text-sm">Color: Black, Reliability & Space</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-3xl font-extrabold text-accent-red">300 MAD</span>
-                            <span class="text-gray-500 text-sm">/ day</span>
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                    <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
+                        <img src="https://placehold.co/600x400/808080/ffffff?text=Grey+Logan" alt="Grey Dacia Logan Manual" class="w-full h-full object-contain">
+                    </div>
+                    <div class="p-6 md:w-2/3 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Dacia Logan (<span data-i18n="manual">Manual</span>)</h3>
+                            <p class="text-gray-500 mb-4">A reliable and trusted choice for long trips, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="gauge" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="manual">Manual</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats">5 Seats</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="luggage" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> Large Trunk</span>
+                            </div>
                         </div>
-                        <ul class="flex flex-wrap justify-between text-sm text-gray-600 border-t pt-4 mb-4">
-                            <li class="flex items-center w-1/2 mb-1"><i data-lucide="users" class="w-4 h-4 mr-1 feature-icon"></i> 5 Seats</li>
-                            <li class="flex items-center w-1/2 mb-1"><i data-lucide="fuel" class="w-4 h-4 mr-1 feature-icon"></i> Manual</li>
-                            <li class="flex items-center w-full"><i data-lucide="snowflake" class="w-4 h-4 mr-1 feature-icon"></i> A/C</li>
-                        </ul>
-                        <button onclick="openBookingModal(this)" class="w-full accent-red text-white font-semibold py-3 rounded-lg hover:accent-red-dark transition duration-300 shadow-md flex items-center justify-center">
-                            <i data-lucide="calendar-check" class="w-5 h-5 mr-2"></i> Book It
-                        </button>
+                        <div class="flex justify-between items-center border-t pt-4">
+                            <div class="flex flex-col">
+                                <span class="text-xl font-extrabold text-primary-dark">300 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
+                            </div>
+                            <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
+                                    data-car-name="Dacia Logan (Grey, Manual)" 
+                                    data-car-price="300 DH">
+                                Book Now
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Car Card 6: Grey Dacia Logan (300 MAD) -->
-                <div class="car-card bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden border-2 border-gray-100 hover:border-accent-red" 
-                     data-car="Dacia Logan (Grey)" 
-                     data-price="300" 
-                     data-features="Manual, A/C, 5 Seats">
-                    <img src="https://placehold.co/600x400/808080/ffffff?text=Grey+Dacia+Logan" alt="Grey Dacia Logan" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-1">Dacia Logan</h3>
-                        <p class="text-gray-500 mb-4 text-sm">Color: Grey, Great value sedan</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-3xl font-extrabold text-accent-red">300 MAD</span>
-                            <span class="text-gray-500 text-sm">/ day</span>
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                    <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
+                        <img src="https://placehold.co/600x400/ffffff/000000?text=White+Logan" alt="White Dacia Logan Manual" class="w-full h-full object-contain">
+                    </div>
+                    <div class="p-6 md:w-2/3 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Dacia Logan (<span data-i18n="manual">Manual</span>)</h3>
+                            <p class="text-gray-500 mb-4">Clean and comfortable, ready for any Moroccan adventure, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="gauge" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="manual">Manual</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats">5 Seats</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="luggage" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> Large Trunk</span>
+                            </div>
                         </div>
-                        <ul class="flex flex-wrap justify-between text-sm text-gray-600 border-t pt-4 mb-4">
-                            <li class="flex items-center w-1/2 mb-1"><i data-lucide="users" class="w-4 h-4 mr-1 feature-icon"></i> 5 Seats</li>
-                            <li class="flex items-center w-1/2 mb-1"><i data-lucide="fuel" class="w-4 h-4 mr-1 feature-icon"></i> Manual</li>
-                            <li class="flex items-center w-full"><i data-lucide="snowflake" class="w-4 h-4 mr-1 feature-icon"></i> A/C</li>
-                        </ul>
-                        <button onclick="openBookingModal(this)" class="w-full accent-red text-white font-semibold py-3 rounded-lg hover:accent-red-dark transition duration-300 shadow-md flex items-center justify-center">
-                            <i data-lucide="calendar-check" class="w-5 h-5 mr-2"></i> Book It
-                        </button>
+                        <div class="flex justify-between items-center border-t pt-4">
+                            <div class="flex flex-col">
+                                <span class="text-xl font-extrabold text-primary-dark">300 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
+                            </div>
+                            <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
+                                    data-car-name="Dacia Logan (White, Manual)" 
+                                    data-car-price="300 DH">
+                                Book Now
+                            </button>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Car Card 7: White Dacia Logan (300 MAD) -->
-                <div class="car-card bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden border-2 border-gray-100 hover:border-accent-red" 
-                     data-car="Dacia Logan (White)" 
-                     data-price="300" 
-                     data-features="Manual, A/C, 5 Seats">
-                    <img src="https://placehold.co/600x400/ffffff/000000?text=White+Dacia+Logan" alt="White Dacia Logan" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-1">Dacia Logan</h3>
-                        <p class="text-gray-500 mb-4 text-sm">Color: White, Reliable and fresh</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-3xl font-extrabold text-accent-red">300 MAD</span>
-                            <span class="text-gray-500 text-sm">/ day</span>
-                        </div>
-                        <ul class="flex flex-wrap justify-between text-sm text-gray-600 border-t pt-4 mb-4">
-                            <li class="flex items-center w-1/2 mb-1"><i data-lucide="users" class="w-4 h-4 mr-1 feature-icon"></i> 5 Seats</li>
-                            <li class="flex items-center w-1/2 mb-1"><i data-lucide="fuel" class="w-4 h-4 mr-1 feature-icon"></i> Manual</li>
-                            <li class="flex items-center w-full"><i data-lucide="snowflake" class="w-4 h-4 mr-1 feature-icon"></i> A/C</li>
-                        </ul>
-                        <button onclick="openBookingModal(this)" class="w-full accent-red text-white font-semibold py-3 rounded-lg hover:accent-red-dark transition duration-300 shadow-md flex items-center justify-center">
-                            <i data-lucide="calendar-check" class="w-5 h-5 mr-2"></i> Book It
-                        </button>
-                    </div>
-                </div>
-
             </div>
+
         </div>
-    </section>
+    </main>
 
-
-    <!-- Booking Options Modal (Hidden by default) -->
-    <div id="booking-modal" class="modal-overlay hidden" onclick="closeBookingModal(event)">
-        <div class="bg-white rounded-xl shadow-2xl p-6 w-11/12 max-w-md" onclick="event.stopPropagation()">
-            <div class="flex justify-between items-center border-b pb-3 mb-4">
-                <h2 id="modal-title" class="text-2xl font-bold text-primary-dark">Choose Booking Method</h2>
-                <button onclick="document.getElementById('booking-modal').classList.add('hidden')" class="text-gray-400 hover:text-gray-700">
+    <div id="contact-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center hidden" 
+         role="dialog" aria-modal="true">
+        <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md m-4 transform transition-all duration-300 scale-95 opacity-0" id="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-primary-dark" data-i18n="h3-modal">Book Your Car</h3>
+                <button id="close-modal-btn" aria-label="Close modal" class="text-gray-500 hover:text-primary-dark">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
-            
-            <p id="modal-car-info" class="text-gray-700 mb-6 text-center text-lg font-semibold"></p>
+            <p class="text-gray-700 mb-6" data-i18n="modal-p">Please choose your preferred contact method. Your chosen car details will be pre-filled.</p>
 
             <div class="space-y-4">
-                <!-- Option 1: WhatsApp Button -->
-                <button id="whatsapp-link" class="w-full text-white font-semibold py-3 rounded-lg bg-green-600 hover:bg-green-700 transition duration-300 shadow-lg flex items-center justify-center" onclick="confirmWhatsApp()">
-                    <i data-lucide="message-circle" class="w-6 h-6 mr-3"></i> Book on WhatsApp (0602020402)
-                </button>
-                
-                <!-- Option 2: Email Button -->
-                <button id="email-link" class="w-full text-white font-semibold py-3 rounded-lg accent-red hover:accent-red-dark transition duration-300 shadow-lg flex items-center justify-center" onclick="confirmEmail()">
-                    <i data-lucide="mail" class="w-6 h-6 mr-3"></i> Book via Email (blackiriscars@gmail.com)
-                </button>
+                <a id="whatsapp-link" href="#" target="_blank" class="w-full flex items-center justify-center bg-green-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-700 transition duration-300 shadow-md">
+                    <i data-lucide="message-circle" class="w-5 h-5 ltr:mr-3"></i> <span data-i18n="btn-whatsapp">WhatsApp</span>
+                </a>
+                <a id="email-link" href="#" class="w-full flex items-center justify-center accent-blue text-white font-semibold py-3 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md">
+                    <i data-lucide="mail" class="w-5 h-5 ltr:mr-3"></i> <span data-i18n="btn-email">Email</span>
+                </a>
             </div>
+            <p class="text-xs text-gray-500 mt-6 text-center" data-i18n="modal-footer">We will confirm availability and finalize the booking details.</p>
         </div>
     </div>
 
 
-    <!-- Footer (Used for contact, remains the same) -->
-    <footer id="contact-footer" class="primary-dark text-white py-12">
+    <footer class="primary-dark text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 border-b border-gray-700 pb-8 mb-8">
-                <!-- Logo/Branding -->
                 <div>
-                    <h3 class="text-2xl font-extrabold mb-4 text-accent-red">Black Iris Cars</h3>
+                    <h3 class="text-2xl font-extrabold mb-4 text-gray-300">Black Iris Cars</h3>
                     <p class="text-gray-400 text-sm">Your reliable partner for car rentals across Morocco.</p>
                 </div>
-                <!-- Quick Links -->
                 <div>
-                    <h4 class="text-lg font-semibold mb-4">Quick Navigation</h4>
+                    <h4 class="text-lg font-semibold mb-4" data-i18n="h4-nav">Quick Navigation</h4>
                     <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="index.html#featured" class="hover:text-accent-red transition duration-150">Our Fleet</a></li>
-                        <li><a href="index.html#why-us" class="hover:text-accent-red transition duration-150">Our Promise</a></li>
-                        <li><a href="index.html#testimonials" class="hover:text-accent-red transition duration-150">Customer Reviews</a></li>
+                        <li><a href="index.html#featured" class="hover:text-accent-blue transition duration-150" data-i18n="nav-fleet">Our Fleet</a></li>
+                        <li><a href="index.html#why-us" class="hover:text-accent-blue transition duration-150" data-i18n="nav-why">Our Promise</a></li>
+                        <li><a href="index.html#contact" class="hover:text-accent-blue transition duration-150" data-i1g8n="nav-contact">Contact</a></li>
                     </ul>
                 </div>
-                <!-- Contact Info (Simplified) -->
                 <div>
-                    <h4 class="text-lg font-semibold mb-4">Contact & Booking</h4>
-                    <p class="text-sm text-gray-400 mb-2 flex items-center"><i data-lucide="phone" class="w-4 h-4 mr-2 text-accent-red"></i> Call: 0602020402</p>
-                    <p class="text-sm text-gray-400 mb-2 flex items-center"><i data-lucide="mail" class="w-4 h-4 mr-2 text-accent-red"></i> <a href="mailto:blackiriscars@gmail.com" class="hover:text-accent-red">blackiriscars@gmail.com</a></p>
-                    <a href="https://wa.me/212602020402" target="_blank" class="text-sm text-white px-3 py-1 mt-2 inline-flex items-center rounded-lg bg-green-500 hover:bg-green-600 transition duration-150">
-                        <i data-lucide="message-circle" class="w-4 h-4 mr-2"></i> WhatsApp 0602020402
+                    <h4 class="text-lg font-semibold mb-4" data-i18n="h4-contact">Contact & Booking</h4>
+                    <p class="text-sm text-gray-400 mb-2 flex items-center ltr:justify-start"><i data-lucide="phone" class="w-4 h-4 ltr:mr-2 text-accent-blue"></i> <span data-i18n="call-text">Call:</span> 0602020402</p>
+                    <p class="text-sm text-gray-400 mb-2 flex items-center ltr:justify-start"><i data-lucide="mail" class="w-4 h-4 ltr:mr-2 text-accent-blue"></i> <a href="mailto:blackiriscars@gmail.com" class="hover:text-accent-blue">blackiriscars@gmail.com</a></p>
+                    <p class="text-sm text-gray-400 mb-2 flex items-center ltr:justify-start"><i data-lucide="map-pin" class="w-4 h-4 ltr:mr-2 text-accent-blue"></i> <span data-i18n="address-text">10 rue ouarzazat hassan rabat</span></p>
+                    <a href="https://wa.me/212602020402" target="_blank" class="text-sm text-white px-3 py-1 mt-2 inline-flex items-center rounded-lg bg-green-600 hover:bg-green-700 transition duration-150">
+                        <i data-lucide="message-circle" class="w-4 h-4 ltr:mr-2"></i> <span data-i18n="whatsapp-text">WhatsApp</span> 0602020402
                     </a>
                 </div>
             </div>
             <div class="text-center text-sm text-gray-500 pt-4">
-                &copy; 2024 Black Iris Cars. All rights reserved.
+                &copy; <span data-i18n="copy-right">2024 Black Iris Cars. All rights reserved.</span>
             </div>
         </div>
     </footer>
@@ -325,129 +558,232 @@
     <script>
         // Initialize Lucide Icons
         lucide.createIcons();
+        
+        // --- Translation Logic (Duplicated for standalone file) ---
+        const translations = {
+            'en': {
+                'nav-fleet': 'Our Fleet', 'nav-why': 'Why Choose Us', 'nav-reviews': 'Reviews', 'nav-contact': 'Contact',
+                'h1-hero': 'Explore Morocco. Drive Quality.', 'p-hero': 'Premium cars available across all major Moroccan cities.',
+                'h2-reservation': 'Quick Reservation', 'label-pickup-city': 'Pick-up City or Airport', 'label-pickup-date': 'Pick-up Date',
+                'label-return-date': 'Return Date', 'btn-search': 'Search Cars', 'h2-fleet': 'Our Fleet', 'car-day': '/ day',
+                'btn-view-all': 'View All Cars', 'h2-promise': 'The Black Iris Promise', 'pickup-title': 'Effortless Pickup',
+                'pickup-desc': 'Fast service at all major Moroccan airports.', 'insured-title': 'Insured & Ready',
+                'insured-desc': 'Comprehensive insurance included for peace of mind.', 'support-title': '24/7 Local Support',
+                'support-desc': 'Dedicated support line available around the clock.', 'morocco-title': 'Morocco Ready',
+                'morocco-desc': 'Vehicles maintained for all Moroccan terrains and climate.', 'h2-testimonials': 'What Our Clients Say',
+                'h4-nav': 'Quick Navigation', 'h4-contact': 'Contact & Booking', 'call-text': 'Call:', 'whatsapp-text': 'WhatsApp',
+                'address-text': '10 rue ouarzazat hassan rabat', 'copy-right': '2024 Black Iris Cars. All rights reserved.',
+                'select-location': 'Select a location', 'manual': 'Manual', 'automatic': 'Automatic',
+                // available_cars.html specific
+                'h1-available': 'Available Rental Cars', 'h3-filter': 'Filter Options', 'label-price': 'Price Range (DH/day)',
+                'sort-count': 'Showing 12 available cars', 'label-sort': 'Sort By:', 'option-low': 'Price: Low to High',
+                'option-high': 'Price: High to Low', 'option-popular': 'Most Popular', 'h3-modal': 'Book Your Car',
+                'modal-p': 'Please choose your preferred contact method. Your chosen car details will be pre-filled.',
+                'btn-whatsapp': 'WhatsApp', 'btn-email': 'Email', 'modal-footer': 'We will confirm availability and finalize the booking details.',
+                'car-seats': '5 Seats', 'car-ac': 'A/C',
+            },
+            'fr': {
+                'nav-fleet': 'Notre Flotte', 'nav-why': 'Pourquoi Nous Choisir', 'nav-reviews': 'Avis', 'nav-contact': 'Contact',
+                'h1-hero': 'Explorez le Maroc. Conduisez la Qualité.', 'p-hero': 'Voitures premium disponibles dans toutes les grandes villes marocaines.',
+                'h2-reservation': 'Réservation Rapide', 'label-pickup-city': 'Ville ou Aéroport de Ramassage', 'label-pickup-date': 'Date de Ramassage',
+                'label-return-date': 'Date de Retour', 'btn-search': 'Rechercher des Voitures', 'h2-fleet': 'Notre Flotte', 'car-day': '/ jour',
+                'btn-view-all': 'Voir Toutes les Voitures', 'h2-promise': 'La Promesse Black Iris', 'pickup-title': 'Ramassage Facile',
+                'pickup-desc': 'Service rapide dans tous les principaux aéroports marocains.', 'insured-title': 'Assuré & Prêt',
+                'insured-desc': 'Assurance complète incluse pour votre tranquillité d\'esprit.', 'support-title': 'Support Local 24/7',
+                'support-desc': 'Ligne d\'assistance dédiée disponible 24 heures sur 24.', 'morocco-title': 'Prêt pour le Maroc',
+                'morocco-desc': 'Véhicules entretenus pour tous les terrains et climats marocains.', 'h2-testimonials': 'Ce que disent nos Clients',
+                'h4-nav': 'Navigation Rapide', 'h4-contact': 'Contact & Réservation', 'call-text': 'Appelez:', 'whatsapp-text': 'WhatsApp',
+                'address-text': '10 rue ouarzazat hassan rabat', 'copy-right': '2024 Black Iris Cars. Tous droits réservés.',
+                'select-location': 'Sélectionnez un emplacement', 'manual': 'Manuelle', 'automatic': 'Automatique',
+                // available_cars.html specific
+                'h1-available': 'Voitures de Location Disponibles', 'h3-filter': 'Options de Filtre', 'label-price': 'Gamme de Prix (DH/jour)',
+                'sort-count': 'Affichage de 12 voitures disponibles', 'label-sort': 'Trier par:', 'option-low': 'Prix: Bas à Élevé',
+                'option-high': 'Prix: Élevé à Bas', 'option-popular': 'Le Plus Populaire', 'h3-modal': 'Réservez Votre Voiture',
+                'modal-p': 'Veuillez choisir votre méthode de contact préférée. Les détails de la voiture choisie seront pré-remplis.',
+                'btn-whatsapp': 'WhatsApp', 'btn-email': 'Email', 'modal-footer': 'Nous confirmerons la disponibilité et finaliserons les détails de la réservation.',
+                'car-seats': '5 Sièges', 'car-ac': 'Climatisation',
+            },
+            'ar': {
+                'nav-fleet': 'أسطولنا', 'nav-why': 'لماذا تختارنا', 'nav-reviews': 'التقيimات', 'nav-contact': 'اتصال',
+                'h1-hero': 'اكتشف المغرب. قد الجودة.', 'p-hero': 'سيارات فاخرة متوفرة في جميع المدن المغربية الكبرى.',
+                'h2-reservation': 'حجز سريع', 'label-pickup-city': 'مدينة أو مطار الاستلام', 'label-pickup-date': 'تاريخ الاستلام',
+                'label-return-date': 'تاريخ الإرجاع', 'btn-search': 'البحث عن سيارات', 'h2-fleet': 'أسطولنا', 'car-day': '/ يوم',
+                'btn-view-all': 'عرض جميع السيارات', 'h2-promise': 'وعد بلاك آيرس', 'pickup-title': 'استلام سهل',
+                'pickup-desc': 'خدمة سريعة في جميع المطارات المغربية الرئيسية.', 'insured-title': 'مؤمنة وجاهزة',
+                'insured-desc': 'تأمين شامل متضمن لراحة بالك.', 'support-title': 'دعم محلي 24/7',
+                'support-desc': 'خط دعم مخصص متاح على مدار الساعة.', 'morocco-title': 'جاهزية للمغرب',
+                'morocco-desc': 'مركبات مجهزة لجميع التضاريس والمناخات المغربية.', 'h2-testimonials': 'ماذا يقول عملاؤنا',
+                'h4-nav': 'روابط سريعة', 'h4-contact': 'الاتصال والحجز', 'call-text': 'اتصل:', 'whatsapp-text': 'واتساب',
+                'address-text': '10 شارع ورزازات حسان الرباط', 'copy-right': '2024 بلاك آيرس للسيارات. جميع الحقوق محفوظة.',
+                'select-location': 'اختر موقعًا', 'manual': 'يدوي', 'automatic': 'أوتوماتيكي',
+                // available_cars.html specific
+                'h1-available': 'سيارات الإيجار المتاحة', 'h3-filter': 'خيارات التصفية', 'label-price': 'نطاق السعر (درهم/يوم)',
+                'sort-count': 'عرض 12 سيارة متاحة', 'label-sort': 'الترتيب حسب:', 'option-low': 'السعر: من الأقل للأعلى',
+                'option-high': 'السعر: من الأعلى للأقل', 'option-popular': 'الأكثر شعبية', 'h3-modal': 'احجز سيارتك',
+                'modal-p': 'الرجاء اختيار طريقة الاتصال المفضلة لديك. سيتم ملء تفاصيل السيارة المختارة مسبقًا.',
+                'btn-whatsapp': 'واتساب', 'btn-email': 'بريد إلكتروني', 'modal-footer': 'سنؤكد التوفر ونكمل تفاصيل الحجز.',
+                'car-seats': '5 مقاعد', 'car-ac': 'مكيف',
+            }
+        };
+        
+        const languageSelector = document.getElementById('language-selector');
 
-        // Global variables to store current booking details
-        let currentCarDetails = {};
-        const CONTACT_NUMBER = '212602020402'; // For WhatsApp
-        const CONTACT_EMAIL = 'blackiriscars@gmail.com';
+        function setLanguage(lang) {
+            const dictionary = translations[lang];
+            
+            // 1. Update text content
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (dictionary[key]) {
+                    element.textContent = dictionary[key];
+                }
+            });
 
-        // 1. Mobile Menu Toggle
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
+            // 2. Handle RTL (Right-to-Left)
+            const body = document.body;
+            if (lang === 'ar') {
+                body.setAttribute('dir', 'rtl');
+            } else {
+                body.setAttribute('dir', 'ltr');
+            }
+            // Update title
+             document.title = (dictionary['h1-available'] || 'Available Cars') + (lang === 'ar' ? ' | بلاك آيرس' : ' | Black Iris');
 
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+            // 3. Update the price value displayed below the range input
+            const priceRange = document.getElementById('price-range');
+            const priceValue = document.getElementById('price-value');
+            if (priceRange && priceValue) {
+                const prefix = lang === 'ar' ? 'يصل إلى' : 'Up to';
+                priceValue.textContent = `${prefix} ${priceRange.value} DH`;
+            }
+
+            // 4. Reset select options for correct language display
+            document.querySelectorAll('select option').forEach(option => {
+                const key = option.getAttribute('data-i18n');
+                if (key && dictionary[key]) {
+                    option.textContent = dictionary[key];
+                }
+            });
+        }
+
+        languageSelector.addEventListener('change', (event) => {
+            setLanguage(event.target.value);
+            // Save preference to localStorage
+            localStorage.setItem('languagePreference', event.target.value);
         });
 
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
+        // Load language preference on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('languagePreference') || 'en';
+            languageSelector.value = savedLang;
+            setLanguage(savedLang);
+        });
+
+
+        // --- Filter Sidebar Mobile Toggle Logic ---
+        const filterButton = document.getElementById('filter-menu-button');
+        const filterSidebar = document.getElementById('filter-sidebar');
+        const filterCloseButton = document.getElementById('filter-close-button');
+
+        // Open sidebar on mobile button click
+        filterButton.addEventListener('click', () => {
+            filterSidebar.classList.add('open');
+            document.body.classList.add('overflow-hidden'); // Prevent scrolling body when sidebar is open
+        });
+        
+        // Close sidebar on mobile close button click
+        filterCloseButton.addEventListener('click', () => {
+            filterSidebar.classList.remove('open');
+            document.body.classList.remove('overflow-hidden');
+        });
+
+        // Update price range value display
+        const priceRange = document.getElementById('price-range');
+        const priceValue = document.getElementById('price-value');
+        priceRange.addEventListener('input', (event) => {
+             const currentLang = document.body.getAttribute('dir') === 'rtl' ? 'ar' : 'en';
+             const prefix = currentLang === 'ar' ? 'يصل إلى' : 'Up to';
+             priceValue.textContent = `${prefix} ${event.target.value} DH`;
+        });
+        
+        
+        // --- Modal Logic ---
+        const modal = document.getElementById('contact-modal');
+        const modalContent = document.getElementById('modal-content');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const bookButtons = document.querySelectorAll('.book-now-btn');
+        const whatsappLink = document.getElementById('whatsapp-link');
+        const emailLink = document.getElementById('email-link');
+
+
+        function openModal(carName, carPrice) {
+            // --- NEW: Read data from localStorage ---
+            const location = localStorage.getItem('rentalLocation');
+            const pickupDate = localStorage.getItem('rentalPickupDate');
+            const returnDate = localStorage.getItem('rentalReturnDate');
+
+            let tripDetails = '';
+            // Check if all details are present
+            if (location && pickupDate && returnDate) {
+                // Format the dates for display
+                const pDate = new Date(pickupDate).toLocaleString();
+                const rDate = new Date(returnDate).toLocaleString();
+
+                tripDetails = `
+---
+My Trip Details:
+Location: ${location}
+Pickup: ${pDate}
+Return: ${rDate}
+---
+`;
+            }
+            // --- END NEW ---
+
+            // 1. Generate Pre-populated Messages
+            const whatsappMessage = `Hello, I am interested in renting the ${carName} (${carPrice}/day).${tripDetails}\nPlease confirm availability and help me proceed with the booking.`;
+            const emailSubject = `Car Rental Inquiry for ${carName}`;
+            const emailBody = `Hello,\n\nI am interested in renting the ${carName} (${carPrice}/day).${tripDetails}\n\nPlease confirm availability for my desired dates and provide the next steps for reservation.`;
+        
+            // 2. Set Link HREFs (URL encoding is crucial)
+            whatsappLink.href = `https://wa.me/212602020402?text=${encodeURIComponent(whatsappMessage)}`;
+            emailLink.href = `mailto:blackiriscars@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+        
+            // 3. Display Modal
+            modal.classList.remove('hidden');
+            // Animate transition (scale/opacity removed on display)
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+            }, 10);
+            document.body.classList.add('overflow-hidden'); // Disable background scrolling
+        }
+
+        function closeModal() {
+            modalContent.classList.add('scale-95', 'opacity-0');
+            // Wait for animation to finish before hiding
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }, 300); 
+        }
+
+        // Attach event listeners to all book buttons, passing car data
+        bookButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                const carName = event.currentTarget.getAttribute('data-car-name');
+                const carPrice = event.currentTarget.getAttribute('data-car-price');
+                openModal(carName, carPrice);
             });
         });
 
-        // Get stored data from index.html (via localStorage)
-        const location = localStorage.getItem('rentalLocation') || 'Location Unknown';
-        const pickupDateStr = localStorage.getItem('rentalPickupDate');
-        const returnDateStr = localStorage.getItem('rentalReturnDate');
+        closeModalBtn.addEventListener('click', closeModal);
 
-        // Function to format the date/time string for display
-        const formatDateTime = (dateTimeStr) => {
-            if (!dateTimeStr) return 'N/A';
-            try {
-                const date = new Date(dateTimeStr);
-                // Ensure date is valid before formatting
-                if (isNaN(date)) return 'Invalid Date'; 
-                const datePart = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-                const timePart = date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-                return `${datePart} at ${timePart}`;
-            } catch (e) {
-                console.error("Date parsing error:", e);
-                return 'N/A';
+        // Close modal if backdrop is clicked
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
             }
-        };
-
-        // Populate search summary on load
-        const searchSummaryElement = document.getElementById('search-summary');
-        searchSummaryElement.innerHTML = `
-            <p class="text-lg font-semibold text-primary-dark">Your Search Details:</p>
-            <p class="text-gray-700 mt-2">
-                <i data-lucide="map-pin" class="inline w-4 h-4 mr-1 text-accent-red"></i> Pick-up City: <strong>${location}</strong>
-            </p>
-            <p class="text-gray-700">
-                <i data-lucide="calendar" class="inline w-4 h-4 mr-1 text-accent-red"></i> From: <strong>${formatDateTime(pickupDateStr)}</strong>
-            </p>
-            <p class="text-gray-700">
-                <i data-lucide="calendar" class="inline w-4 h-4 mr-1 text-accent-red"></i> To: <strong>${formatDateTime(returnDateStr)}</strong>
-            </p>
-        `;
-        lucide.createIcons(); // Re-initialize icons after injection
-
-        // 2. Modal Handling Functions
-
-        // Opens the custom modal and sets the car details
-        window.openBookingModal = function(button) {
-            const carCard = button.closest('.car-card');
-            
-            // Store details for use by WhatsApp/Email functions
-            currentCarDetails.name = carCard.getAttribute('data-car');
-            currentCarDetails.price = carCard.getAttribute('data-price');
-            
-            // Update modal content
-            document.getElementById('modal-car-info').textContent = `Car Selected: ${currentCarDetails.name} (${currentCarDetails.price} MAD/day)`;
-
-            // Show the modal
-            document.getElementById('booking-modal').classList.remove('hidden');
-            lucide.createIcons(); // Ensure modal icons are drawn
-        }
-
-        // Closes the modal when clicking outside of it
-        window.closeBookingModal = function(event) {
-            if (event.target.id === 'booking-modal') {
-                document.getElementById('booking-modal').classList.add('hidden');
-            }
-        }
-        
-        // Handles WhatsApp booking
-        window.confirmWhatsApp = function() {
-            const message = `Hello Black Iris Cars, I'd like to book the ${currentCarDetails.name} (${currentCarDetails.price} MAD/day). 
-Pick-up Location: ${location}. 
-Pick-up Date: ${formatDateTime(pickupDateStr)}. 
-Return Date: ${formatDateTime(returnDateStr)}. 
-Please confirm my reservation.`;
-
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappUrl = `https://wa.me/${CONTACT_NUMBER}?text=${encodedMessage}`;
-            
-            window.open(whatsappUrl, '_blank');
-            document.getElementById('booking-modal').classList.add('hidden');
-        }
-
-        // Handles Email booking
-        window.confirmEmail = function() {
-            const subject = encodeURIComponent(`Booking Request: ${currentCarDetails.name} in ${location}`);
-            
-            const body = encodeURIComponent(
-                `Hello Black Iris Cars,
-                
-I would like to reserve the following vehicle:
-Car: ${currentCarDetails.name}
-Price: ${currentCarDetails.price} MAD/day
-
-Trip Details:
-Pick-up Location: ${location}
-Pick-up Date/Time: ${formatDateTime(pickupDateStr)}
-Return Date/Time: ${formatDateTime(returnDateStr)}
-
-Please send me the next steps to finalize the booking. Thank you.`
-            );
-            
-            const emailUrl = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
-            
-            window.location.href = emailUrl;
-            document.getElementById('booking-modal').classList.add('hidden');
-        }
-        
+        });
     </script>
 </body>
 </html>
-
