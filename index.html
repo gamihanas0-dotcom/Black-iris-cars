@@ -1,180 +1,224 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Black Iris Cars - Rent in Morocco</title>
-    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Lucide Icons for aesthetic components -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Custom Font and base styles */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        /* Custom Font Poppins */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background-color: #fafafa;
+            transition: all 0.3s ease; /* For smooth RTL transition */
         }
-        /* New custom theme colors */
-        .primary-dark { background-color: #2a2a2a; }
-        .text-primary-dark { color: #2a2a2a; }
-        .accent-red { background-color: #cc0000; }
-        .hover\:accent-red-dark:hover { background-color: #990000; }
-        .text-accent-red { color: #cc0000; }
+        /* Monochrome Theme Colors + Royal Blue Accent */
+        .primary-dark { background-color: #1a1a1a; } /* Blacker Black */
+        .text-primary-dark { color: #1a1a1a; } /* Blacker Black */
+        .accent-blue { background-color: #4169e1; } /* Royal Blue */
+        .hover\:accent-blue-dark:hover { background-color: #2b4daa; } /* Darker Royal Blue */
+        .text-accent-blue { color: #4169e1; }
+
         #hero-section {
-            background-image: url('https://placehold.co/1200x600/2a2a2a/ffffff?text=Black+Iris+Cars+-+Morocco');
+            background-image: url('https://placehold.co/1200x600/1a1a1a/ffffff?text=Black+Iris+Cars+-+Morocco'); /* Updated background color */
             background-size: cover;
             background-position: center;
         }
-        .feature-icon { color: #cc0000; }
+        /* Icon color uses the dark text color */
+        .feature-icon { color: #1a1a1a; }
 
-        /* CRITICAL FIX: Ensure date/time input text is visible (black) */
-        input[type="datetime-local"] {
+        /* CRITICAL: Ensure inputs are visible (black text) and consistent padding */
+        input[type="datetime-local"], select {
             color: #000000 !important;
             background-color: #ffffff !important;
+            padding: 8px 12px !important; 
+            height: 44px; 
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
         }
         /* Optional: Style for input calendar icon */
         input[type="datetime-local"]::-webkit-calendar-picker-indicator {
-            filter: invert(0); /* Ensure icon is visible on white background */
+            filter: invert(0); 
         }
+        /* Ensure selected city option text is black */
+        select option { color: #000000; }
+
+        /* RTL adjustments for Arabic */
+        [dir="rtl"] .ltr\:mr-2 { margin-right: 0; margin-left: 0.5rem; }
+        [dir="rtl"] .ltr\:text-left { text-align: right; }
+        [dir="rtl"] .ltr\:justify-start { justify-content: flex-end; }
+        [dir="rtl"] .md\:ltr\:space-x-8 > * + * { margin-left: 0; margin-right: 2rem; }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased" dir="ltr">
 
-    <!-- Header & Navigation -->
     <header class="bg-white shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <!-- Logo Area -->
                 <a href="#" class="flex items-center">
-                    <img src="https://placehold.co/40x40/000000/ffffff?text=Logo" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-car-front\'><path d=\'M19 17h2c.6 0 1-.4 1-1v-2a1 1 0 0 0-1-1h-1M5 17H3c-.6 0-1-.4-1-1v-2a1 1 0 0 1 1-1h1\'/><path d=\'m18 14 4 2v3H2v-3l4-2\'/><path d=\'M10 9V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2\'/><path d=\'M14 9V7a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2\'/><path d=\'M2 14h20\'/><path d=\'M7 17v-2\'/><path d=\'M17 17v-2\'/></svg>\';" alt="Black Iris Cars Logo" class="w-10 h-10 mr-2 rounded-full border border-gray-100">
+                    <img src="https://i.postimg.cc/B6LWwXNL/923d79fe-5117-4849-9761-57e1fe5a8d96.jpg" alt="Black Iris Cars Logo" class="w-10 h-10 mr-2 rounded-full border border-gray-100">
                     <span class="text-2xl font-extrabold text-primary-dark">Black Iris Cars</span>
                 </a>
 
-                <!-- Desktop Nav Links -->
-                <nav class="hidden md:flex space-x-8">
-                    <a href="#featured" class="text-gray-600 hover:text-accent-red transition duration-150">Our Fleet</a>
-                    <a href="#why-us" class="text-gray-600 hover:text-accent-red transition duration-150">Why Choose Us</a>
-                    <a href="#testimonials" class="text-gray-600 hover:text-accent-red transition duration-150">Reviews</a>
-                    <a href="#contact" class="text-gray-600 hover:text-accent-red transition duration-150">Contact</a>
-                </nav>
+                <div class="flex items-center space-x-4">
+                    <select id="language-selector" aria-label="Select language" class="rounded-lg border-gray-300 focus:ring-primary-dark focus:border-primary-dark text-sm p-2 border text-primary-dark">
+                        <option value="en">English</option>
+                        <option value="fr">Français</option>
+                        <option value="ar">العربية</option>
+                    </select>
 
-                <!-- Mobile Menu Button -->
-                <button id="mobile-menu-button" class="md:hidden text-gray-600 hover:text-accent-red p-2 rounded-lg transition duration-150">
-                    <i data-lucide="menu" class="w-6 h-6"></i>
-                </button>
+                    <nav class="hidden md:flex ltr:mr-2 md:ltr:space-x-8">
+                        <a href="#featured" class="text-gray-600 hover:text-accent-blue transition duration-150" data-i18n="nav-fleet">Our Fleet</a>
+                        <a href="#why-us" class="text-gray-600 hover:text-accent-blue transition duration-150" data-i18n="nav-why">Why Choose Us</a>
+                        <a href="#testimonials" class="text-gray-600 hover:text-accent-blue transition duration-150" data-i18n="nav-reviews">Reviews</a>
+                        <a href="#contact" class="text-gray-600 hover:text-accent-blue transition duration-150" data-i18n="nav-contact">Contact</a>
+                    </nav>
+
+                    <button id="mobile-menu-button" aria-label="Toggle navigation menu" class="md:hidden text-gray-600 hover:text-accent-blue p-2 rounded-lg transition duration-150">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
             </div>
         </div>
 
-        <!-- Mobile Menu (Hidden by default) -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#featured" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-red">Our Fleet</a>
-                <a href="#why-us" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-red">Why Choose Us</a>
-                <a href="#testimonials" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-red">Reviews</a>
-                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-red">Contact</a>
+                <a href="#featured" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-blue" data-i18n="nav-fleet">Our Fleet</a>
+                <a href="#why-us" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-blue" data-i18n="nav-why">Why Choose Us</a>
+                <a href="#testimonials" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-blue" data-i18n="nav-reviews">Reviews</a>
+                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-blue" data-i18n="nav-contact">Contact</a>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section with Booking Form -->
     <section id="hero-section" class="py-20 md:py-32 relative text-white">
         <div class="absolute inset-0 primary-dark opacity-70"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center">
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4">
-                    Explore Morocco. Drive Luxury.
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4" data-i18n="h1-hero">
+                    Explore Morocco. Drive Quality.
                 </h1>
-                <p class="text-xl sm:text-2xl font-light mb-8">
+                <p class="text-xl sm:text-2xl font-light mb-8" data-i18n="p-hero">
                     Premium cars available across all major Moroccan cities.
                 </p>
             </div>
 
-            <!-- Booking Form Card -->
             <div class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl mt-10 max-w-4xl mx-auto">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6">Quick Reservation</h2>
+                <h2 class="text-2xl font-bold text-gray-800 mb-6" data-i18n="h2-reservation">Quick Reservation</h2>
                 <form id="rental-form" class="space-y-4 md:space-y-0 md:grid md:grid-cols-5 md:gap-4">
-                    <!-- Location -->
                     <div class="col-span-2">
-                        <label for="location" class="block text-sm font-medium text-gray-700">Pick-up City</label>
+                        <label for="location" class="block text-sm font-medium text-gray-700" data-i18n="label-pickup-city">Pick-up City or Airport</label>
                         <div class="mt-1 relative rounded-md shadow-sm">
-                            <i data-lucide="map-pin" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"></i>
-                            <select id="location" name="location" required class="pl-10 block w-full rounded-lg border-gray-300 focus:ring-accent-red focus:border-accent-red p-3 border">
-                                <option value="">Select a city in Morocco</option>
-                                <option value="Agadir">Agadir</option>
-                                <option value="Casablanca">Casablanca</option>
+                            <select id="location" name="location" required class="block w-full rounded-lg border-gray-300 focus:ring-gray-700 focus:border-gray-700 border">
+                                <option value="" data-i18n="select-location">Select a location</option>
+                                <option value="Casablanca Airport">Casablanca Mohammed V Airport (CMN)</option>
+                                <option value="Marrakech Airport">Marrakech Menara Airport (RAK)</option>
+                                <option value="Tangier Airport">Tangier Ibn Battouta Airport (TNG)</option>
+                                <option value="Agadir Airport">Agadir Al Massira Airport (AGA)</option>
+                                <option value="Rabat Airport">Rabat–Salé Airport (RBA)</option>
+                                <option disabled>──────────</option>
+                                <option value="Casablanca">Casablanca City</option>
+                                <option value="Marrakech">Marrakech City</option>
+                                <option value="Rabat">Rabat City</option>
+                                <option value="Tangier">Tangier City</option>
+                                <option value="Agadir">Agadir City</option>
                                 <option value="Fes">Fes</option>
                                 <option value="Kenitra">Kenitra</option>
-                                <option value="Marrakech">Marrakech</option>
-                                <option value="Rabat">Rabat</option>
+                                <option value="Meknes">Meknes</option>
                                 <option value="Salé">Salé</option>
-                                <option value="Tangier">Tangier</option>
                                 <option value="Temara">Temara</option>
                                 <option value="Tetouan">Tetouan</option>
                             </select>
                         </div>
                     </div>
 
-                    <!-- Pickup Date/Time -->
                     <div>
-                        <label for="pickup-date" class="block text-sm font-medium text-gray-700">Pick-up Date</label>
-                        <input type="datetime-local" id="pickup-date" name="pickup-date" required class="mt-1 block w-full rounded-lg border-gray-300 focus:ring-accent-red focus:border-accent-red p-3 border">
+                        <label for="pickup-date" class="block text-sm font-medium text-gray-700" data-i18n="label-pickup-date">Pick-up Date</label>
+                        <input type="datetime-local" id="pickup-date" name="pickup-date" required class="mt-1 block w-full rounded-lg border-gray-300 focus:ring-gray-700 focus:border-gray-700 border">
                     </div>
 
-                    <!-- Return Date/Time -->
                     <div>
-                        <label for="return-date" class="block text-sm font-medium text-gray-700">Return Date</label>
-                        <input type="datetime-local" id="return-date" name="return-date" required class="mt-1 block w-full rounded-lg border-gray-300 focus:ring-accent-red focus:border-accent-red p-3 border">
+                        <label for="return-date" class="block text-sm font-medium text-gray-700" data-i18n="label-return-date">Return Date</label>
+                        <input type="datetime-local" id="return-date" name="return-date" required class="mt-1 block w-full rounded-lg border-gray-300 focus:ring-gray-700 focus:border-gray-700 border">
                     </div>
 
-                    <!-- Submit Button -->
                     <div class="col-span-1 flex items-end">
-                        <button type="submit" class="w-full accent-red text-white font-semibold py-3 rounded-lg hover:accent-red-dark transition duration-300 shadow-md">
+                        <button type="submit" class="w-full accent-blue text-white font-semibold py-3 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md" data-i18n="btn-search">
                             Search Cars
                         </button>
                     </div>
                 </form>
 
-                <!-- Search Result Message Box (Used for validation errors only now) -->
-                <div id="result-message" class="hidden mt-6 p-4 rounded-xl bg-red-100 border border-red-400 text-red-700 transition duration-500 ease-in-out">
-                    <!-- Message content will be injected here -->
-                </div>
+                <div id="result-message" class="hidden mt-6 p-4 rounded-xl bg-gray-100 border border-gray-400 text-gray-700 transition duration-500 ease-in-out">
+                    </div>
             </div>
         </div>
     </section>
     
-    <!-- Rest of the sections remain the same for navigation anchors (Fleet, Why Us, Testimonials, Contact) -->
-    <!-- Note: These sections are included here for completeness but the main logic is in the form above -->
-
-    <!-- Featured Vehicles Section (The content is duplicated in available_cars.html) -->
     <section id="featured" class="py-16 md:py-24 bg-white">
-        <!-- Content here remains for display on the home page -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-4xl font-extrabold text-primary-dark text-center mb-12">
+            <h2 class="text-4xl font-extrabold text-primary-dark text-center mb-12" data-i18n="h2-fleet">
                 Our Fleet
             </h2>
 
-            <!-- Placeholder Grid of Cars -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                 <div class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-gray-100">
-                    <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Clio+5" alt="Black Renault Clio 5" class="w-full h-48 object-cover">
-                    <div class="p-6"><h3 class="text-xl font-bold text-gray-800">Renault Clio 5</h3><p class="text-gray-500 text-sm">300 MAD/day</p></div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-12 gap-4">
+                 
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-gray-100 col-span-2">
+                    <img src="https://placehold.co/600x400/808080/ffffff?text=Grey+Tucson" alt="Grey Hyundai Tucson Automatic" class="w-full h-24 sm:h-32 object-cover">
+                    <div class="p-3 text-center"><h3 class="text-sm font-bold text-gray-800">Hyundai Tucson (<span data-i18n="automatic">Automatic</span>)</h3><p class="text-gray-500 text-xs">850 DH<span data-i18n="car-day">/ day</span></p></div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-gray-100 col-span-2">
+                    <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Tucson" alt="Black Hyundai Tucson Automatic" class="w-full h-24 sm:h-32 object-cover">
+                    <div class="p-3 text-center"><h3 class="text-sm font-bold text-gray-800">Hyundai Tucson (<span data-i18n="automatic">Automatic</span>)</h3><p class="text-gray-500 text-xs">850 DH<span data-i18n="car-day">/ day</span></p></div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-gray-100 col-span-2">
+                    <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Sportage" alt="Black Kia Sportage Automatic" class="w-full h-24 sm:h-32 object-cover">
+                    <div class="p-3 text-center"><h3 class="text-sm font-bold text-gray-800">Kia Sportage (<span data-i18n="automatic">Automatic</span>)</h3><p class="text-gray-500 text-xs">850 DH<span data-i18n="car-day">/ day</span></p></div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-gray-100 col-span-2">
+                    <img src="https://placehold.co/600x400/003300/ffffff?text=Green+Duster" alt="Green Dacia Duster Manual" class="w-full h-24 sm:h-32 object-cover">
+                    <div class="p-3 text-center"><h3 class="text-sm font-bold text-gray-800">Dacia Duster (<span data-i18n="manual">Manual</span>)</h3><p class="text-gray-500 text-xs">500 DH<span data-i18n="car-day">/ day</span></p></div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-gray-100">
+                    <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Clio+5" alt="Black Renault Clio 5 Manual" class="w-full h-24 sm:h-32 object-cover">
+                    <div class="p-3 text-center"><h3 class="text-sm font-bold text-gray-800">Clio 5 (<span data-i18n="manual">Manual</span>)</h3><p class="text-gray-500 text-xs">300 DH<span data-i18n="car-day">/ day</span></p></div>
                 </div>
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-gray-100">
-                    <img src="https://placehold.co/600x400/808080/ffffff?text=Grey+Clio+5" alt="Grey Renault Clio 5" class="w-full h-48 object-cover">
-                    <div class="p-6"><h3 class="text-xl font-bold text-gray-800">Renault Clio 5</h3><p class="text-gray-500 text-sm">300 MAD/day</p></div>
+                    <img src="https://placehold.co/600x400/808080/ffffff?text=Grey+Clio+5" alt="Grey Renault Clio 5 Manual" class="w-full h-24 sm:h-32 object-cover">
+                    <div class="p-3 text-center"><h3 class="text-sm font-bold text-gray-800">Clio 5 (<span data-i18n="manual">Manual</span>)</h3><p class="text-gray-500 text-xs">300 DH<span data-i18n="car-day">/ day</span></p></div>
                 </div>
                  <div class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-gray-100">
-                    <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Peugeot+208" alt="Black Peugeot 208" class="w-full h-48 object-cover">
-                    <div class="p-6"><h3 class="text-xl font-bold text-gray-800">Peugeot 208</h3><p class="text-gray-500 text-sm">300 MAD/day</p></div>
+                    <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Peugeot+208" alt="Black Peugeot 208 Manual" class="w-full h-24 sm:h-32 object-cover">
+                    <div class="p-3 text-center"><h3 class="text-sm font-bold text-gray-800">Peugeot 208 (<span data-i18n="manual">Manual</span>)</h3><p class="text-gray-500 text-xs">300 DH<span data-i18n="car-day">/ day</span></p></div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-gray-100">
+                    <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Clio+5+Auto" alt="Black Clio 5 Automatic" class="w-full h-24 sm:h-32 object-cover">
+                    <div class="p-3 text-center"><h3 class="text-sm font-bold text-gray-800">Clio 5 (<span data-i18n="automatic">Automatic</span>)</h3><p class="text-gray-500 text-xs">350 DH<span data-i18n="car-day">/ day</span></p></div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-gray-100">
+                    <img src="https://placehold.co/600x400/000000/ffffff?text=Black+P208+Auto" alt="Black Peugeot 208 Automatic" class="w-full h-24 sm:h-32 object-cover">
+                    <div class="p-3 text-center"><h3 class="text-sm font-bold text-gray-800">Peugeot 208 (<span data-i18n="automatic">Automatic</span>)</h3><p class="text-gray-500 text-xs">350 DH<span data-i18n="car-day">/ day</span></p></div>
                 </div>
                  <div class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-gray-100">
-                    <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Clio+5+Auto" alt="Black Clio 5 Automatic" class="w-full h-48 object-cover">
-                    <div class="p-6"><h3 class="text-xl font-bold text-gray-800">Renault Clio 5 (Auto)</h3><p class="text-gray-500 text-sm">350 MAD/day</p></div>
+                    <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Logan" alt="Black Dacia Logan" class="w-full h-24 sm:h-32 object-cover">
+                    <div class="p-3 text-center"><h3 class="text-sm font-bold text-gray-800">Logan (<span data-i18n="manual">Manual</span>)</h3><p class="text-gray-500 text-xs">300 DH<span data-i18n="car-day">/ day</span></p></div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-gray-100">
+                    <img src="https://placehold.co/600x400/808080/ffffff?text=Grey+Logan" alt="Grey Dacia Logan" class="w-full h-24 sm:h-32 object-cover">
+                    <div class="p-3 text-center"><h3 class="text-sm font-bold text-gray-800">Logan (<span data-i18n="manual">Manual</span>)</h3><p class="text-gray-500 text-xs">300 DH<span data-i18n="car-day">/ day</span></p></div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-gray-100">
+                    <img src="https://placehold.co/600x400/ffffff/000000?text=White+Logan" alt="White Dacia Logan" class="w-full h-24 sm:h-32 object-cover">
+                    <div class="p-3 text-center"><h3 class="text-sm font-bold text-gray-800">Logan (<span data-i18n="manual">Manual</span>)</h3><p class="text-gray-500 text-xs">300 DH<span data-i18n="car-day">/ day</span></p></div>
                 </div>
             </div>
             <div class="text-center mt-8">
-                <a href="available_cars.html" class="accent-red text-white font-semibold py-3 px-8 rounded-lg hover:accent-red-dark transition duration-300 shadow-md">
+                <a href="available_cars.html" class="accent-blue text-white font-semibold py-3 px-8 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md" data-i18n="btn-view-all">
                     View All Cars
                 </a>
             </div>
@@ -182,56 +226,54 @@
     </section>
 
 
-    <!-- Why Choose Us Section -->
     <section id="why-us" class="py-16 md:py-24 primary-dark text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-4xl font-extrabold text-center mb-12">
+            <h2 class="text-4xl font-extrabold text-center mb-12" data-i18n="h2-promise">
                 The Black Iris Promise
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-                <div class="p-6 rounded-xl bg-gray-800 shadow-xl border-t-4 border-accent-red">
-                    <i data-lucide="key-round" class="w-12 h-12 mx-auto mb-4 text-accent-red"></i>
-                    <h3 class="text-xl font-semibold mb-2">Effortless Pickup</h3>
-                    <p class="text-gray-400">Fast service at all major Moroccan airports.</p>
+                <div class="p-6 rounded-xl bg-gray-800 shadow-xl border-t-4 border-gray-500">
+                    <i data-lucide="key-round" class="w-12 h-12 mx-auto mb-4 text-accent-blue"></i>
+                    <h3 class="text-xl font-semibold mb-2" data-i18n="pickup-title">Effortless Pickup</h3>
+                    <p class="text-gray-400" data-i18n="pickup-desc">Fast service at all major Moroccan airports.</p>
                 </div>
-                <div class="p-6 rounded-xl bg-gray-800 shadow-xl border-t-4 border-accent-red">
-                    <i data-lucide="shield-check" class="w-12 h-12 mx-auto mb-4 text-accent-red"></i>
-                    <h3 class="text-xl font-semibold mb-2">Insured & Ready</h3>
-                    <p class="text-gray-400">Comprehensive insurance included for peace of mind.</p>
+                <div class="p-6 rounded-xl bg-gray-800 shadow-xl border-t-4 border-gray-500">
+                    <i data-lucide="shield-check" class="w-12 h-12 mx-auto mb-4 text-accent-blue"></i>
+                    <h3 class="text-xl font-semibold mb-2" data-i18n="insured-title">Insured & Ready</h3>
+                    <p class="text-gray-400" data-i18n="insured-desc">Comprehensive insurance included for peace of mind.</p>
                 </div>
-                <div class="p-6 rounded-xl bg-gray-800 shadow-xl border-t-4 border-accent-red">
-                    <i data-lucide="headset" class="w-12 h-12 mx-auto mb-4 text-accent-red"></i>
-                    <h3 class="text-xl font-semibold mb-2">24/7 Local Support</h3>
-                    <p class="text-gray-400">Dedicated support line available around the clock.</p>
+                <div class="p-6 rounded-xl bg-gray-800 shadow-xl border-t-4 border-gray-500">
+                    <i data-lucide="headset" class="w-12 h-12 mx-auto mb-4 text-accent-blue"></i>
+                    <h3 class="text-xl font-semibold mb-2" data-i18n="support-title">24/7 Local Support</h3>
+                    <p class="text-gray-400" data-i18n="support-desc">Dedicated support line available around the clock.</p>
                 </div>
-                <div class="p-6 rounded-xl bg-gray-800 shadow-xl border-t-4 border-accent-red">
-                    <i data-lucide="map" class="w-12 h-12 mx-auto mb-4 text-accent-red"></i>
-                    <h3 class="text-xl font-semibold mb-2">Morocco Ready</h3>
-                    <p class="text-gray-400">Vehicles maintained for all Moroccan terrains and climate.</p>
+                <div class="p-6 rounded-xl bg-gray-800 shadow-xl border-t-4 border-gray-500">
+                    <i data-lucide="map" class="w-12 h-12 mx-auto mb-4 text-accent-blue"></i>
+                    <h3 class="text-xl font-semibold mb-2" data-i18n="morocco-title">Morocco Ready</h3>
+                    <p class="text-gray-400" data-i18n="morocco-desc">Vehicles maintained for all Moroccan terrains and climate.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Testimonials Section -->
     <section id="testimonials" class="py-16 md:py-24 bg-fafafa">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-4xl font-extrabold text-primary-dark text-center mb-12">
+            <h2 class="text-4xl font-extrabold text-primary-dark text-center mb-12" data-i18n="h2-testimonials">
                 What Our Clients Say
             </h2>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-accent-red">
+                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-gray-500">
                     <i data-lucide="quote" class="w-8 h-8 text-gray-300 mb-3"></i>
                     <p class="text-gray-700 italic mb-4">"Rented from Casablanca airport. The process was smooth, and the car performed flawlessly across the Atlas Mountains. Excellent service!"</p>
                     <p class="font-semibold text-primary-dark">— Youssef H., Rabat</p>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-accent-red">
+                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-gray-500">
                     <i data-lucide="quote" class="w-8 h-8 text-gray-300 mb-3"></i>
-                    <p class="text-gray-700 italic mb-4">"Friendly staff in Marrakech, and the price was transparent—no hidden costs. Black Iris Cars made my trip worry-free."</p>
-                    <p class="font-semibold text-primary-dark">— Fatima E., USA</p>
+                    <p class="text-gray-700 italic mb-4">"Friendly staff in Meknes, and the price was transparent—no hidden costs. Black Iris Cars made my trip worry-free. They delivered the car promptly."</p>
+                    <p class="font-semibold text-primary-dark">— Hino G., Meknes</p>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-accent-red">
+                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-gray-500">
                     <i data-lucide="quote" class="w-8 h-8 text-gray-300 mb-3"></i>
                     <p class="text-gray-700 italic mb-4">"Needed a last-minute SUV in Tangier. The booking was confirmed instantly. The vehicle was clean and modern. Highly recommend this company."</p>
                     <p class="font-semibold text-primary-dark">— Amine B., UK</p>
@@ -240,36 +282,33 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer id="contact" class="primary-dark text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 border-b border-gray-700 pb-8 mb-8">
-                <!-- Logo/Branding -->
                 <div>
-                    <h3 class="text-2xl font-extrabold mb-4 text-accent-red">Black Iris Cars</h3>
+                    <h3 class="text-2xl font-extrabold mb-4 text-gray-300">Black Iris Cars</h3>
                     <p class="text-gray-400 text-sm">Your reliable partner for car rentals across Morocco.</p>
                 </div>
-                <!-- Quick Links -->
                 <div>
-                    <h4 class="text-lg font-semibold mb-4">Quick Navigation</h4>
+                    <h4 class="text-lg font-semibold mb-4" data-i18n="h4-nav">Quick Navigation</h4>
                     <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#featured" class="hover:text-accent-red transition duration-150">Our Fleet</a></li>
-                        <li><a href="#why-us" class="hover:text-accent-red transition duration-150">Our Promise</a></li>
-                        <li><a href="#testimonials" class="hover:text-accent-red transition duration-150">Customer Reviews</a></li>
+                        <li><a href="#featured" class="hover:text-accent-blue transition duration-150" data-i18n="nav-fleet">Our Fleet</a></li>
+                        <li><a href="#why-us" class="hover:text-accent-blue transition duration-150" data-i18n="nav-why">Our Promise</a></li>
+                        <li><a href="#testimonials" class="hover:text-accent-blue transition duration-150" data-i18n="nav-reviews">Customer Reviews</a></li>
                     </ul>
                 </div>
-                <!-- Contact Info (Simplified) -->
                 <div>
-                    <h4 class="text-lg font-semibold mb-4">Contact & Booking</h4>
-                    <p class="text-sm text-gray-400 mb-2 flex items-center"><i data-lucide="phone" class="w-4 h-4 mr-2 text-accent-red"></i> Call: 0602020402</p>
-                    <p class="text-sm text-gray-400 mb-2 flex items-center"><i data-lucide="mail" class="w-4 h-4 mr-2 text-accent-red"></i> <a href="mailto:blackiriscars@gmail.com" class="hover:text-accent-red">blackiriscars@gmail.com</a></p>
-                    <a href="https://wa.me/212602020402" target="_blank" class="text-sm text-white px-3 py-1 mt-2 inline-flex items-center rounded-lg bg-green-500 hover:bg-green-600 transition duration-150">
-                        <i data-lucide="message-circle" class="w-4 h-4 mr-2"></i> WhatsApp 0602020402
+                    <h4 class="text-lg font-semibold mb-4" data-i18n="h4-contact">Contact & Booking</h4>
+                    <p class="text-sm text-gray-400 mb-2 flex items-center ltr:justify-start"><i data-lucide="phone" class="w-4 h-4 ltr:mr-2 text-accent-blue ltr:mr-2 ltr:ml-0 ltr:mr-2"></i> <span data-i18n="call-text">Call:</span> 0602020402</p>
+                    <p class="text-sm text-gray-400 mb-2 flex items-center ltr:justify-start"><i data-lucide="mail" class="w-4 h-4 ltr:mr-2 text-accent-blue ltr:mr-2 ltr:ml-0 ltr:mr-2"></i> <a href="mailto:blackiriscars@gmail.com" class="hover:text-accent-blue">blackiriscars@gmail.com</a></p>
+                    <p class="text-sm text-gray-400 mb-2 flex items-center ltr:justify-start"><i data-lucide="map-pin" class="w-4 h-4 ltr:mr-2 text-accent-blue ltr:mr-2 ltr:ml-0 ltr:mr-2"></i> <span data-i18n="address-text">10 rue ouarzazat hassan rabat</span></p>
+                    <a href="https://wa.me/212602020402" target="_blank" class="text-sm text-white px-3 py-1 mt-2 inline-flex items-center rounded-lg bg-green-600 hover:bg-green-700 transition duration-150">
+                        <i data-lucide="message-circle" class="w-4 h-4 ltr:mr-2 ltr:ml-0 ltr:mr-2"></i> <span data-i18n="whatsapp-text">WhatsApp</span> 0602020402
                     </a>
                 </div>
             </div>
             <div class="text-center text-sm text-gray-500 pt-4">
-                &copy; 2024 Black Iris Cars. All rights reserved.
+                &copy; <span data-i18n="copy-right">2024 Black Iris Cars. All rights reserved.</span>
             </div>
         </div>
     </footer>
@@ -277,8 +316,116 @@
     <script>
         // Initialize Lucide Icons
         lucide.createIcons();
+        
+        // --- Translation Logic ---
+        const translations = {
+            'en': {
+                'nav-fleet': 'Our Fleet', 'nav-why': 'Why Choose Us', 'nav-reviews': 'Reviews', 'nav-contact': 'Contact',
+                'h1-hero': 'Explore Morocco. Drive Quality.', 'p-hero': 'Premium cars available across all major Moroccan cities.',
+                'h2-reservation': 'Quick Reservation', 'label-pickup-city': 'Pick-up City or Airport', 'label-pickup-date': 'Pick-up Date',
+                'label-return-date': 'Return Date', 'btn-search': 'Search Cars', 'h2-fleet': 'Our Fleet', 'car-day': '/ day',
+                'btn-view-all': 'View All Cars', 'h2-promise': 'The Black Iris Promise', 'pickup-title': 'Effortless Pickup',
+                'pickup-desc': 'Fast service at all major Moroccan airports.', 'insured-title': 'Insured & Ready',
+                'insured-desc': 'Comprehensive insurance included for peace of mind.', 'support-title': '24/7 Local Support',
+                'support-desc': 'Dedicated support line available around the clock.', 'morocco-title': 'Morocco Ready',
+                'morocco-desc': 'Vehicles maintained for all Moroccan terrains and climate.', 'h2-testimonials': 'What Our Clients Say',
+                'h4-nav': 'Quick Navigation', 'h4-contact': 'Contact & Booking', 'call-text': 'Call:', 'whatsapp-text': 'WhatsApp',
+                'address-text': '10 rue ouarzazat hassan rabat', 'copy-right': '2024 Black Iris Cars. All rights reserved.',
+                'select-location': 'Select a location', 'manual': 'Manual', 'automatic': 'Automatic',
+            },
+            'fr': {
+                'nav-fleet': 'Notre Flotte', 'nav-why': 'Pourquoi Nous Choisir', 'nav-reviews': 'Avis', 'nav-contact': 'Contact',
+                'h1-hero': 'Explorez le Maroc. Conduisez la Qualité.', 'p-hero': 'Voitures premium disponibles dans toutes les grandes villes marocaines.',
+                'h2-reservation': 'Réservation Rapide', 'label-pickup-city': 'Ville ou Aéroport de Ramassage', 'label-pickup-date': 'Date de Ramassage',
+                'label-return-date': 'Date de Retour', 'btn-search': 'Rechercher des Voitures', 'h2-fleet': 'Notre Flotte', 'car-day': '/ jour',
+                'btn-view-all': 'Voir Toutes les Voitures', 'h2-promise': 'La Promesse Black Iris', 'pickup-title': 'Ramassage Facile',
+                'pickup-desc': 'Service rapide dans tous les principaux aéroports marocains.', 'insured-title': 'Assuré & Prêt',
+                'insured-desc': 'Assurance complète incluse pour votre tranquillité d\'esprit.', 'support-title': 'Support Local 24/7',
+                'support-desc': 'Ligne d\'assistance dédiée disponible 24 heures sur 24.', 'morocco-title': 'Prêt pour le Maroc',
+                'morocco-desc': 'Véhicules entretenus pour tous les terrains et climats marocains.', 'h2-testimonials': 'Ce que disent nos Clients',
+                'h4-nav': 'Navigation Rapide', 'h4-contact': 'Contact & Réservation', 'call-text': 'Appelez:', 'whatsapp-text': 'WhatsApp',
+                'address-text': '10 rue ouarzazat hassan rabat', 'copy-right': '2024 Black Iris Cars. Tous droits réservés.',
+                'select-location': 'Sélectionnez un emplacement', 'manual': 'Manuelle', 'automatic': 'Automatique',
+            },
+            'ar': {
+                'nav-fleet': 'أسطولنا', 'nav-why': 'لماذا تختارنا', 'nav-reviews': 'التقييمات', 'nav-contact': 'اتصال',
+                'h1-hero': 'اكتشف المغرب. قد الجودة.', 'p-hero': 'سيارات فاخرة متوفرة في جميع المدن المغربية الكبرى.',
+                'h2-reservation': 'حجز سريع', 'label-pickup-city': 'مدينة أو مطار الاستلام', 'label-pickup-date': 'تاريخ الاستلام',
+                'label-return-date': 'تاريخ الإرجاع', 'btn-search': 'البحث عن سيارات', 'h2-fleet': 'أسطولنا', 'car-day': '/ يوم',
+                'btn-view-all': 'عرض جميع السيارات', 'h2-promise': 'وعد بلاك آيرس', 'pickup-title': 'استلام سهل',
+                'pickup-desc': 'خدمة سريعة في جميع المطارات المغربية الرئيسية.', 'insured-title': 'مؤمنة وجاهزة',
+                'insured-desc': 'تأمين شامل متضمن لراحة بالك.', 'support-title': 'دعم محلي 24/7',
+                'support-desc': 'خط دعم مخصص متاح على مدار الساعة.', 'morocco-title': 'جاهزية للمغرب',
+                'morocco-desc': 'مركبات مجهزة لجميع التضarيس والمناخات المغربية.', 'h2-testimonials': 'ماذا يقول عملاؤنا',
+                'h4-nav': 'روابط سريعة', 'h4-contact': 'الاتصال والحجز', 'call-text': 'اتصل:', 'whatsapp-text': 'واتساب',
+                'address-text': '10 شارع ورزازات حسان الرباط', 'copy-right': '2024 بلاك آيرس للسيارات. جميع الحقوق محفوظة.',
+                'select-location': 'اختر موقعًا', 'manual': 'يدوي', 'automatic': 'أوتوماتيكي',
+            }
+        };
 
-        // Mobile Menu Toggle
+        const languageSelector = document.getElementById('language-selector');
+
+        function setLanguage(lang) {
+            const dictionary = translations[lang];
+            
+            // 1. Update text content
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (dictionary[key]) {
+                    element.textContent = dictionary[key];
+                }
+            });
+
+            // 2. Handle RTL (Right-to-Left)
+            const body = document.body;
+            if (lang === 'ar') {
+                body.setAttribute('dir', 'rtl');
+            } else {
+                body.setAttribute('dir', 'ltr');
+            }
+            // Update title
+            document.title = (dictionary['h1-hero'] || 'Black Iris Cars') + (lang === 'ar' ? ' | استئجار سيارة' : ' | Car Rental');
+        }
+
+        languageSelector.addEventListener('change', (event) => {
+            setLanguage(event.target.value);
+            // Save preference to localStorage
+            localStorage.setItem('languagePreference', event.target.value);
+        });
+
+        // Load language preference on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('languagePreference') || 'en';
+            languageSelector.value = savedLang;
+            setLanguage(savedLang);
+
+            // --- NEW: Date/Time Validation Logic ---
+            const pickupDateInput = document.getElementById('pickup-date');
+            const returnDateInput = document.getElementById('return-date');
+
+            // Set min date for pickup to be 'now' (in local time)
+            const now = new Date();
+            // Adjust for local timezone offset and format as YYYY-MM-DDTHH:MM
+            const localISOTime = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+            
+            pickupDateInput.setAttribute('min', localISOTime);
+            returnDateInput.setAttribute('min', localISOTime); // Also set min for return date initially
+
+            // Add listener to update return date's min value when pickup date changes
+            pickupDateInput.addEventListener('input', () => {
+                if (pickupDateInput.value) {
+                    returnDateInput.setAttribute('min', pickupDateInput.value);
+                    
+                    // If the current return date is now before the new pickup date, clear it
+                    if (returnDateInput.value && returnDateInput.value < pickupDateInput.value) {
+                        returnDateInput.value = '';
+                    }
+                }
+            });
+            // --- END NEW ---
+        });
+
+        // --- Mobile Menu Toggle ---
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
 
@@ -293,27 +440,42 @@
         });
 
 
-        // Form Submission Handler: Redirects to the available_cars.html page
+        // --- Form Submission Handler ---
         const rentalForm = document.getElementById('rental-form');
         const resultMessage = document.getElementById('result-message');
 
         rentalForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
+            event.preventDefault(); 
 
             const location = document.getElementById('location').value;
             const pickupDate = document.getElementById('pickup-date').value;
             const returnDate = document.getElementById('return-date').value;
 
-            // Simple validation check
+            // --- MODIFIED VALIDATION LOGIC ---
+            const pDate = new Date(pickupDate);
+            const rDate = new Date(returnDate);
+
+            // 1. Check if fields are empty
             if (!location || !pickupDate || !returnDate) {
-                // Show validation error on the same page
                 resultMessage.classList.remove('hidden');
-                resultMessage.innerHTML = '<strong>Error!</strong> Please select a pick-up city and complete date range.';
+                // Note: For a full solution, this error message should also be in the translations object
+                resultMessage.innerHTML = '<strong>Error!</strong> Please select a pick-up city/airport and complete date range.';
 
                 setTimeout(() => {
                     resultMessage.classList.add('hidden');
                 }, 5000);
-            } else {
+            } 
+            // 2. NEW: Check if return date is before or same as pickup date
+            else if (rDate <= pDate) { 
+                resultMessage.classList.remove('hidden');
+                resultMessage.innerHTML = '<strong>Error!</strong> The return date must be after the pick-up date.';
+
+                setTimeout(() => {
+                    resultMessage.classList.add('hidden');
+                }, 5000);
+            }
+            // 3. Success
+            else {
                 // Store search parameters in localStorage for the next page
                 localStorage.setItem('rentalLocation', location);
                 localStorage.setItem('rentalPickupDate', pickupDate);
@@ -322,9 +484,9 @@
                 // Redirect to the available cars page
                 window.location.href = 'available_cars.html';
             }
+            // --- END MODIFICATION ---
         });
 
     </script>
 </body>
 </html>
-
