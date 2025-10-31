@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,9 +25,23 @@
         /* Style for filter sidebar on mobile */
         #filter-sidebar {
             transition: transform 0.3s ease-in-out;
-            transform: translateX(-100%);
+            /* Pushing off to the left for LTR */
+            transform: translateX(-100%); 
         }
         #filter-sidebar.open {
+            transform: translateX(0);
+        }
+
+        /* RTL adjustment for sidebar sliding direction */
+        [dir="rtl"] #filter-sidebar {
+            /* Pushing off to the right for RTL */
+            transform: translateX(100%); 
+            left: auto; /* Remove left 0 default */
+            right: 0; /* Align to the right */
+        }
+
+        [dir="rtl"] #filter-sidebar.open {
+            /* Sliding in from the right for RTL */
             transform: translateX(0);
         }
         
@@ -45,6 +60,23 @@
         [dir="rtl"] .ltr\:mr-2 { margin-right: 0; margin-left: 0.5rem; }
         [dir="rtl"] .ltr\:text-left { text-align: right; }
         [dir="rtl"] .ltr\:justify-start { justify-content: flex-end; }
+
+        /* Language Selector Styling (New) */
+        #language-selector {
+            /* Remove box styling */
+            border: none;
+            padding: 0;
+            background-color: transparent;
+            color: #1a1a1a; 
+            font-weight: 500;
+            cursor: pointer;
+            outline: none;
+            
+            /* REMOVE DEFAULT ARROW ICON (Browser compatibility) */
+            -webkit-appearance: none; /* Safari and Chrome */
+            -moz-appearance: none;    /* Firefox */
+            appearance: none;         /* Standard property */
+        }
     </style>
 </head>
 <body class="antialiased" dir="ltr">
@@ -54,11 +86,11 @@
             <div class="flex justify-between items-center h-16">
                 <a href="index.html" class="flex items-center">
                     <img src="https://i.postimg.cc/B6LWwXNL/923d79fe-5117-4849-9761-57e1fe5a8d96.jpg" alt="Black Iris Cars Logo" class="w-10 h-10 mr-2 rounded-full border border-gray-100">
-                    <span class="text-2xl font-extrabold text-primary-dark">Black Iris Cars</span>
+                    <span class="text-2xl font-extrabold text-primary-dark">BLACK IRIS cars</span>
                 </a>
 
                 <div class="flex items-center space-x-4">
-                     <select id="language-selector" class="rounded-lg border-gray-300 focus:ring-primary-dark focus:border-primary-dark text-sm p-2 border text-primary-dark">
+                     <select id="language-selector" class="text-sm">
                         <option value="en">English</option>
                         <option value="fr">Français</option>
                         <option value="ar">العربية</option>
@@ -70,7 +102,7 @@
                         <a href="index.html#contact" class="text-gray-600 hover:text-accent-blue transition duration-150" data-i18n="nav-contact">Contact</a>
                     </nav>
 
-                    <button id="filter-menu-button" aria-label="Toggle filter menu" class="md:hidden text-gray-600 hover:text-accent-blue p-2 rounded-lg transition duration-150">
+                    <button id="filter-menu-button" class="md:hidden text-gray-600 hover:text-accent-blue p-2 rounded-lg transition duration-150">
                         <i data-lucide="filter" class="w-6 h-6"></i>
                     </button>
                 </div>
@@ -82,6 +114,8 @@
         <h1 class="text-3xl sm:text-4xl font-extrabold text-primary-dark mb-4" data-i18n="h1-available">
             Available Rental Cars
         </h1>
+        
+        <div id="filter-backdrop" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
 
         <div class="md:grid md:grid-cols-4 lg:grid-cols-5 md:gap-8">
 
@@ -93,7 +127,7 @@
                 
                 <h3 class="text-2xl font-bold text-primary-dark mb-6 border-b pb-3" data-i18n="h3-filter">Filter Options</h3>
                 
-                <form class="space-y-6">
+                <form id="filter-form" class="space-y-6">
                     <div>
                         <label for="price-range" class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="label-price">Price Range (DH/day)</label>
                         <input type="range" id="price-range" min="200" max="1500" value="1500" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer text-primary-dark">
@@ -102,7 +136,7 @@
 
                     <div>
                         <p class="text-sm font-semibold text-gray-700 mb-2">Transmission</p>
-                        <div class="space-y-2">
+                        <div class="space-y-2" id="transmission-filters">
                             <label class="flex items-center text-gray-600 ltr:justify-start">
                                 <input type="checkbox" name="transmission" value="automatic" class="rounded text-primary-dark focus:ring-primary-dark ltr:mr-2"> <span data-i18n="automatic">Automatic</span>
                             </label>
@@ -114,20 +148,23 @@
 
                     <div>
                         <p class="text-sm font-semibold text-gray-700 mb-2">Vehicle Type</p>
-                        <div class="space-y-2">
+                        <div class="space-y-2" id="type-filters">
                             <label class="flex items-center text-gray-600 ltr:justify-start">
-                                <input type="checkbox" name="car-type" value="sedan" class="rounded text-primary-dark focus:ring-primary-dark ltr:mr-2"> Sedan / Hatchback
+                                <input type="checkbox" name="car-type" value="sedan" class="rounded text-primary-dark focus:ring-primary-dark ltr:mr-2"> Sedan
+                            </label>
+                            <label class="flex items-center text-gray-600 ltr:justify-start">
+                                <input type="checkbox" name="car-type" value="hatchback" class="rounded text-primary-dark focus:ring-primary-dark ltr:mr-2"> Hatchback
                             </label>
                             <label class="flex items-center text-gray-600 ltr:justify-start">
                                 <input type="checkbox" name="car-type" value="suv" class="rounded text-primary-dark focus:ring-primary-dark ltr:mr-2"> SUV / Crossover
                             </label>
                             <label class="flex items-center text-gray-600 ltr:justify-start">
-                                <input type="checkbox" name="car-type" value="van" class="rounded text-primary-dark focus:ring-primary-dark ltr:mr-2"> Van / Minivan
+                                <input type="checkbox" name="car-type" value="luxury-suv" class="rounded text-primary-dark focus:ring-primary-dark ltr:mr-2"> Luxury SUV
                             </label>
                         </div>
                     </div>
 
-                    <button type="button" class="w-full accent-blue text-white font-semibold py-2 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md mt-4">
+                    <button type="button" id="apply-filters-btn" class="w-full accent-blue text-white font-semibold py-2 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md mt-4">
                         Apply Filters
                     </button>
                 </form>
@@ -136,142 +173,192 @@
             <div class="md:col-span-3 lg:col-span-4 space-y-6" id="results-container">
                 
                 <div class="flex justify-between items-center bg-white p-3 rounded-lg shadow-sm border border-gray-100">
-                    <p class="text-sm text-gray-600" data-i18n="sort-count">Showing 12 available cars</p>
-                    <div class="flex items-center">
-                        <label for="sort-by" class="text-sm font-medium text-gray-700 ltr:mr-2 hidden sm:block" data-i18n="label-sort">Sort By:</label>
-                        <select id="sort-by" class="rounded-lg border-gray-300 focus:ring-primary-dark focus:border-primary-dark text-sm p-2 border">
-                            <option value="price-low" data-i18n="option-low">Price: Low to High</option>
-                            <option value="price-high" data-i18n="option-high">Price: High to Low</option>
-                            <option value="popularity" data-i18n="option-popular">Most Popular</option>
-                        </select>
-                    </div>
+                    <p class="text-sm text-gray-600" id="car-count">16 cars available</p> 
                 </div>
 
 
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                <div class="car-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300" data-price="1200" data-transmission="automatic" data-type="luxury-suv">
                     <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
-                        <img src="https://placehold.co/600x400/808080/ffffff?text=Grey+Tucson" alt="Grey Hyundai Tucson Automatic" class="w-full h-full object-contain">
+                        <img src="https://i.postimg.cc/4NpS5rGj/IMG-4179.webp" alt="Grey VW Touareg Automatic" class="w-full h-full object-contain">
                     </div>
                     <div class="p-6 md:w-2/3 flex flex-col justify-between">
                         <div>
-                            <h3 class="text-2xl font-bold text-gray-900">Hyundai Tucson (<span data-i18n="automatic">Automatic</span>)</h3>
-                            <p class="text-gray-500 mb-4">Luxury compact SUV, space and comfort for long journeys, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <h3 class="text-2xl font-bold text-gray-900">Volkswagen Touareg (<span data-i18n="automatic">Automatic</span>)</h3>
+                            <p class="text-gray-500 mb-4" data-i18n="car-description-touareg">Ultimate luxury SUV, perfect for the longest trips with supreme comfort, <span data-i18n="car-seats-6">6 Seats</span>, A/C.</p>
                             <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="car" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="automatic">Automatic</span></span>
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
-                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats">5 Seats</span></span>
-                                <span class="flex items-center ltr:justify-start"><i data-lucide="luggage" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> Premium SUV</span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats-6">6 Seats</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="luggage" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> Luxury SUV</span>
                             </div>
                         </div>
                         <div class="flex justify-between items-center border-t pt-4">
                             <div class="flex flex-col">
-                                <span class="text-xl font-extrabold text-primary-dark">850 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xl font-extrabold text-primary-dark">1200 DH <span data-i18n="car-day" class="text-base font-normal text-gray-500">/ day</span></span>
                                 <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
                             </div>
                             <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
-                                    data-car-name="Hyundai Tucson (Grey, Automatic)" 
-                                    data-car-price="850 DH">
+                                        data-car-name="VW Touareg (Grey, Automatic)" 
+                                        data-car-price="1200 DH">
                                 Book Now
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                <div class="car-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300" data-price="850" data-transmission="automatic" data-type="suv">
                     <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
-                        <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Tucson" alt="Black Hyundai Tucson Automatic" class="w-full h-full object-contain">
+                        <img src="https://i.postimg.cc/DzvHm59V/IMG-4161.jpg" alt="Grey Hyundai Tucson Automatic" class="w-full h-full object-contain">
                     </div>
                     <div class="p-6 md:w-2/3 flex flex-col justify-between">
                         <div>
                             <h3 class="text-2xl font-bold text-gray-900">Hyundai Tucson (<span data-i18n="automatic">Automatic</span>)</h3>
-                            <p class="text-gray-500 mb-4">Stylish and powerful SUV, perfect for Moroccan highways, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <p class="text-gray-500 mb-4" data-i18n="car-description-tucson-grey">Luxury compact SUV, space and comfort for long journeys, <span data-i18n="car-seats-6">6 Seats</span>, A/C.</p>
                             <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="car" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="automatic">Automatic</span></span>
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
-                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats">5 Seats</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats-6">6 Seats</span></span>
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="luggage" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> Premium SUV</span>
                             </div>
                         </div>
                         <div class="flex justify-between items-center border-t pt-4">
                             <div class="flex flex-col">
-                                <span class="text-xl font-extrabold text-primary-dark">850 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xl font-extrabold text-primary-dark">850 DH <span data-i18n="car-day" class="text-base font-normal text-gray-500">/ day</span></span>
                                 <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
                             </div>
                             <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
-                                    data-car-name="Hyundai Tucson (Black, Automatic)" 
-                                    data-car-price="850 DH">
+                                        data-car-name="Hyundai Tucson (Grey, Automatic)" 
+                                        data-car-price="850 DH">
                                 Book Now
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                <div class="car-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300" data-price="850" data-transmission="automatic" data-type="suv">
                     <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
-                        <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Sportage" alt="Black Kia Sportage Automatic" class="w-full h-full object-contain">
+                        <img src="https://i.postimg.cc/HxP2YtgX/IMG-4180.jpg" alt="Black Hyundai Tucson Automatic" class="w-full h-full object-contain">
+                    </div>
+                    <div class="p-6 md:w-2/3 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Hyundai Tucson (<span data-i18n="automatic">Automatic</span>)</h3>
+                            <p class="text-gray-500 mb-4" data-i18n="car-description-tucson-black">Stylish and powerful SUV, perfect for Moroccan highways, <span data-i18n="car-seats-6">6 Seats</span>, A/C.</p>
+                            <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="car" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="automatic">Automatic</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats-6">6 Seats</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="luggage" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> Premium SUV</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center border-t pt-4">
+                            <div class="flex flex-col">
+                                <span class="text-xl font-extrabold text-primary-dark">850 DH <span data-i18n="car-day" class="text-base font-normal text-gray-500">/ day</span></span>
+                                <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
+                            </div>
+                            <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
+                                        data-car-name="Hyundai Tucson (Black, Automatic)" 
+                                        data-car-price="850 DH">
+                                Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="car-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300" data-price="850" data-transmission="automatic" data-type="suv">
+                    <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
+                        <img src="https://i.postimg.cc/7PWswqPy/IMG-4190.jpg" alt="Black Kia Sportage Automatic" class="w-full h-full object-contain">
                     </div>
                     <div class="p-6 md:w-2/3 flex flex-col justify-between">
                         <div>
                             <h3 class="text-2xl font-bold text-gray-900">Kia Sportage (<span data-i18n="automatic">Automatic</span>)</h3>
-                            <p class="text-gray-500 mb-4">Top-rated crossover with excellent handling, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <p class="text-gray-500 mb-4" data-i18n="car-description-sportage-black">Top-rated crossover with excellent handling, <span data-i18n="car-seats-6">6 Seats</span>, A/C.</p>
                             <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="car" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="automatic">Automatic</span></span>
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
-                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats">5 Seats</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats-6">6 Seats</span></span>
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="luggage" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> Premium SUV</span>
                             </div>
                         </div>
                         <div class="flex justify-between items-center border-t pt-4">
                             <div class="flex flex-col">
-                                <span class="text-xl font-extrabold text-primary-dark">850 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xl font-extrabold text-primary-dark">850 DH <span data-i18n="car-day" class="text-base font-normal text-gray-500">/ day</span></span>
                                 <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
                             </div>
                             <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
-                                    data-car-name="Kia Sportage (Black, Automatic)" 
-                                    data-car-price="850 DH">
+                                        data-car-name="Kia Sportage (Black, Automatic)" 
+                                        data-car-price="850 DH">
                                 Book Now
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                <div class="car-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300" data-price="650" data-transmission="automatic" data-type="suv">
                     <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
-                        <img src="https://placehold.co/600x400/003300/ffffff?text=Green+Duster" alt="Green Dacia Duster Manual" class="w-full h-full object-contain">
+                        <img src="https://i.postimg.cc/d3ySgfyT/IMG-4177.jpg" alt="Black VW T-Roc Automatic" class="w-full h-full object-contain">
+                    </div>
+                    <div class="p-6 md:w-2/3 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">VW T-Roc (<span data-i18n="automatic">Automatic</span>)</h3>
+                            <p class="text-gray-500 mb-4" data-i18n="car-description-troc">Compact and stylish German engineering for city and road trips, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="car" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="automatic">Automatic</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats">5 Seats</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="luggage" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> Crossover</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center border-t pt-4">
+                            <div class="flex flex-col">
+                                <span class="text-xl font-extrabold text-primary-dark">650 DH <span data-i18n="car-day" class="text-base font-normal text-gray-500">/ day</span></span>
+                                <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
+                            </div>
+                            <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
+                                        data-car-name="VW T-Roc (Black, Automatic)" 
+                                        data-car-price="650 DH">
+                                Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="car-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300" data-price="500" data-transmission="manual" data-type="suv">
+                    <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
+                        <img src="https://i.postimg.cc/YSDn07Nf/IMG-4181.jpg" alt="Green Dacia Duster Manual" class="w-full h-full object-contain">
                     </div>
                     <div class="p-6 md:w-2/3 flex flex-col justify-between">
                         <div>
                             <h3 class="text-2xl font-bold text-gray-900">Dacia Duster (<span data-i18n="manual">Manual</span>)</h3>
-                            <p class="text-gray-500 mb-4">Tough and reliable compact SUV, great value, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <p class="text-gray-500 mb-4" data-i18n="car-description-duster">Tough and reliable compact SUV, great value, <span data-i18n="car-seats-6">6 Seats</span>, A/C.</p>
                             <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="gauge" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="manual">Manual</span></span>
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
-                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats">5 Seats</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats-6">6 Seats</span></span>
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="map" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> Off-Road Ready</span>
                             </div>
                         </div>
                         <div class="flex justify-between items-center border-t pt-4">
                             <div class="flex flex-col">
-                                <span class="text-xl font-extrabold text-primary-dark">500 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xl font-extrabold text-primary-dark">500 DH <span data-i18n="car-day" class="text-base font-normal text-gray-500">/ day</span></span>
                                 <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
                             </div
                             <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
-                                    data-car-name="Dacia Duster (Green, Manual)" 
-                                    data-car-price="500 DH">
+                                        data-car-name="Dacia Duster (Green, Manual)" 
+                                        data-car-price="500 DH">
                                 Book Now
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                <div class="car-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300" data-price="300" data-transmission="manual" data-type="hatchback">
                     <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
-                        <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Clio+5" alt="Black Renault Clio 5 Manual" class="w-full h-full object-contain">
+                        <img src="https://i.postimg.cc/J43pJZ3f/IMG-4184.webp" alt="Black Renault Clio 5 Manual" class="w-full h-full object-contain">
                     </div>
                     <div class="p-6 md:w-2/3 flex flex-col justify-between">
                         <div>
                             <h3 class="text-2xl font-bold text-gray-900">Renault Clio 5 (<span data-i18n="manual">Manual</span>)</h3>
-                            <p class="text-gray-500 mb-4">Modern, Fuel Efficient, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <p class="text-gray-500 mb-4" data-i18n="car-description-clio-manual-black">Modern, Fuel Efficient, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
                             <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="gauge" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="manual">Manual</span></span>
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
@@ -281,26 +368,26 @@
                         </div>
                         <div class="flex justify-between items-center border-t pt-4">
                             <div class="flex flex-col">
-                                <span class="text-xl font-extrabold text-primary-dark">300 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xl font-extrabold text-primary-dark">300 DH <span data-i18n="car-day" class="text-base font-normal text-gray-500">/ day</span></span>
                                 <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
                             </div>
                             <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
-                                    data-car-name="Renault Clio 5 (Black, Manual)" 
-                                    data-car-price="300 DH">
+                                        data-car-name="Renault Clio 5 (Black, Manual)" 
+                                        data-car-price="300 DH">
                                 Book Now
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                <div class="car-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300" data-price="300" data-transmission="manual" data-type="hatchback">
                     <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
-                        <img src="https://placehold.co/600x400/808080/ffffff?text=Grey+Clio+5" alt="Grey Renault Clio 5 Manual" class="w-full h-full object-contain">
+                        <img src="https://i.postimg.cc/Y0Ybdm5z/IMG-4183.webp" alt="Grey Renault Clio 5 Manual" class="w-full h-full object-contain">
                     </div>
                     <div class="p-6 md:w-2/3 flex flex-col justify-between">
                         <div>
                             <h3 class="text-2xl font-bold text-gray-900">Renault Clio 5 (<span data-i18n="manual">Manual</span>)</h3>
-                            <p class="text-gray-500 mb-4">Stylish and efficient for the urban traveler, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <p class="text-gray-500 mb-4" data-i18n="car-description-clio-manual-grey">Stylish and efficient for the urban traveler, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
                             <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="gauge" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="manual">Manual</span></span>
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
@@ -310,26 +397,26 @@
                         </div>
                         <div class="flex justify-between items-center border-t pt-4">
                             <div class="flex flex-col">
-                                <span class="text-xl font-extrabold text-primary-dark">300 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xl font-extrabold text-primary-dark">300 DH <span data-i18n="car-day" class="text-base font-normal text-gray-500">/ day</span></span>
                                 <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
                             </div>
                             <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
-                                    data-car-name="Renault Clio 5 (Grey, Manual)" 
-                                    data-car-price="300 DH">
+                                        data-car-name="Renault Clio 5 (Grey, Manual)" 
+                                        data-car-price="300 DH">
                                 Book Now
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                <div class="car-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300" data-price="300" data-transmission="manual" data-type="hatchback">
                     <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
-                        <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Peugeot+208" alt="Black Peugeot 208 Manual" class="w-full h-full object-contain">
+                        <img src="https://i.postimg.cc/cJzhZmZ9/IMG-4186.jpg" alt="Black Peugeot 208 Manual" class="w-full h-full object-contain">
                     </div>
                     <div class="p-6 md:w-2/3 flex flex-col justify-between">
                         <div>
                             <h3 class="text-2xl font-bold text-gray-900">Peugeot 208 (<span data-i18n="manual">Manual</span>)</h3>
-                            <p class="text-gray-500 mb-4">A comfortable and popular compact car, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <p class="text-gray-500 mb-4" data-i18n="car-description-208-manual-black">A comfortable and popular compact car, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
                             <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="gauge" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="manual">Manual</span></span>
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
@@ -339,26 +426,55 @@
                         </div>
                         <div class="flex justify-between items-center border-t pt-4">
                             <div class="flex flex-col">
-                                <span class="text-xl font-extrabold text-primary-dark">300 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xl font-extrabold text-primary-dark">300 DH <span data-i18n="car-day" class="text-base font-normal text-gray-500">/ day</span></span>
                                 <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
                             </div>
                             <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
-                                    data-car-name="Peugeot 208 (Black, Manual)" 
-                                    data-car-price="300 DH">
+                                        data-car-name="Peugeot 208 (Black, Manual)" 
+                                        data-car-price="300 DH">
+                                Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="car-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300" data-price="300" data-transmission="manual" data-type="hatchback">
+                    <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
+                        <img src="https://i.postimg.cc/VvqWqPtt/IMG-4185.jpg" alt="Grey Peugeot 208 Manual" class="w-full h-full object-contain">
+                    </div>
+                    <div class="p-6 md:w-2/3 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Peugeot 208 (<span data-i18n="manual">Manual</span>)</h3>
+                            <p class="text-gray-500 mb-4" data-i18n="car-description-208-manual-grey">Stylish compact choice for easy urban driving, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="gauge" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="manual">Manual</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats">5 Seats</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="car" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> Hatchback</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center border-t pt-4">
+                            <div class="flex flex-col">
+                                <span class="text-xl font-extrabold text-primary-dark">300 DH <span data-i18n="car-day" class="text-base font-normal text-gray-500">/ day</span></span>
+                                <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
+                            </div>
+                            <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
+                                        data-car-name="Peugeot 208 (Grey, Manual)" 
+                                        data-car-price="300 DH">
                                 Book Now
                             </button>
                         </div>
                     </div>
                 </div>
                 
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                <div class="car-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300" data-price="350" data-transmission="automatic" data-type="hatchback">
                     <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
-                        <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Clio+5+Auto" alt="Black Renault Clio 5 Automatic" class="w-full h-full object-contain">
+                        <img src="https://i.postimg.cc/J43pJZ3f/IMG-4184.webp" alt="Black Renault Clio 5 Automatic" class="w-full h-full object-contain">
                     </div>
                     <div class="p-6 md:w-2/3 flex flex-col justify-between">
                         <div>
                             <h3 class="text-2xl font-bold text-gray-900">Renault Clio 5 (<span data-i18n="automatic">Automatic</span>)</h3>
-                            <p class="text-gray-500 mb-4">The comfort of automatic driving, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <p class="text-gray-500 mb-4" data-i18n="car-description-clio-auto-black">The comfort of automatic driving, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
                             <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="car" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="automatic">Automatic</span></span>
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
@@ -368,26 +484,26 @@
                         </div>
                         <div class="flex justify-between items-center border-t pt-4">
                             <div class="flex flex-col">
-                                <span class="text-xl font-extrabold text-primary-dark">350 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xl font-extrabold text-primary-dark">350 DH <span data-i18n="car-day" class="text-base font-normal text-gray-500">/ day</span></span>
                                 <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
                             </div>
                             <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
-                                    data-car-name="Renault Clio 5 (Black, Automatic)" 
-                                    data-car-price="350 DH">
+                                        data-car-name="Renault Clio 5 (Black, Automatic)" 
+                                        data-car-price="350 DH">
                                 Book Now
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                <div class="car-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300" data-price="350" data-transmission="automatic" data-type="hatchback">
                     <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
-                        <img src="https://placehold.co/600x400/000000/ffffff?text=Black+P208+Auto" alt="Black Peugeot 208 Automatic" class="w-full h-full object-contain">
+                        <img src="https://i.postimg.cc/cJzhZmZ9/IMG-4186.jpg" alt="Black Peugeot 208 Automatic" class="w-full h-full object-contain">
                     </div>
                     <div class="p-6 md:w-2/3 flex flex-col justify-between">
                         <div>
                             <h3 class="text-2xl font-bold text-gray-900">Peugeot 208 (<span data-i18n="automatic">Automatic</span>)</h3>
-                            <p class="text-gray-500 mb-4">Smooth automatic driving in a stylish compact, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <p class="text-gray-500 mb-4" data-i18n="car-description-208-auto-black">Smooth automatic driving in a stylish compact, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
                             <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="car" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="automatic">Automatic</span></span>
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
@@ -397,26 +513,26 @@
                         </div>
                         <div class="flex justify-between items-center border-t pt-4">
                             <div class="flex flex-col">
-                                <span class="text-xl font-extrabold text-primary-dark">350 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xl font-extrabold text-primary-dark">350 DH <span data-i18n="car-day" class="text-base font-normal text-gray-500">/ day</span></span>
                                 <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
                             </div>
                             <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
-                                    data-car-name="Peugeot 208 (Black, Automatic)" 
-                                    data-car-price="350 DH">
+                                        data-car-name="Peugeot 208 (Black, Automatic)" 
+                                        data-car-price="350 DH">
                                 Book Now
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                <div class="car-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300" data-price="300" data-transmission="manual" data-type="sedan">
                     <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
-                        <img src="https://placehold.co/600x400/000000/ffffff?text=Black+Logan" alt="Black Dacia Logan Manual" class="w-full h-full object-contain">
+                        <img src="https://i.postimg.cc/bNLQpT9v/IMG-4188.webp" alt="Black Dacia Logan Manual" class="w-full h-full object-contain">
                     </div>
                     <div class="p-6 md:w-2/3 flex flex-col justify-between">
                         <div>
                             <h3 class="text-2xl font-bold text-gray-900">Dacia Logan (<span data-i18n="manual">Manual</span>)</h3>
-                            <p class="text-gray-500 mb-4">Robust and spacious sedan, excellent value, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <p class="text-gray-500 mb-4" data-i18n="car-description-logan-black">Robust and spacious sedan, excellent value, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
                             <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="gauge" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="manual">Manual</span></span>
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
@@ -426,26 +542,26 @@
                         </div>
                         <div class="flex justify-between items-center border-t pt-4">
                             <div class="flex flex-col">
-                                <span class="text-xl font-extrabold text-primary-dark">300 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xl font-extrabold text-primary-dark">300 DH <span data-i18n="car-day" class="text-base font-normal text-gray-500">/ day</span></span>
                                 <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
                             </div>
                             <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
-                                    data-car-name="Dacia Logan (Black, Manual)" 
-                                    data-car-price="300 DH">
+                                        data-car-name="Dacia Logan (Black, Manual)" 
+                                        data-car-price="300 DH">
                                 Book Now
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                <div class="car-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300" data-price="300" data-transmission="manual" data-type="sedan">
                     <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
-                        <img src="https://placehold.co/600x400/808080/ffffff?text=Grey+Logan" alt="Grey Dacia Logan Manual" class="w-full h-full object-contain">
+                        <img src="https://i.postimg.cc/R0W1PHf4/IMG-4189.png" alt="Grey Dacia Logan Manual" class="w-full h-full object-contain">
                     </div>
                     <div class="p-6 md:w-2/3 flex flex-col justify-between">
                         <div>
                             <h3 class="text-2xl font-bold text-gray-900">Dacia Logan (<span data-i18n="manual">Manual</span>)</h3>
-                            <p class="text-gray-500 mb-4">A reliable and trusted choice for long trips, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <p class="text-gray-500 mb-4" data-i18n="car-description-logan-grey">A reliable and trusted choice for long trips, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
                             <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="gauge" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="manual">Manual</span></span>
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
@@ -455,26 +571,26 @@
                         </div>
                         <div class="flex justify-between items-center border-t pt-4">
                             <div class="flex flex-col">
-                                <span class="text-xl font-extrabold text-primary-dark">300 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xl font-extrabold text-primary-dark">300 DH <span data-i18n="car-day" class="text-base font-normal text-gray-500">/ day</span></span>
                                 <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
                             </div>
                             <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
-                                    data-car-name="Dacia Logan (Grey, Manual)" 
-                                    data-car-price="300 DH">
+                                        data-car-name="Dacia Logan (Grey, Manual)" 
+                                        data-car-price="300 DH">
                                 Book Now
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300">
+                <div class="car-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300" data-price="300" data-transmission="manual" data-type="sedan">
                     <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
-                        <img src="https://placehold.co/600x400/ffffff/000000?text=White+Logan" alt="White Dacia Logan Manual" class="w-full h-full object-contain">
+                        <img src="https://i.postimg.cc/R0W1PHf4/IMG-4189.png" alt="White Dacia Logan Manual" class="w-full h-full object-contain">
                     </div>
                     <div class="p-6 md:w-2/3 flex flex-col justify-between">
                         <div>
                             <h3 class="text-2xl font-bold text-gray-900">Dacia Logan (<span data-i18n="manual">Manual</span>)</h3>
-                            <p class="text-gray-500 mb-4">Clean and comfortable, ready for any Moroccan adventure, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <p class="text-gray-500 mb-4" data-i18n="car-description-logan-white">Clean and comfortable, ready for any Moroccan adventure, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
                             <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="gauge" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="manual">Manual</span></span>
                                 <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
@@ -484,28 +600,58 @@
                         </div>
                         <div class="flex justify-between items-center border-t pt-4">
                             <div class="flex flex-col">
-                                <span class="text-xl font-extrabold text-primary-dark">300 DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                                <span class="text-xl font-extrabold text-primary-dark">300 DH <span data-i18n="car-day" class="text-base font-normal text-gray-500">/ day</span></span>
                                 <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
                             </div>
                             <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
-                                    data-car-name="Dacia Logan (White, Manual)" 
-                                    data-car-price="300 DH">
+                                        data-car-name="Dacia Logan (White, Manual)" 
+                                        data-car-price="300 DH">
                                 Book Now
                             </button>
                         </div>
                     </div>
                 </div>
+
+                <div class="car-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300" data-price="250" data-transmission="manual" data-type="hatchback">
+                    <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
+                        <img src="https://i.postimg.cc/cJtY7NyL/IMG-4191.png" alt="Grey Dacia Sandero Manual" class="w-full h-full object-contain">
+                    </div>
+                    <div class="p-6 md:w-2/3 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Dacia Sandero (<span data-i18n="manual">Manual</span>)</h3>
+                            <p class="text-gray-500 mb-4" data-i18n="car-description-sandero">Economical and compact hatchback, ideal for city travel, <span data-i18n="car-seats">5 Seats</span>, A/C.</p>
+                            <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="gauge" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="manual">Manual</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> A/C</span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> <span data-i18n="car-seats">5 Seats</span></span>
+                                <span class="flex items-center ltr:justify-start"><i data-lucide="fuel" class="w-4 h-4 ltr:mr-2 text-primary-dark"></i> Fuel Efficient</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center border-t pt-4">
+                            <div class="flex flex-col">
+                                <span class="text-xl font-extrabold text-primary-dark">250 DH <span data-i18n="car-day" class="text-base font-normal text-gray-500">/ day</span></span>
+                                <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
+                            </div>
+                            <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
+                                        data-car-name="Dacia Sandero (Grey, Manual)" 
+                                        data-car-price="250 DH">
+                                Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
 
         </div>
     </main>
 
-    <div id="contact-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center hidden" 
-         role="dialog" aria-modal="true">
+    <div id="contact-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center hidden">
         <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md m-4 transform transition-all duration-300 scale-95 opacity-0" id="modal-content">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-2xl font-bold text-primary-dark" data-i18n="h3-modal">Book Your Car</h3>
-                <button id="close-modal-btn" aria-label="Close modal" class="text-gray-500 hover:text-primary-dark">
+                <button id="close-modal-btn" class="text-gray-500 hover:text-primary-dark">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
@@ -528,7 +674,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 border-b border-gray-700 pb-8 mb-8">
                 <div>
-                    <h3 class="text-2xl font-extrabold mb-4 text-gray-300">Black Iris Cars</h3>
+                    <h3 class="text-2xl font-extrabold mb-4 text-gray-300">BLACK IRIS cars</h3>
                     <p class="text-gray-400 text-sm">Your reliable partner for car rentals across Morocco.</p>
                 </div>
                 <div>
@@ -536,12 +682,12 @@
                     <ul class="space-y-2 text-sm text-gray-400">
                         <li><a href="index.html#featured" class="hover:text-accent-blue transition duration-150" data-i18n="nav-fleet">Our Fleet</a></li>
                         <li><a href="index.html#why-us" class="hover:text-accent-blue transition duration-150" data-i18n="nav-why">Our Promise</a></li>
-                        <li><a href="index.html#contact" class="hover:text-accent-blue transition duration-150" data-i1g8n="nav-contact">Contact</a></li>
+                        <li><a href="index.html#contact" class="hover:text-accent-blue transition duration-150" data-i18n="nav-contact">Contact</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="text-lg font-semibold mb-4" data-i18n="h4-contact">Contact & Booking</h4>
-                    <p class="text-sm text-gray-400 mb-2 flex items-center ltr:justify-start"><i data-lucide="phone" class="w-4 h-4 ltr:mr-2 text-accent-blue"></i> <span data-i18n="call-text">Call:</span> 0602020402</p>
+                    <p class="text-sm text-gray-400 mb-2 flex items-center ltr:justify-start"><i data-lucide="phone" class="w-4 h-4 ltr:mr-2 text-accent-blue"></i> 0602020402</p>
                     <p class="text-sm text-gray-400 mb-2 flex items-center ltr:justify-start"><i data-lucide="mail" class="w-4 h-4 ltr:mr-2 text-accent-blue"></i> <a href="mailto:blackiriscars@gmail.com" class="hover:text-accent-blue">blackiriscars@gmail.com</a></p>
                     <p class="text-sm text-gray-400 mb-2 flex items-center ltr:justify-start"><i data-lucide="map-pin" class="w-4 h-4 ltr:mr-2 text-accent-blue"></i> <span data-i18n="address-text">10 rue ouarzazat hassan rabat</span></p>
                     <a href="https://wa.me/212602020402" target="_blank" class="text-sm text-white px-3 py-1 mt-2 inline-flex items-center rounded-lg bg-green-600 hover:bg-green-700 transition duration-150">
@@ -559,7 +705,7 @@
         // Initialize Lucide Icons
         lucide.createIcons();
         
-        // --- Translation Logic (Duplicated for standalone file) ---
+        // --- Translation Logic ---
         const translations = {
             'en': {
                 'nav-fleet': 'Our Fleet', 'nav-why': 'Why Choose Us', 'nav-reviews': 'Reviews', 'nav-contact': 'Contact',
@@ -576,11 +722,16 @@
                 'select-location': 'Select a location', 'manual': 'Manual', 'automatic': 'Automatic',
                 // available_cars.html specific
                 'h1-available': 'Available Rental Cars', 'h3-filter': 'Filter Options', 'label-price': 'Price Range (DH/day)',
-                'sort-count': 'Showing 12 available cars', 'label-sort': 'Sort By:', 'option-low': 'Price: Low to High',
-                'option-high': 'Price: High to Low', 'option-popular': 'Most Popular', 'h3-modal': 'Book Your Car',
+                'sort-count-text': 'cars available', 
+                'option-popular': 'Most Popular', 'h3-modal': 'Book Your Car',
                 'modal-p': 'Please choose your preferred contact method. Your chosen car details will be pre-filled.',
                 'btn-whatsapp': 'WhatsApp', 'btn-email': 'Email', 'modal-footer': 'We will confirm availability and finalize the booking details.',
-                'car-seats': '5 Seats', 'car-ac': 'A/C',
+                'car-seats': '5 Seats', // For economy cars
+                'car-seats-6': '6 Seats', // For SUVs
+                // Localized Booking Templates
+                'book-whatsapp-msg': (carName, carPrice) => `Hello, I am interested in renting the ${carName} (${carPrice}/day). Please confirm availability and help me proceed with the booking.`,
+                'book-email-subj': (carName) => `Car Rental Inquiry for ${carName}`,
+                'book-email-body': (carName, carPrice) => `Hello,\n\nI am interested in renting the ${carName} (${carPrice}/day). Please confirm availability for my desired dates and provide the next steps for reservation.`,
             },
             'fr': {
                 'nav-fleet': 'Notre Flotte', 'nav-why': 'Pourquoi Nous Choisir', 'nav-reviews': 'Avis', 'nav-contact': 'Contact',
@@ -597,14 +748,19 @@
                 'select-location': 'Sélectionnez un emplacement', 'manual': 'Manuelle', 'automatic': 'Automatique',
                 // available_cars.html specific
                 'h1-available': 'Voitures de Location Disponibles', 'h3-filter': 'Options de Filtre', 'label-price': 'Gamme de Prix (DH/jour)',
-                'sort-count': 'Affichage de 12 voitures disponibles', 'label-sort': 'Trier par:', 'option-low': 'Prix: Bas à Élevé',
-                'option-high': 'Prix: Élevé à Bas', 'option-popular': 'Le Plus Populaire', 'h3-modal': 'Réservez Votre Voiture',
+                'sort-count-text': 'voitures disponibles', 
+                'option-popular': 'Le Plus Populaire', 'h3-modal': 'Réservez Votre Voiture',
                 'modal-p': 'Veuillez choisir votre méthode de contact préférée. Les détails de la voiture choisie seront pré-remplis.',
                 'btn-whatsapp': 'WhatsApp', 'btn-email': 'Email', 'modal-footer': 'Nous confirmerons la disponibilité et finaliserons les détails de la réservation.',
-                'car-seats': '5 Sièges', 'car-ac': 'Climatisation',
+                'car-seats': '5 Sièges', // For economy cars
+                'car-seats-6': '6 Sièges', // For SUVs
+                // Localized Booking Templates
+                'book-whatsapp-msg': (carName, carPrice) => `Bonjour, je suis intéressé(e) par la location de ${carName} (${carPrice}/jour). Veuillez confirmer la disponibilité et m'aider à procéder à la réservation.`,
+                'book-email-subj': (carName) => `Demande de location de voiture pour ${carName}`,
+                'book-email-body': (carName, carPrice) => `Bonjour,\n\nJe suis intéressé(e) par la location de ${carName} (${carPrice}/jour). Veuillez confirmer la disponibilité pour mes dates souhaitées et m'indiquer les prochaines étapes pour la réservation.`,
             },
             'ar': {
-                'nav-fleet': 'أسطولنا', 'nav-why': 'لماذا تختارنا', 'nav-reviews': 'التقيimات', 'nav-contact': 'اتصال',
+                'nav-fleet': 'أسطولنا', 'nav-why': 'لماذا تختارنا', 'nav-reviews': 'التقييمات', 'nav-contact': 'اتصال',
                 'h1-hero': 'اكتشف المغرب. قد الجودة.', 'p-hero': 'سيارات فاخرة متوفرة في جميع المدن المغربية الكبرى.',
                 'h2-reservation': 'حجز سريع', 'label-pickup-city': 'مدينة أو مطار الاستلام', 'label-pickup-date': 'تاريخ الاستلام',
                 'label-return-date': 'تاريخ الإرجاع', 'btn-search': 'البحث عن سيارات', 'h2-fleet': 'أسطولنا', 'car-day': '/ يوم',
@@ -618,11 +774,16 @@
                 'select-location': 'اختر موقعًا', 'manual': 'يدوي', 'automatic': 'أوتوماتيكي',
                 // available_cars.html specific
                 'h1-available': 'سيارات الإيجار المتاحة', 'h3-filter': 'خيارات التصفية', 'label-price': 'نطاق السعر (درهم/يوم)',
-                'sort-count': 'عرض 12 سيارة متاحة', 'label-sort': 'الترتيب حسب:', 'option-low': 'السعر: من الأقل للأعلى',
-                'option-high': 'السعر: من الأعلى للأقل', 'option-popular': 'الأكثر شعبية', 'h3-modal': 'احجز سيارتك',
+                'sort-count-text': 'سيارة متاحة', 
+                'option-popular': 'الأكثر شعبية', 'h3-modal': 'احجز سيارتك',
                 'modal-p': 'الرجاء اختيار طريقة الاتصال المفضلة لديك. سيتم ملء تفاصيل السيارة المختارة مسبقًا.',
                 'btn-whatsapp': 'واتساب', 'btn-email': 'بريد إلكتروني', 'modal-footer': 'سنؤكد التوفر ونكمل تفاصيل الحجز.',
-                'car-seats': '5 مقاعد', 'car-ac': 'مكيف',
+                'car-seats': '5 مقاعد', // For economy cars
+                'car-seats-6': '6 مقاعد', // For SUVs
+                 // Localized Booking Templates
+                'book-whatsapp-msg': (carName, carPrice) => `مرحباً، أنا مهتم باستئجار ${carName} (${carPrice}/يوم). الرجاء تأكيد التوفر ومساعدتي في متابعة الحجز.`,
+                'book-email-subj': (carName) => `استفسار حجز سيارة لـ ${carName}`,
+                'book-email-body': (carName, carPrice) => `مرحباً،\n\nأنا مهتم باستئجار ${carName} (${carPrice}/يوم). الرجاء تأكيد التوفر للتواريخ المطلوبة وتزويدي بالخطوات التالية للحجز.`,
             }
         };
         
@@ -638,6 +799,9 @@
                     element.textContent = dictionary[key];
                 }
             });
+            // Update car count with new language text
+            updateCarCount(document.querySelectorAll('.car-card:not([style*="none"])').length);
+
 
             // 2. Handle RTL (Right-to-Left)
             const body = document.body;
@@ -647,7 +811,7 @@
                 body.setAttribute('dir', 'ltr');
             }
             // Update title
-             document.title = (dictionary['h1-available'] || 'Available Cars') + (lang === 'ar' ? ' | بلاك آيرس' : ' | Black Iris');
+             document.title = (translations['en']['h1-available'] || 'Available Cars') + (lang === 'ar' ? ' | بلاك آيرس' : ' | Black Iris');
 
             // 3. Update the price value displayed below the range input
             const priceRange = document.getElementById('price-range');
@@ -668,7 +832,6 @@
 
         languageSelector.addEventListener('change', (event) => {
             setLanguage(event.target.value);
-            // Save preference to localStorage
             localStorage.setItem('languagePreference', event.target.value);
         });
 
@@ -678,35 +841,108 @@
             languageSelector.value = savedLang;
             setLanguage(savedLang);
         });
+        
+        // --- Filtering Logic ---
+        const carCards = document.querySelectorAll('.car-card');
+        const priceRange = document.getElementById('price-range');
+        const priceValue = document.getElementById('price-value');
+        const applyFiltersBtn = document.getElementById('apply-filters-btn');
+        const carCountElement = document.getElementById('car-count');
+        const transmissionFilters = document.querySelectorAll('#transmission-filters input[type="checkbox"]');
+        const typeFilters = document.querySelectorAll('#type-filters input[type="checkbox"]');
+        
+        function updateCarCount(count) {
+            const currentLang = languageSelector.value;
+            const text = translations[currentLang]['sort-count-text'];
+            carCountElement.textContent = `${count} ${text}`;
+        }
 
+        function getCheckedValues(checkboxes) {
+            return Array.from(checkboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+        }
 
+        function filterCars() {
+            const maxPrice = parseInt(priceRange.value);
+            const selectedTransmissions = getCheckedValues(transmissionFilters);
+            const selectedTypes = getCheckedValues(typeFilters);
+            
+            let visibleCount = 0;
+
+            carCards.forEach(card => {
+                const carPrice = parseInt(card.getAttribute('data-price'));
+                const carTransmission = card.getAttribute('data-transmission');
+                const carType = card.getAttribute('data-type');
+
+                // 1. Price Check
+                const priceMatch = carPrice <= maxPrice;
+
+                // 2. Transmission Check (If no filters selected, all match)
+                const transmissionMatch = selectedTransmissions.length === 0 || selectedTransmissions.includes(carTransmission);
+
+                // 3. Type Check (If no filters selected, all match)
+                const typeMatch = selectedTypes.length === 0 || selectedTypes.includes(carType);
+
+                // Final decision
+                if (priceMatch && transmissionMatch && typeMatch) {
+                    card.style.display = 'flex'; // Show the car card
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none'; // Hide the car card
+                }
+            });
+
+            updateCarCount(visibleCount);
+        }
+        
         // --- Filter Sidebar Mobile Toggle Logic ---
         const filterButton = document.getElementById('filter-menu-button');
         const filterSidebar = document.getElementById('filter-sidebar');
         const filterCloseButton = document.getElementById('filter-close-button');
+        const filterBackdrop = document.getElementById('filter-backdrop'); // The new backdrop element
+        const resultsContainer = document.getElementById('results-container');
+
+        // Function to open/close sidebar
+        function toggleSidebar() {
+            const isSidebarOpen = filterSidebar.classList.toggle('open');
+            document.body.classList.toggle('overflow-hidden');
+            filterBackdrop.classList.toggle('hidden', !isSidebarOpen);
+        }
 
         // Open sidebar on mobile button click
-        filterButton.addEventListener('click', () => {
-            filterSidebar.classList.add('open');
-            document.body.classList.add('overflow-hidden'); // Prevent scrolling body when sidebar is open
-        });
+        filterButton.addEventListener('click', toggleSidebar);
         
         // Close sidebar on mobile close button click
-        filterCloseButton.addEventListener('click', () => {
-            filterSidebar.classList.remove('open');
-            document.body.classList.remove('overflow-hidden');
+        filterCloseButton.addEventListener('click', toggleSidebar);
+
+        // Close sidebar when clicking APPLY FILTERS button and filter cars
+        applyFiltersBtn.addEventListener('click', () => {
+            filterCars(); // Apply the filter logic
+            if (filterSidebar.classList.contains('open')) {
+                 toggleSidebar(); // Close sidebar if it was open (mobile view)
+            }
         });
 
-        // Update price range value display
-        const priceRange = document.getElementById('price-range');
-        const priceValue = document.getElementById('price-value');
+        // Close sidebar when clicking the results area (mobile dismissal)
+        // This handles clicks outside the sidebar on mobile
+        resultsContainer.addEventListener('click', () => {
+             if (filterSidebar.classList.contains('open')) {
+                 toggleSidebar();
+             }
+        });
+
+        // Close sidebar when clicking the backdrop (mobile dismissal)
+        filterBackdrop.addEventListener('click', toggleSidebar);
+
+
+        // Live Price Range Update
         priceRange.addEventListener('input', (event) => {
              const currentLang = document.body.getAttribute('dir') === 'rtl' ? 'ar' : 'en';
              const prefix = currentLang === 'ar' ? 'يصل إلى' : 'Up to';
              priceValue.textContent = `${prefix} ${event.target.value} DH`;
         });
-        
-        
+
         // --- Modal Logic ---
         const modal = document.getElementById('contact-modal');
         const modalContent = document.getElementById('modal-content');
@@ -717,57 +953,34 @@
 
 
         function openModal(carName, carPrice) {
-            // --- NEW: Read data from localStorage ---
-            const location = localStorage.getItem('rentalLocation');
-            const pickupDate = localStorage.getItem('rentalPickupDate');
-            const returnDate = localStorage.getItem('rentalReturnDate');
+            const currentLang = languageSelector.value;
+            const dict = translations[currentLang];
 
-            let tripDetails = '';
-            // Check if all details are present
-            if (location && pickupDate && returnDate) {
-                // Format the dates for display
-                const pDate = new Date(pickupDate).toLocaleString();
-                const rDate = new Date(returnDate).toLocaleString();
-
-                tripDetails = `
----
-My Trip Details:
-Location: ${location}
-Pickup: ${pDate}
-Return: ${rDate}
----
-`;
-            }
-            // --- END NEW ---
-
-            // 1. Generate Pre-populated Messages
-            const whatsappMessage = `Hello, I am interested in renting the ${carName} (${carPrice}/day).${tripDetails}\nPlease confirm availability and help me proceed with the booking.`;
-            const emailSubject = `Car Rental Inquiry for ${carName}`;
-            const emailBody = `Hello,\n\nI am interested in renting the ${carName} (${carPrice}/day).${tripDetails}\n\nPlease confirm availability for my desired dates and provide the next steps for reservation.`;
+            // Use the localized template functions
+            const whatsappMessage = dict['book-whatsapp-msg'](carName, carPrice);
+            const emailSubject = dict['book-email-subj'](carName);
+            const emailBody = dict['book-email-body'](carName, carPrice);
         
-            // 2. Set Link HREFs (URL encoding is crucial)
+            // Set Link HREFs (URL encoding is crucial)
             whatsappLink.href = `https://wa.me/212602020402?text=${encodeURIComponent(whatsappMessage)}`;
             emailLink.href = `mailto:blackiriscars@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
         
-            // 3. Display Modal
+            // Display Modal
             modal.classList.remove('hidden');
-            // Animate transition (scale/opacity removed on display)
             setTimeout(() => {
                 modalContent.classList.remove('scale-95', 'opacity-0');
             }, 10);
-            document.body.classList.add('overflow-hidden'); // Disable background scrolling
+            document.body.classList.add('overflow-hidden');
         }
 
         function closeModal() {
             modalContent.classList.add('scale-95', 'opacity-0');
-            // Wait for animation to finish before hiding
             setTimeout(() => {
                 modal.classList.add('hidden');
                 document.body.classList.remove('overflow-hidden');
             }, 300); 
         }
 
-        // Attach event listeners to all book buttons, passing car data
         bookButtons.forEach(button => {
             button.addEventListener('click', (event) => {
                 const carName = event.currentTarget.getAttribute('data-car-name');
@@ -778,12 +991,14 @@ Return: ${rDate}
 
         closeModalBtn.addEventListener('click', closeModal);
 
-        // Close modal if backdrop is clicked
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 closeModal();
             }
         });
+        
+        // Run filter on initial load to ensure correct state and count
+        document.addEventListener('DOMContentLoaded', filterCars);
     </script>
 </body>
 </html>
