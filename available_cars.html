@@ -865,14 +865,14 @@
              priceValue.textContent = `${prefix} ${event.target.value} DH`;
         });
 
-        // --- Modal Logic (CRITICAL FIX: Uses FULL message template) ---
-        // Modal references MUST be outside the init function if they are used by global listeners.
+        // --- Modal References ---
+        // Modal references MUST be defined globally for consistency.
         const modal = document.getElementById('contact-modal');
         const modalContent = document.getElementById('modal-content');
         const closeModalBtn = document.getElementById('close-modal-btn');
-        const bookButtons = document.querySelectorAll('.book-now-btn');
         const whatsappLink = document.getElementById('whatsapp-link');
         const emailLink = document.getElementById('email-link');
+        const bookButtons = document.querySelectorAll('.book-now-btn'); // Must be queried again inside init function if not global
 
 
         function openModal(carName, carPrice) {
@@ -890,7 +890,7 @@
                  returnDisplay = new Date(rentalReturnDate).toLocaleDateString(currentLang, { dateStyle: 'medium' });
             }
 
-            // CRITICAL FIX: Use the localized FULL message templates
+            // Use the localized FULL message templates
             const whatsappMessage = dict['book-whatsapp-msg-full'](carName, carPrice, rentalLocation, pickupDisplay, returnDisplay);
             const emailSubject = dict['book-email-subj-full'](carName, rentalLocation);
             const emailBody = dict['book-email-body-full'](carName, carPrice, rentalLocation, pickupDisplay, returnDisplay);
@@ -917,13 +917,16 @@
 
         function initAvailableCarsPage() {
             getLocalStorageData();
+            
             const savedLang = localStorage.getItem('languagePreference') || 'en';
             setLanguage(savedLang);
             languageSelector.value = savedLang;
             filterCars(); 
 
-            // IMPORTANT: Attach listeners after the DOM is fully loaded and elements are referenced.
-            bookButtons.forEach(button => {
+            // **CRITICAL FIX:** Re-querying buttons and attaching listeners only after DOM is ready
+            const localBookButtons = document.querySelectorAll('.book-now-btn');
+
+            localBookButtons.forEach(button => {
                 button.addEventListener('click', (event) => {
                     const carName = event.currentTarget.getAttribute('data-car-name');
                     const carPrice = event.currentTarget.getAttribute('data-car-price');
