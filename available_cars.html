@@ -704,8 +704,7 @@
         // Initialize Lucide Icons
         lucide.createIcons();
         
-        // --- Global Data (Needs to be duplicated or imported for standalone functionality) ---
-        // This data should be identical to the list in index.html
+        // --- Global Data (Identical to index.html for consistency) ---
         const carData = [
             // New SUVs
             { id: 13, name: 'VW T-Roc', color: 'Black', price: 700, transmission: 'Automatic', seats: 5, type: 'suv', img: 'https://i.postimg.cc/d3ySgfyT/IMG-4177.jpg', desc: 'Premium compact crossover, comfortable and stylish for city and highway driving.' },
@@ -880,9 +879,6 @@
             rentalLocation = localStorage.getItem('rentalLocation') || '';
             rentalPickupDate = localStorage.getItem('rentalPickupDate') || '';
             rentalReturnDate = localStorage.getItem('rentalReturnDate') || '';
-            
-            // Optional: You could display this data somewhere on the page for the user to confirm.
-            // For example: document.getElementById('booking-summary').textContent = `Booking for ${rentalLocation} on ${rentalPickupDate}`;
         }
         
         // --- Filtering Logic ---
