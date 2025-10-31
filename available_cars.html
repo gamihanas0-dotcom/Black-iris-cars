@@ -177,7 +177,7 @@
                 </div>
 
 
-                <div class="car-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300" data-price="1200" data-transmission="automatic" data-type="luxury-suv">
+                <div class="car-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300" data-price="1400" data-transmission="automatic" data-type="luxury-suv">
                     <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
                         <img src="https://i.postimg.cc/4NpS5rGj/IMG-4179.webp" alt="Grey VW Touareg Automatic" class="w-full h-full object-contain">
                     </div>
@@ -194,12 +194,12 @@
                         </div>
                         <div class="flex justify-between items-center border-t pt-4">
                             <div class="flex flex-col">
-                                <span class="text-xl font-extrabold text-primary-dark">1200 DH <span data-i18n="car-day" class="text-base font-normal text-gray-500">/ day</span></span>
+                                <span class="text-xl font-extrabold text-primary-dark">1400 DH <span data-i18n="car-day" class="text-base font-normal text-gray-500">/ day</span></span>
                                 <span class="text-xs text-gray-400 mt-1">Total est: Calculate on checkout</span>
                             </div>
                             <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
                                         data-car-name="VW Touareg (Grey, Automatic)" 
-                                        data-car-price="1200 DH">
+                                        data-car-price="1400 DH">
                                 Book Now
                             </button>
                         </div>
@@ -705,16 +705,15 @@
         // Initialize Lucide Icons
         lucide.createIcons();
         
-        // --- Data Retrieval on Load ---
+        // --- Global State ---
+        let currentLang = 'en';
         let rentalLocation = '';
         let rentalPickupDate = '';
         let rentalReturnDate = '';
-        
-        // Ensure global variables are set (using data loaded from data.js)
-        let currentLang = 'en';
+
+        // --- Utility Functions (Data & Translation) ---
 
         function getTranslation(key) {
-            // Check if key is a string property or a function (template)
             const translation = translations[currentLang][key];
             if (typeof translation === 'function') {
                 return translation; 
@@ -733,7 +732,6 @@
                     element.textContent = dictionary[key];
                 }
             });
-            // Update car count with new language text
             updateCarCount(document.querySelectorAll('.car-card:not([style*="none"])').length);
 
 
@@ -774,7 +772,6 @@
         });
 
         function getLocalStorageData() {
-            // CRITICAL FIX: Retrieve data from localStorage
             rentalLocation = localStorage.getItem('rentalLocation') || '';
             rentalPickupDate = localStorage.getItem('rentalPickupDate') || '';
             rentalReturnDate = localStorage.getItem('rentalReturnDate') || '';
@@ -937,8 +934,8 @@
         document.addEventListener('DOMContentLoaded', () => {
             getLocalStorageData(); // CRITICAL: Pull data first!
             const savedLang = localStorage.getItem('languagePreference') || 'en';
-            languageSelector.value = savedLang;
             setLanguage(savedLang);
+            languageSelector.value = savedLang;
             filterCars(); 
         });
     </script>
