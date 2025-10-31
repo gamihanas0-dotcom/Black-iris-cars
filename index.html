@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLACK IRIS cars - Rent in Morocco</title>
+    <title>BLACK IRIS cars - Car rental in Morocco</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -231,7 +231,7 @@
     </section>
 
     ---
-    
+
     <section id="testimonials" class="py-16 md:py-24 bg-fafafa">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-4xl font-extrabold text-primary-dark text-center mb-12" data-i18n="h2-testimonials">
@@ -485,11 +485,55 @@
             localStorage.setItem('languagePreference', event.target.value);
         });
 
-        // Load language preference on page load
+        // --- Date Functions (Reusable) ---
+        
+        // Helper function to format a Date object for datetime-local input
+        function getFormattedDateTime(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${year}-${month}-${day}T${hours}:${minutes}`;
+        }
+
+        function initializeDateFields() {
+            const pickupInput = document.getElementById('pickup-date');
+            const returnInput = document.getElementById('return-date');
+
+            const now = new Date();
+            // Round up to the next minute to prevent immediate expiry
+            now.setSeconds(0);
+            now.setMilliseconds(0);
+            
+            const minDateTime = getFormattedDateTime(now);
+            pickupInput.min = minDateTime;
+            returnInput.min = minDateTime;
+
+            // Add event listener to adjust return date constraints whenever pickup date changes
+            pickupInput.addEventListener('change', () => {
+                const pickupTime = new Date(pickupInput.value);
+                if (isNaN(pickupTime)) return;
+                
+                // Calculate minimum return time: 1 full day after pickup
+                const minReturnTime = new Date(pickupTime.getTime() + (24 * 60 * 60 * 1000));
+                
+                // Ensure min attribute for return date reflects the new pickup date constraint
+                returnInput.min = getFormattedDateTime(minReturnTime);
+
+                // If current return value is earlier than the new minimum, update it
+                if (returnInput.value && new Date(returnInput.value).getTime() < minReturnTime.getTime()) {
+                    returnInput.value = getFormattedDateTime(minReturnTime);
+                }
+            });
+        }
+
+        // Load language preference and initialize dates on page load
         document.addEventListener('DOMContentLoaded', () => {
             const savedLang = localStorage.getItem('languagePreference') || 'en';
             languageSelector.value = savedLang;
             setLanguage(savedLang);
+            initializeDateFields();
         });
 
 
@@ -529,7 +573,7 @@
         }
 
 
-        // --- CAR DETAIL MODAL LOGIC ---
+        // --- CAR DETAIL MODAL LOGIC (Called from available_cars.html or index.html) ---
         const detailModal = document.getElementById('car-detail-modal');
         const modalDetailContent = document.getElementById('modal-detail-content');
         const closeDetailModalBtn = document.getElementById('close-detail-modal-btn');
@@ -571,24 +615,46 @@
             document.body.classList.add('overflow-hidden');
         }
 
+        // --- CORE LOGIC: Dynamic Message Generator ---
         function showContactOptions(carName, carPrice, carTransmission, carColor) {
             const transmissionText = getTranslation(carTransmission.toLowerCase());
-            const pickupLocation = localStorage.getItem('rentalLocation') || 'Not Specified';
-            const pickupDate = localStorage.getItem('rentalPickupDate') || 'Not Specified';
-            const returnDate = localStorage.getItem('rentalReturnDate') || 'Not Specified';
 
-            // Generate Detailed Pre-populated Messages
-            const whatsappMessage = `Hello, I am interested in renting the ${carName} (${carPrice} DH${getTranslation('car-day')}).\n\n- Pickup: ${pickupLocation} on ${pickupDate}\n- Return: ${returnDate}\n- Details: Transmission: ${transmissionText}, Color: ${carColor}.\n\nPlease confirm availability and help me proceed with the booking.`;
-            const emailSubject = `Car Rental Inquiry for ${carName}`;
-            const emailBody = `Hello,\n\nI am interested in renting the ${carName} (${carPrice} DH${getTranslation('car-day')}).\n\nBooking Details:\n- Pickup Location: ${pickupLocation}\n- Pickup Date: ${pickupDate}\n- Return Date: ${returnDate}\n\nCar Details:\n- Transmission: ${transmissionText}\n- Color: ${carColor}\n\nPlease confirm availability and provide the next steps for reservation.`;
+            // 1. Retrieve data from localStorage (set by the main form submission)
+            const rentalLocation = localStorage.getItem('rentalLocation');
+            const rentalPickupDate = localStorage.getItem('rentalPickupDate');
+            const rentalReturnDate = localStorage.getItem('rentalReturnDate');
+
+            let messageContent;
+            let emailSubject;
             
-            // Set Link HREFs (URL encoding is crucial)
-            whatsappLink.href = `https://wa.me/212602020402?text=${encodeURIComponent(whatsappMessage)}`;
-            emailLink.href = `mailto:blackiriscars@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+            // SCENARIO CHECK: Are dates and location available in storage?
+            if (rentalLocation && rentalPickupDate && rentalReturnDate) {
+                // SCENARIO: DETAILED MESSAGE (User completed search form on index page or available_cars.html)
+                // This is the message you want when the client presses Book on the available cars page.
+                
+                // Format dates for the message
+                const pickupDisplay = new Date(rentalPickupDate).toLocaleString(currentLang, { dateStyle: 'medium', timeStyle: 'short' });
+                const returnDisplay = new Date(rentalReturnDate).toLocaleString(currentLang, { dateStyle: 'medium', timeStyle: 'short' });
+
+                messageContent = `Hello, I am interested in renting the ${carName} (${carColor}, ${transmissionText}) (${carPrice} DH${getTranslation('car-day')}).\n\nBooking Details:\n- City/Airport: ${rentalLocation}\n- Pickup: ${pickupDisplay}\n- Return: ${returnDisplay}\n\nPlease confirm availability and help me proceed with the booking.`;
+                
+                emailSubject = `Car Reservation Inquiry: ${carName} (${rentalLocation})`;
+
+            } else {
+                // SCENARIO: CONCISE MESSAGE (User navigated directly to the index page featured car, or available_cars.html without searching)
+                // This is the message you want for the index page pop-up.
+                
+                messageContent = `Hello, I am interested in renting the ${carName} (${carColor}, ${transmissionText}) (${carPrice} DH${getTranslation('car-day')}). Please confirm availability and help me proceed with the booking.`;
+
+                emailSubject = `Car Rental Inquiry: ${carName} (${carColor}, ${transmissionText})`;
+            }
+
+            // 2. Set Link HREFs (URL encoding is crucial)
+            whatsappLink.href = `https://wa.me/212602020402?text=${encodeURIComponent(messageContent)}`;
+            emailLink.href = `mailto:blackiriscars@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(messageContent)}`;
             
-            // Show contact buttons (Modal dynamically resizes to accommodate this content)
+            // 3. Update Modal Display
             contactOptions.classList.remove('hidden');
-            // Hide the initial 'Book Now' button
             modalBookButton.classList.add('hidden');
         }
 
@@ -643,7 +709,7 @@
             });
         });
 
-        // --- FORM SUBMISSION HANDLER (Instant Redirect) ---
+        // --- FORM SUBMISSION HANDLER (Validation and Instant Redirect) ---
         const rentalForm = document.getElementById('rental-form');
         const resultMessage = document.getElementById('result-message');
 
@@ -654,11 +720,40 @@
             const pickupDate = document.getElementById('pickup-date').value;
             const returnDate = document.getElementById('return-date').value;
 
-            // Simple validation check (only shows error message if incomplete)
+            // --- DATE AND FIELD VALIDATION LOGIC ---
+            
+            // 1. Check for required fields
             if (!location || !pickupDate || !returnDate) {
                 resultMessage.classList.remove('hidden', 'bg-green-100', 'border-green-400', 'text-green-700');
                 resultMessage.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
-                resultMessage.innerHTML = '<strong>Error!</strong> Please select a pick-up city/airport and complete date range.';
+                resultMessage.innerHTML = '<strong>Error!</strong> Please select a pick-up city/airport and complete the date range.';
+
+                setTimeout(() => {
+                    resultMessage.classList.add('hidden');
+                }, 5000);
+                return;
+            }
+
+            const pickupTime = new Date(pickupDate).getTime();
+            const returnTime = new Date(returnDate).getTime();
+            const nowTime = new Date().getTime();
+            const oneDayInMs = 24 * 60 * 60 * 1000;
+
+            let errorMessage = '';
+
+            // 2. Check Pickup Date (Submission check, complementing HTML5 min attribute)
+            if (pickupTime < nowTime - (60 * 1000)) { 
+                errorMessage = '<strong>Error!</strong> The pick-up date/time cannot be in the past.';
+            } 
+            // 3. Check Minimum Rental Duration (Return must be >= 24 hours after Pickup)
+            else if (returnTime < pickupTime + oneDayInMs) {
+                errorMessage = '<strong>Error!</strong> The rental period must be for at least 1 full day (24 hours).';
+            }
+
+            if (errorMessage) {
+                resultMessage.classList.remove('hidden', 'bg-green-100', 'border-green-400', 'text-green-700');
+                resultMessage.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
+                resultMessage.innerHTML = errorMessage;
 
                 setTimeout(() => {
                     resultMessage.classList.add('hidden');
@@ -666,7 +761,9 @@
                 return;
             }
             
-            // Store search parameters in localStorage 
+            // --- VALIDATION SUCCESS: INSTANT REDIRECT ---
+            
+            // Store search parameters in localStorage for use on available_cars.html
             localStorage.setItem('rentalLocation', location);
             localStorage.setItem('rentalPickupDate', pickupDate);
             localStorage.setItem('rentalReturnDate', returnDate);
