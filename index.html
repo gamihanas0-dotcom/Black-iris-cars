@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLACK IRIS cars - Car rental in Morocco</title>
+    <title>BLACK IRIS cars - Rent in Morocco</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -30,7 +30,7 @@
         .feature-icon { color: #1a1a1a; }
 
         /* CRITICAL: Ensure inputs are visible (black text) and consistent padding */
-        input[type="datetime-local"], select {
+        input[type="date"], select {
             color: #000000 !important;
             background-color: #ffffff !important;
             padding: 8px 12px !important; 
@@ -39,8 +39,8 @@
             -webkit-appearance: none;
             -moz-appearance: none;
         }
-        /* Optional: Style for input calendar icon */
-        input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+        /* Style for input calendar icon (kept for consistency, though 'date' type behavior varies) */
+        input[type="date"]::-webkit-calendar-picker-indicator {
             filter: invert(0); 
         }
         /* Ensure selected city option text is black */
@@ -158,12 +158,12 @@
 
                     <div>
                         <label for="pickup-date" class="block text-sm font-medium text-gray-700" data-i18n="label-pickup-date">Pick-up Date</label>
-                        <input type="datetime-local" id="pickup-date" name="pickup-date" required class="mt-1 block w-full rounded-lg border-gray-300 focus:ring-gray-700 focus:border-gray-700 border">
+                        <input type="date" id="pickup-date" name="pickup-date" required class="mt-1 block w-full rounded-lg border-gray-300 focus:ring-gray-700 focus:border-gray-700 border">
                     </div>
 
                     <div>
                         <label for="return-date" class="block text-sm font-medium text-gray-700" data-i18n="label-return-date">Return Date</label>
-                        <input type="datetime-local" id="return-date" name="return-date" required class="mt-1 block w-full rounded-lg border-gray-300 focus:ring-gray-700 focus:border-gray-700 border">
+                        <input type="date" id="return-date" name="return-date" required class="mt-1 block w-full rounded-lg border-gray-300 focus:ring-gray-700 focus:border-gray-700 border">
                     </div>
 
                     <div class="col-span-1 flex items-end">
@@ -360,7 +360,7 @@
         const carData = [
             // New SUVs
             { id: 13, name: 'VW T-Roc', color: 'Black', price: 700, transmission: 'Automatic', seats: 5, type: 'SUV', img: 'https://i.postimg.cc/d3ySgfyT/IMG-4177.jpg', desc: 'Premium compact crossover, comfortable and stylish for city and highway driving.' },
-            { id: 14, name: 'VW Touareg', color: 'Grey', price: 1400, transmission: 'Automatic', seats: 6, type: 'SUV', img: 'https://i.postimg.cc/4NpS5rGj/IMG-4179.webp', desc: 'Full-size luxury SUV, offering ultimate comfort, power, and space for long-distance luxury travel.' }, 
+            { id: 14, name: 'VW Touareg', color: 'Grey', price: 1400, transmission: 'Automatic', seats: 6, type: 'Luxury-SUV', img: 'https://i.postimg.cc/4NpS5rGj/IMG-4179.webp', desc: 'Full-size luxury SUV, offering ultimate comfort, power, and space for long-distance luxury travel.' }, 
             // Existing SUVs
             { id: 1, name: 'Hyundai Tucson', color: 'Grey', price: 850, transmission: 'Automatic', seats: 6, type: 'SUV', img: 'https://i.postimg.cc/DzvHm59V/IMG-4161.jpg', desc: 'Luxury compact SUV, space and comfort for long journeys, perfect for family road trips.' },
             { id: 2, name: 'Hyundai Tucson', color: 'Black', price: 850, transmission: 'Automatic', seats: 6, type: 'SUV', img: 'https://i.postimg.cc/HxP2YtgX/IMG-4180.jpg', desc: 'Stylish and powerful SUV, featuring modern technology and excellent handling on Moroccan highways.' },
@@ -397,6 +397,10 @@
                 'select-location': 'Select a location', 'manual': 'Manual', 'automatic': 'Automatic', 'btn-book-now': 'Book Now',
                 'modal-ac-label-short': 'A/C', 'car-seats-label-spaced': ' Seats', 
                 'modal-p': 'Choose contact method:', 'btn-whatsapp': 'WhatsApp', 'btn-email': 'Email',
+                // Localized Booking Templates (NEW for Index to match Available Cars)
+                'book-whatsapp-msg': (carName, carPrice, city, pickup, dropoff) => `Hello, I am interested in renting the ${carName} (${carPrice}/day). Pickup Location: ${city || 'N/A'}, Dates: ${pickup || 'N/A'} to ${dropoff || 'N/A'}. Please confirm availability and help me proceed with the booking.`,
+                'book-email-subj': (carName, city) => `Car Rental Inquiry for ${carName} in ${city || 'N/A'}`,
+                'book-email-body': (carName, carPrice, city, pickup, dropoff) => `Hello,\n\nI am interested in renting the ${carName} (${carPrice}/day).\n\nDetails:\n- Location: ${city || 'N/A'}\n- Pickup Date: ${pickup || 'N/A'}\n- Return Date: ${dropoff || 'N/A'}\n\nPlease confirm availability and provide the next steps for reservation.`,
             },
             'fr': {
                 'nav-fleet': 'Notre Flotte', 
@@ -415,6 +419,10 @@
                 'select-location': 'Sélectionnez un emplacement', 'manual': 'Manuelle', 'automatic': 'Automatique', 'btn-book-now': 'Réserver Maintenant',
                 'modal-ac-label-short': 'Climatisation', 'car-seats-label-spaced': ' Sièges', 
                 'modal-p': 'Choisissez la méthode de contact:', 'btn-whatsapp': 'WhatsApp', 'btn-email': 'Email',
+                // Localized Booking Templates (NEW for Index to match Available Cars)
+                'book-whatsapp-msg': (carName, carPrice, city, pickup, dropoff) => `Bonjour, je suis intéressé(e) par la location de ${carName} (${carPrice}/jour). Lieu de prise en charge : ${city || 'N/A'}, Dates : du ${pickup || 'N/A'} au ${dropoff || 'N/A'}. Veuillez confirmer la disponibilité et m'aider à procéder à la réservation.`,
+                'book-email-subj': (carName, city) => `Demande de location pour ${carName} à ${city || 'N/A'}`,
+                'book-email-body': (carName, carPrice, city, pickup, dropoff) => `Bonjour,\n\nJe suis intéressé(e) par la location de ${carName} (${carPrice}/jour).\n\nDétails:\n- Lieu : ${city || 'N/A'}\n- Date de prise en charge : ${pickup || 'N/A'}\n- Date de retour : ${dropoff || 'N/A'}\n\nVeuillez confirmer la disponibilité et m'indiquer les prochaines étapes pour la réservation.`,
             },
             'ar': {
                 'nav-fleet': 'أسطولنا', 
@@ -433,6 +441,10 @@
                 'select-location': 'اختر موقعًا', 'manual': 'يدوي', 'automatic': 'أوتوماتيكي', 'btn-book-now': 'احجز الآن',
                 'modal-ac-label-short': 'مكيف', 'car-seats-label-spaced': ' مقاعد',
                 'modal-p': 'اختر طريقة الاتصال:', 'btn-whatsapp': 'واتساب', 'btn-email': 'بريد إلكتروني',
+                // Localized Booking Templates (NEW for Index to match Available Cars)
+                'book-whatsapp-msg': (carName, carPrice, city, pickup, dropoff) => `مرحباً، أنا مهتم باستئجار ${carName} (${carPrice}/يوم). موقع الاستلام: ${city || 'N/A'}، التواريخ: من ${pickup || 'N/A'} إلى ${dropoff || 'N/A'}. الرجاء تأكيد التوفر ومساعدتي في متابعة الحجز.`,
+                'book-email-subj': (carName, city) => `استفسار حجز سيارة لـ ${carName} في ${city || 'N/A'}`,
+                'book-email-body': (carName, carPrice, city, pickup, dropoff) => `مرحباً،\n\nأنا مهتم باستئجار ${carName} (${carPrice}/يوم).\n\nالتفاصيل:\n- الموقع: ${city || 'N/A'}\n- تاريخ الاستلام: ${pickup || 'N/A'}\n- تاريخ الإرجاع: ${dropoff || 'N/A'}\n\nالرجاء تأكيد التوفر وتزويدي بالخطوات التالية للحجز.`,
             }
         };
 
@@ -449,7 +461,7 @@
             // 1. Update text content
             document.querySelectorAll('[data-i18n]').forEach(element => {
                 const key = element.getAttribute('data-i18n');
-                if (dictionary[key]) {
+                if (dictionary[key] && typeof dictionary[key] === 'string') { // Check if it's a simple string translation
                     element.textContent = dictionary[key];
                 }
             });
@@ -467,7 +479,7 @@
             // 3. Reset select options for correct language display
             document.querySelectorAll('select option').forEach(option => {
                 const key = option.getAttribute('data-i18n');
-                if (key && dictionary[key]) {
+                if (key && dictionary[key] && typeof dictionary[key] === 'string') {
                     option.textContent = dictionary[key];
                 }
             });
@@ -487,14 +499,12 @@
 
         // --- Date Functions (Reusable) ---
         
-        // Helper function to format a Date object for datetime-local input
-        function getFormattedDateTime(date) {
+        // Helper function to format a Date object for date input (YYYY-MM-DD)
+        function getFormattedDate(date) {
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const day = String(date.getDate()).padStart(2, '0');
-            const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
-            return `${year}-${month}-${day}T${hours}:${minutes}`;
+            return `${year}-${month}-${day}`;
         }
 
         function initializeDateFields() {
@@ -502,28 +512,28 @@
             const returnInput = document.getElementById('return-date');
 
             const now = new Date();
-            // Round up to the next minute to prevent immediate expiry
-            now.setSeconds(0);
-            now.setMilliseconds(0);
+            // Get today's date for MIN attribute
+            const minDate = getFormattedDate(now);
             
-            const minDateTime = getFormattedDateTime(now);
-            pickupInput.min = minDateTime;
-            returnInput.min = minDateTime;
+            pickupInput.min = minDate;
+            returnInput.min = minDate; // Initial minimum return is today
 
             // Add event listener to adjust return date constraints whenever pickup date changes
             pickupInput.addEventListener('change', () => {
-                const pickupTime = new Date(pickupInput.value);
-                if (isNaN(pickupTime)) return;
+                const pickupDate = pickupInput.value;
+                if (!pickupDate) return;
                 
-                // Calculate minimum return time: 1 full day after pickup
-                const minReturnTime = new Date(pickupTime.getTime() + (24 * 60 * 60 * 1000));
+                // Calculate minimum required return date: Pickup Date + 1 Day
+                const pickupTime = new Date(pickupDate).getTime();
+                const minReturnDateObj = new Date(pickupTime + (24 * 60 * 60 * 1000));
+                const minReturnDate = getFormattedDate(minReturnDateObj);
                 
-                // Ensure min attribute for return date reflects the new pickup date constraint
-                returnInput.min = getFormattedDateTime(minReturnTime);
+                // Set the minimum selectable date visually for the return input
+                returnInput.min = minReturnDate;
 
-                // If current return value is earlier than the new minimum, update it
-                if (returnInput.value && new Date(returnInput.value).getTime() < minReturnTime.getTime()) {
-                    returnInput.value = getFormattedDateTime(minReturnTime);
+                // If current return value is invalid or missing, suggest the new minimum date
+                if (!returnInput.value || returnInput.value < minReturnDate) {
+                    returnInput.value = minReturnDate;
                 }
             });
         }
@@ -583,12 +593,20 @@
         const emailLink = document.getElementById('email-link');
 
         function openCarDetailModal(car) {
+             const currentLang = languageSelector.value;
+             const dict = translations[currentLang];
+            // Retrieve data from localStorage
+            const rentalLocation = localStorage.getItem('rentalLocation');
+            const rentalPickupDate = localStorage.getItem('rentalPickupDate');
+            const rentalReturnDate = localStorage.getItem('rentalReturnDate');
+
             // Populate modal content
-            document.getElementById('modal-car-name').textContent = `${car.name} (${getTranslation(car.transmission.toLowerCase())})`;
+            const transmissionText = getTranslation(car.transmission.toLowerCase());
+            document.getElementById('modal-car-name').textContent = `${car.name} (${transmissionText})`;
             document.getElementById('modal-car-image').src = car.img;
             
             // Set dynamic details
-            document.getElementById('modal-transmission').textContent = getTranslation(car.transmission.toLowerCase());
+            document.getElementById('modal-transmission').textContent = transmissionText;
             document.getElementById('modal-seats-value').textContent = car.seats;
             document.getElementById('modal-color').textContent = car.color;
             document.getElementById('modal-car-desc').textContent = car.desc;
@@ -598,14 +616,13 @@
             contactOptions.classList.add('hidden');
             modalBookButton.classList.remove('hidden'); // Ensure 'Book Now' button is visible
             
-            // Re-attach listener for the main Book Now button inside the modal
-            modalBookButton.onclick = () => showContactOptions(car.name, car.price, car.transmission, car.color);
+            // **FIXED: Use the main modal buttons to call the dynamic message generator**
+            modalBookButton.onclick = () => showContactOptions(car.name, `${car.price} DH`, car.transmission, car.color);
             
             // Apply current translations to modal text elements
             setLanguage(currentLang);
             // Manually update the space after the seats label in the modal
             document.querySelector('[data-i18n="car-seats-label-spaced"]').textContent = getTranslation('car-seats-label-spaced');
-
 
             // Display Modal with animation
             detailModal.classList.remove('hidden');
@@ -615,45 +632,39 @@
             document.body.classList.add('overflow-hidden');
         }
 
-        // --- CORE LOGIC: Dynamic Message Generator ---
+        // --- CORE LOGIC: Dynamic Message Generator (Updated to use localStorage) ---
         function showContactOptions(carName, carPrice, carTransmission, carColor) {
-            const transmissionText = getTranslation(carTransmission.toLowerCase());
+            const currentLang = languageSelector.value;
+            const dict = translations[currentLang];
 
             // 1. Retrieve data from localStorage (set by the main form submission)
             const rentalLocation = localStorage.getItem('rentalLocation');
             const rentalPickupDate = localStorage.getItem('rentalPickupDate');
             const rentalReturnDate = localStorage.getItem('rentalReturnDate');
 
-            let messageContent;
-            let emailSubject;
+            // 2. Format dates for display in the message
+            let pickupDisplay = rentalPickupDate;
+            let returnDisplay = rentalReturnDate;
             
-            // SCENARIO CHECK: Are dates and location available in storage?
-            if (rentalLocation && rentalPickupDate && rentalReturnDate) {
-                // SCENARIO: DETAILED MESSAGE (User completed search form on index page or available_cars.html)
-                // This is the message you want when the client presses Book on the available cars page.
-                
-                // Format dates for the message
-                const pickupDisplay = new Date(rentalPickupDate).toLocaleString(currentLang, { dateStyle: 'medium', timeStyle: 'short' });
-                const returnDisplay = new Date(rentalReturnDate).toLocaleString(currentLang, { dateStyle: 'medium', timeStyle: 'short' });
-
-                messageContent = `Hello, I am interested in renting the ${carName} (${carColor}, ${transmissionText}) (${carPrice} DH${getTranslation('car-day')}).\n\nBooking Details:\n- City/Airport: ${rentalLocation}\n- Pickup: ${pickupDisplay}\n- Return: ${returnDisplay}\n\nPlease confirm availability and help me proceed with the booking.`;
-                
-                emailSubject = `Car Reservation Inquiry: ${carName} (${rentalLocation})`;
-
-            } else {
-                // SCENARIO: CONCISE MESSAGE (User navigated directly to the index page featured car, or available_cars.html without searching)
-                // This is the message you want for the index page pop-up.
-                
-                messageContent = `Hello, I am interested in renting the ${carName} (${carColor}, ${transmissionText}) (${carPrice} DH${getTranslation('car-day')}). Please confirm availability and help me proceed with the booking.`;
-
-                emailSubject = `Car Rental Inquiry: ${carName} (${carColor}, ${transmissionText})`;
+            if (rentalPickupDate) {
+                 pickupDisplay = new Date(rentalPickupDate).toLocaleDateString(currentLang, { dateStyle: 'medium' });
+            }
+            if (rentalReturnDate) {
+                 returnDisplay = new Date(rentalReturnDate).toLocaleDateString(currentLang, { dateStyle: 'medium' });
             }
 
-            // 2. Set Link HREFs (URL encoding is crucial)
-            whatsappLink.href = `https://wa.me/212602020402?text=${encodeURIComponent(messageContent)}`;
-            emailLink.href = `mailto:blackiriscars@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(messageContent)}`;
+
+            // 3. Use the localized template functions
+            const whatsappMessage = dict['book-whatsapp-msg'](carName, carPrice, rentalLocation, pickupDisplay, returnDisplay);
+            const emailSubject = dict['book-email-subj'](carName, rentalLocation);
+            const emailBody = dict['book-email-body'](carName, carPrice, rentalLocation, pickupDisplay, returnDisplay);
+
+
+            // 4. Set Link HREFs (URL encoding is crucial)
+            whatsappLink.href = `https://wa.me/212602020402?text=${encodeURIComponent(whatsappMessage)}`;
+            emailLink.href = `mailto:blackiriscars@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
             
-            // 3. Update Modal Display
+            // 5. Update Modal Display
             contactOptions.classList.remove('hidden');
             modalBookButton.classList.add('hidden');
         }
@@ -736,24 +747,25 @@
 
             const pickupTime = new Date(pickupDate).getTime();
             const returnTime = new Date(returnDate).getTime();
-            const nowTime = new Date().getTime();
+            const nowTime = new Date(getFormattedDate(new Date())).getTime(); // Normalize 'now' to start of day
             const oneDayInMs = 24 * 60 * 60 * 1000;
 
             let errorMessage = '';
 
-            // 2. Check Pickup Date (Submission check, complementing HTML5 min attribute)
-            if (pickupTime < nowTime - (60 * 1000)) { 
-                errorMessage = '<strong>Error!</strong> The pick-up date/time cannot be in the past.';
+            // 2. Check Pickup Date (must be today or in the future)
+            if (pickupTime < nowTime) { 
+                errorMessage = '<strong>Error! Choose an available date.</strong>';
             } 
-            // 3. Check Minimum Rental Duration (Return must be >= 24 hours after Pickup)
+            // 3. Check Minimum Rental Duration (Return must be >= 1 day after Pickup)
             else if (returnTime < pickupTime + oneDayInMs) {
-                errorMessage = '<strong>Error!</strong> The rental period must be for at least 1 full day (24 hours).';
+                errorMessage = '<strong>Error! Choose an available date.</strong>';
             }
 
             if (errorMessage) {
                 resultMessage.classList.remove('hidden', 'bg-green-100', 'border-green-400', 'text-green-700');
                 resultMessage.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
-                resultMessage.innerHTML = errorMessage;
+                // Use the requested error message for all date/duration failures
+                resultMessage.innerHTML = '<strong>Error! Choose an available date.</strong>';
 
                 setTimeout(() => {
                     resultMessage.classList.add('hidden');
@@ -764,12 +776,15 @@
             // --- VALIDATION SUCCESS: INSTANT REDIRECT ---
             
             // Store search parameters in localStorage for use on available_cars.html
-            localStorage.setItem('rentalLocation', location);
+            // NOTE: Store the user-selected text for the city/airport, not the whole option.
+            const selectedLocationText = document.getElementById('location').options[document.getElementById('location').selectedIndex].text;
+
+            localStorage.setItem('rentalLocation', selectedLocationText); 
             localStorage.setItem('rentalPickupDate', pickupDate);
             localStorage.setItem('rentalReturnDate', returnDate);
 
             // Instant Redirect: Skip success message entirely
-            window.location.href = 'available_cars.html';
+            window.location.href = 'available cars.html';
         });
 
     </script>
