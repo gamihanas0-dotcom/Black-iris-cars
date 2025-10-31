@@ -19,7 +19,6 @@ const carData = [
     { id: 10, name: 'Dacia Logan', color: 'Black', price: 300, transmission: 'Manual', seats: 5, type: 'sedan', img: 'https://i.postimg.cc/bNLQpT9v/IMG-4188.webp', desc: 'Robust and spacious sedan, excellent value and a large trunk for extra luggage.' },
     { id: 11, name: 'Dacia Logan', color: 'Grey', price: 300, transmission: 'Manual', seats: 5, type: 'sedan', img: 'https://i.postimg.cc/R0W1PHf4/IMG-4189.png', desc: 'A reliable and trusted choice for long trips across Morocco, known for its durability.' },
     { id: 12, name: 'Dacia Logan', color: 'White', price: 300, transmission: 'Manual', seats: 5, type: 'sedan', img: 'https://i.postimg.cc/R0W1PHf4/IMG-4189.png', desc: 'Clean and comfortable, a simple and effective vehicle ready for any Moroccan adventure.' },
-    // New Hatchback (Updated price to 250 DH)
     { id: 15, name: 'Dacia Sandero', color: 'Grey', price: 250, transmission: 'Manual', seats: 5, type: 'hatchback', img: 'https://i.postimg.cc/cJtY7NyL/IMG-4191.png', desc: 'Economical and dependable hatchback, perfect for budget-friendly commuting and city errands.' }
 ];
 
@@ -42,14 +41,14 @@ const translations = {
         'modal-ac-label-short': 'A/C', 'car-seats-label-spaced': ' Seats', 
         'modal-p': 'Choose contact method:', 'btn-whatsapp': 'WhatsApp', 'btn-email': 'Email',
         'car-seats': '5 Seats', 
-        'car-seats-6': '6 Seats', 
+        'car-seats-6': '6 Seats',
+        'h1-available': 'Available Rental Cars', 'h3-filter': 'Filter Options', 'label-price': 'Price Range (DH/day)',
+        'sort-count-text': 'cars available',  // <-- CRITICAL FIX
         
-        // --- MESSAGES FOR AVAILABLE_CARS.HTML (FULL DETAILS) ---
         'book-whatsapp-msg-full': (carName, carPrice, city, pickup, dropoff) => `Hello, I am interested in renting the ${carName} (${carPrice}/day).\n\nBooking Details:\n- Location: ${city || 'N/A'}\n- Pickup Date: ${pickup || 'N/A'}\n- Return Date: ${dropoff || 'N/A'}.\n\nPlease confirm availability and help me proceed with the booking.`,
         'book-email-subj-full': (carName, city) => `Car Reservation Inquiry: ${carName} in ${city || 'N/A'}`,
         'book-email-body-full': (carName, carPrice, city, pickup, dropoff) => `Hello,\n\nI am interested in renting the ${carName} (${carPrice}/day).\n\nDetails:\n- Location: ${city || 'N/A'}\n- Pickup Date: ${pickup || 'N/A'}\n- Return Date: ${dropoff || 'N/A'}\n\nPlease confirm availability and provide the next steps for reservation.`,
 
-        // --- MESSAGES FOR INDEX.HTML (CONCISE/CAR DETAILS ONLY) ---
         'book-whatsapp-msg-concise': (carName, carPrice) => `Hello, I am interested in the ${carName} (${carPrice}/day). Please send me more information about availability and pricing.`,
         'book-email-subj-concise': (carName) => `General Car Inquiry: ${carName}`,
         'book-email-body-concise': (carName, carPrice) => `Hello,\n\nI am interested in the ${carName} (${carPrice}/day) featured on your homepage. Please send me more information about availability and how to book this vehicle.`,
@@ -71,14 +70,14 @@ const translations = {
         'modal-ac-label-short': 'Climatisation', 'car-seats-label-spaced': ' Sièges', 
         'modal-p': 'Choisissez la méthode de contact:', 'btn-whatsapp': 'WhatsApp', 'btn-email': 'Email',
         'car-seats': '5 Sièges', 
-        'car-seats-6': '6 Sièges', 
+        'car-seats-6': '6 Sièges',
+        'h1-available': 'Voitures de Location Disponibles', 'h3-filter': 'Options de Filtre', 'label-price': 'Gamme de Prix (DH/jour)',
+        'sort-count-text': 'voitures disponibles', // <-- CRITICAL FIX
 
-        // --- MESSAGES FOR AVAILABLE_CARS.HTML (FULL DETAILS) ---
         'book-whatsapp-msg-full': (carName, carPrice, city, pickup, dropoff) => `Bonjour, je suis intéressé(e) par la location de ${carName} (${carPrice}/jour).\n\nDétails de la réservation:\n- Lieu : ${city || 'N/A'}\n- Date de prise en charge : ${pickup || 'N/A'}\n- Date de retour : ${dropoff || 'N/A'}.\n\nVeuillez confirmer la disponibilité et m'aider à procéder à la réservation.`,
         'book-email-subj-full': (carName, city) => `Demande de réservation pour ${carName} à ${city || 'N/A'}`,
         'book-email-body-full': (carName, carPrice, city, pickup, dropoff) => `Bonjour,\n\nJe suis intéressé(e) par la location de ${carName} (${carPrice}/jour).\n\nDétails:\n- Lieu : ${city || 'N/A'}\n- Date de prise en charge : ${pickup || 'N/A'}\n- Date de retour : ${dropoff || 'N/A'}\n\nVeuillez confirmer la disponibilité et m'indiquer les prochaines étapes pour la réservation.`,
 
-        // --- MESSAGES FOR INDEX.HTML (CONCISE/CAR DETAILS ONLY) ---
         'book-whatsapp-msg-concise': (carName, carPrice) => `Bonjour, je suis intéressé(e) par la ${carName} (${carPrice}/jour). Veuillez m'envoyer plus d'informations sur la disponibilité et les prix.`,
         'book-email-subj-concise': (carName) => `Demande générale de voiture : ${carName}`,
         'book-email-body-concise': (carName, carPrice) => `Bonjour,\n\nJe suis intéressé(e) par la ${carName} (${carPrice}/jour) présentée sur votre page d'accueil. Veuillez m'envoyer plus d'informations sur la disponibilité et la façon de réserver ce véhicule.`,
@@ -100,14 +99,14 @@ const translations = {
         'modal-ac-label-short': 'مكيف', 'car-seats-label-spaced': ' مقاعد',
         'modal-p': 'اختر طريقة الاتصال:', 'btn-whatsapp': 'واتساب', 'btn-email': 'بريد إلكتروني',
         'car-seats': '5 مقاعد', 
-        'car-seats-6': '6 مقاعد', 
+        'car-seats-6': '6 مقاعد',
+        'h1-available': 'سيارات الإيجار المتاحة', 'h3-filter': 'Options de Filtre', 'label-price': 'Gamme de Prix (DH/jour)',
+        'sort-count-text': 'سيارة متاحة', // <-- CRITICAL FIX
 
-        // --- MESSAGES FOR AVAILABLE_CARS.HTML (FULL DETAILS) ---
         'book-whatsapp-msg-full': (carName, carPrice, city, pickup, dropoff) => `مرحباً، أنا مهتم باستئجار ${carName} (${carPrice}/يوم).\n\nتفاصيل الحجز:\n- الموقع: ${city || 'N/A'}\n- تاريخ الاستلام: ${pickup || 'N/A'}\n- تاريخ الإرجاع: ${dropoff || 'N/A'}.\n\nالرجاء تأكيد التوفر ومساعدتي في متابعة الحجز.`,
         'book-email-subj-full': (carName, city) => `استفسار حجز سيارة لـ ${carName} في ${city || 'N/A'}`,
         'book-email-body-full': (carName, carPrice, city, pickup, dropoff) => `مرحباً،\n\nأنا مهتم باستئجار ${carName} (${carPrice}/يوم).\n\nالتفاصيل:\n- الموقع: ${city || 'N/A'}\n- تاريخ الاستلام: ${pickup || 'N/A'}\n- تاريخ الإرجاع: ${dropoff || 'N/A'}\n\nالرجاء تأكيد التوفر وتزويدي بالخطوات التالية للحجز.`,
         
-        // --- MESSAGES FOR INDEX.HTML (CONCISE/CAR DETAILS ONLY) ---
         'book-whatsapp-msg-concise': (carName, carPrice) => `مرحباً، أنا مهتم بـ ${carName} (${carPrice}/يوم). الرجاء إرسال المزيد من المعلومات حول التوفر والتسعير.`,
         'book-email-subj-concise': (carName) => `استفسار عام عن سيارة: ${carName}`,
         'book-email-body-concise': (carName, carPrice) => `مرحباً،\n\nأنا مهتم بـ ${carName} (${carPrice}/يوم) المعروضة على الصفحة الرئيسية. الرجاء إرسال المزيد من المعلومات حول التوفر وكيفية حجز هذه المركبة.`,
