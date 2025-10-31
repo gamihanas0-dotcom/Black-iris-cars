@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -705,6 +704,19 @@
         // Initialize Lucide Icons
         lucide.createIcons();
         
+        // Global variables to store search parameters
+        let pickupCity = '';
+        let pickupDate = '';
+        let returnDate = '';
+
+        // Function to extract URL parameters
+        function getUrlParameters() {
+            const params = new URLSearchParams(window.location.search);
+            pickupCity = params.get('city') || '';
+            pickupDate = params.get('pickupdate') || '';
+            returnDate = params.get('returndate') || '';
+        }
+        
         // --- Translation Logic ---
         const translations = {
             'en': {
@@ -729,9 +741,9 @@
                 'car-seats': '5 Seats', // For economy cars
                 'car-seats-6': '6 Seats', // For SUVs
                 // Localized Booking Templates
-                'book-whatsapp-msg': (carName, carPrice) => `Hello, I am interested in renting the ${carName} (${carPrice}/day). Please confirm availability and help me proceed with the booking.`,
-                'book-email-subj': (carName) => `Car Rental Inquiry for ${carName}`,
-                'book-email-body': (carName, carPrice) => `Hello,\n\nI am interested in renting the ${carName} (${carPrice}/day). Please confirm availability for my desired dates and provide the next steps for reservation.`,
+                'book-whatsapp-msg': (carName, carPrice, city, pickup, dropoff) => `Hello, I am interested in renting the ${carName} (${carPrice}/day). Pickup Location: ${city || 'N/A'}, Dates: ${pickup || 'N/A'} to ${dropoff || 'N/A'}. Please confirm availability and help me proceed with the booking.`,
+                'book-email-subj': (carName, city) => `Car Rental Inquiry for ${carName} in ${city || 'N/A'}`,
+                'book-email-body': (carName, carPrice, city, pickup, dropoff) => `Hello,\n\nI am interested in renting the ${carName} (${carPrice}/day).\n\nDetails:\n- Location: ${city || 'N/A'}\n- Pickup Date: ${pickup || 'N/A'}\n- Return Date: ${dropoff || 'N/A'}\n\nPlease confirm availability and provide the next steps for reservation.`,
             },
             'fr': {
                 'nav-fleet': 'Notre Flotte', 'nav-why': 'Pourquoi Nous Choisir', 'nav-reviews': 'Avis', 'nav-contact': 'Contact',
@@ -755,9 +767,9 @@
                 'car-seats': '5 Sièges', // For economy cars
                 'car-seats-6': '6 Sièges', // For SUVs
                 // Localized Booking Templates
-                'book-whatsapp-msg': (carName, carPrice) => `Bonjour, je suis intéressé(e) par la location de ${carName} (${carPrice}/jour). Veuillez confirmer la disponibilité et m'aider à procéder à la réservation.`,
-                'book-email-subj': (carName) => `Demande de location de voiture pour ${carName}`,
-                'book-email-body': (carName, carPrice) => `Bonjour,\n\nJe suis intéressé(e) par la location de ${carName} (${carPrice}/jour). Veuillez confirmer la disponibilité pour mes dates souhaitées et m'indiquer les prochaines étapes pour la réservation.`,
+                'book-whatsapp-msg': (carName, carPrice, city, pickup, dropoff) => `Bonjour, je suis intéressé(e) par la location de ${carName} (${carPrice}/jour). Lieu de prise en charge : ${city || 'N/A'}, Dates : du ${pickup || 'N/A'} au ${dropoff || 'N/A'}. Veuillez confirmer la disponibilité et m'aider à procéder à la réservation.`,
+                'book-email-subj': (carName, city) => `Demande de location pour ${carName} à ${city || 'N/A'}`,
+                'book-email-body': (carName, carPrice, city, pickup, dropoff) => `Bonjour,\n\nJe suis intéressé(e) par la location de ${carName} (${carPrice}/jour).\n\nDétails:\n- Lieu : ${city || 'N/A'}\n- Date de prise en charge : ${pickup || 'N/A'}\n- Date de retour : ${dropoff || 'N/A'}\n\nVeuillez confirmer la disponibilité et m'indiquer les prochaines étapes pour la réservation.`,
             },
             'ar': {
                 'nav-fleet': 'أسطولنا', 'nav-why': 'لماذا تختارنا', 'nav-reviews': 'التقييمات', 'nav-contact': 'اتصال',
@@ -781,9 +793,9 @@
                 'car-seats': '5 مقاعد', // For economy cars
                 'car-seats-6': '6 مقاعد', // For SUVs
                  // Localized Booking Templates
-                'book-whatsapp-msg': (carName, carPrice) => `مرحباً، أنا مهتم باستئجار ${carName} (${carPrice}/يوم). الرجاء تأكيد التوفر ومساعدتي في متابعة الحجز.`,
-                'book-email-subj': (carName) => `استفسار حجز سيارة لـ ${carName}`,
-                'book-email-body': (carName, carPrice) => `مرحباً،\n\nأنا مهتم باستئجار ${carName} (${carPrice}/يوم). الرجاء تأكيد التوفر للتواريخ المطلوبة وتزويدي بالخطوات التالية للحجز.`,
+                'book-whatsapp-msg': (carName, carPrice, city, pickup, dropoff) => `مرحباً، أنا مهتم باستئجار ${carName} (${carPrice}/يوم). موقع الاستلام: ${city || 'N/A'}، التواريخ: من ${pickup || 'N/A'} إلى ${dropoff || 'N/A'}. الرجاء تأكيد التوفر ومساعدتي في متابعة الحجز.`,
+                'book-email-subj': (carName, city) => `استفسار حجز سيارة لـ ${carName} في ${city || 'N/A'}`,
+                'book-email-body': (carName, carPrice, city, pickup, dropoff) => `مرحباً،\n\nأنا مهتم باستئجار ${carName} (${carPrice}/يوم).\n\nالتفاصيل:\n- الموقع: ${city || 'N/A'}\n- تاريخ الاستلام: ${pickup || 'N/A'}\n- تاريخ الإرجاع: ${dropoff || 'N/A'}\n\nالرجاء تأكيد التوفر وتزويدي بالخطوات التالية للحجز.`,
             }
         };
         
@@ -837,6 +849,7 @@
 
         // Load language preference on page load
         document.addEventListener('DOMContentLoaded', () => {
+            getUrlParameters(); // IMPORTANT: Get URL parameters before setting language
             const savedLang = localStorage.getItem('languagePreference') || 'en';
             languageSelector.value = savedLang;
             setLanguage(savedLang);
@@ -956,10 +969,10 @@
             const currentLang = languageSelector.value;
             const dict = translations[currentLang];
 
-            // Use the localized template functions
-            const whatsappMessage = dict['book-whatsapp-msg'](carName, carPrice);
-            const emailSubject = dict['book-email-subj'](carName);
-            const emailBody = dict['book-email-body'](carName, carPrice);
+            // Use the localized template functions with URL parameters
+            const whatsappMessage = dict['book-whatsapp-msg'](carName, carPrice, pickupCity, pickupDate, returnDate);
+            const emailSubject = dict['book-email-subj'](carName, pickupCity);
+            const emailBody = dict['book-email-body'](carName, carPrice, pickupCity, pickupDate, returnDate);
         
             // Set Link HREFs (URL encoding is crucial)
             whatsappLink.href = `https://wa.me/212602020402?text=${encodeURIComponent(whatsappMessage)}`;
