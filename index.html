@@ -376,7 +376,7 @@
             // 1. Update text content
             document.querySelectorAll('[data-i18n]').forEach(element => {
                 const key = element.getAttribute('data-i18n');
-                if (dictionary[key] && typeof dictionary[key] === 'string') {
+                if (dictionary[key] && typeof dictionary[key] === 'string') { // Check if it's a simple string translation
                     element.textContent = dictionary[key];
                 }
             });
@@ -447,13 +447,18 @@
             });
         }
 
-        // Load language preference and initialize dates on page load
-        document.addEventListener('DOMContentLoaded', () => {
+        // --- Initialization Function ---
+        function initPage() {
             const savedLang = localStorage.getItem('languagePreference') || 'en';
             languageSelector.value = savedLang;
             setLanguage(savedLang);
             initializeDateFields();
-        });
+            renderCarGrid('featured-car-grid', 10);
+            attachCloseListeners();
+        }
+
+        // Load language preference and initialize dates on page load
+        document.addEventListener('DOMContentLoaded', initPage);
 
 
         // --- CAR GRID RENDERING (Unified function) ---
@@ -577,18 +582,16 @@
             }
         }
         
-        // Initial rendering for Featured Fleet (Top 10 cars)
-        renderCarGrid('featured-car-grid', 10);
+        function attachCloseListeners() {
+            // Attach close listeners
+            closeDetailModalBtn.addEventListener('click', closeCarDetailModal);
+            detailModal.addEventListener('click', (e) => {
+                if (e.target === detailModal) {
+                    closeCarDetailModal();
+                }
+            });
+        }
         
-        // Attach close listeners
-        closeDetailModalBtn.addEventListener('click', closeCarDetailModal);
-        detailModal.addEventListener('click', (e) => {
-            if (e.target === detailModal) {
-                closeCarDetailModal();
-            }
-        });
-
-
         // --- MOBILE MENU TOGGLE ---
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
