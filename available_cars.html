@@ -866,6 +866,7 @@
         });
 
         // --- Modal Logic (CRITICAL FIX: Uses FULL message template) ---
+        // Modal references MUST be outside the init function if they are used by global listeners.
         const modal = document.getElementById('contact-modal');
         const modalContent = document.getElementById('modal-content');
         const closeModalBtn = document.getElementById('close-modal-btn');
@@ -914,30 +915,33 @@
             }, 300); 
         }
 
-        bookButtons.forEach(button => {
-            button.addEventListener('click', (event) => {
-                const carName = event.currentTarget.getAttribute('data-car-name');
-                const carPrice = event.currentTarget.getAttribute('data-car-price');
-                openModal(carName, carPrice);
-            });
-        });
-
-        closeModalBtn.addEventListener('click', closeModal);
-
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeModal();
-            }
-        });
-        
-        // Run filter and data retrieval on initial load
-        document.addEventListener('DOMContentLoaded', () => {
-            getLocalStorageData(); // CRITICAL: Pull data first!
+        function initAvailableCarsPage() {
+            getLocalStorageData();
             const savedLang = localStorage.getItem('languagePreference') || 'en';
             setLanguage(savedLang);
             languageSelector.value = savedLang;
             filterCars(); 
-        });
+
+            // IMPORTANT: Attach listeners after the DOM is fully loaded and elements are referenced.
+            bookButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const carName = event.currentTarget.getAttribute('data-car-name');
+                    const carPrice = event.currentTarget.getAttribute('data-car-price');
+                    openModal(carName, carPrice);
+                });
+            });
+
+            closeModalBtn.addEventListener('click', closeModal);
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+        }
+        
+        // Run initialization function when DOM is ready
+        document.addEventListener('DOMContentLoaded', initAvailableCarsPage);
     </script>
 </body>
 </html>
