@@ -1,7 +1,6 @@
 // --- data.js ---
 
 // --- CAR DATA: Single Source of Truth ---
-// NOTE: Prices are based on the list provided in your original index.html
 const carData = [
     // New SUVs
     { id: 13, name: 'VW T-Roc', color: 'Black', price: 700, transmission: 'Automatic', seats: 5, type: 'suv', img: 'https://i.postimg.cc/d3ySgfyT/IMG-4177.jpg', desc: 'Premium compact crossover, comfortable and stylish for city and highway driving.' },
