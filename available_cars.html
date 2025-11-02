@@ -4,9 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Available Cars | Black Iris Cars</title>
+
+    <meta name="description" content="View our full fleet of available rental cars. From economy hatchbacks to luxury SUVs, find the perfect car for your trip in Morocco.">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="data.js"></script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2Y2MG9ZZ46"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-2Y2MG9ZZ46');
+    </script>
+    
     <style>
         /* Custom Font Poppins */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
@@ -348,7 +360,8 @@
                                 </div>
                                 <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
                                             data-car-name="${car.name} (${car.color}, ${transmissionText})" 
-                                            data-car-price="${car.price} DH">
+                                            data-car-price="${car.price} DH"
+                                            data-i18n="btn-book-now">
                                     Book Now
                                 </button>
                             </div>
@@ -402,26 +415,38 @@
                 filterBackdrop.classList.toggle('hidden', !isSidebarOpen);
             }
 
+            /**
+             * === NEW SMART MODAL ===
+             * This function now checks for localStorage data and uses the
+             * correct message template based on whether the user searched.
+             */
             function openModal(carName, carPrice) {
                 const dict = translations[currentLang];
-                
-                let pickupDisplay = rentalPickupDate;
-                let returnDisplay = rentalReturnDate;
-                
-                if (rentalPickupDate) {
-                     pickupDisplay = new Date(rentalPickupDate).toLocaleDateString(currentLang, { dateStyle: 'medium' });
-                }
-                if (rentalReturnDate) {
-                     returnDisplay = new Date(rentalReturnDate).toLocaleDateString(currentLang, { dateStyle: 'medium' });
-                }
+                let whatsappMessage, emailSubject, emailBody;
 
-                const whatsappMessage = dict['book-whatsapp-msg-full'](carName, carPrice, rentalLocation, pickupDisplay, returnDisplay);
-                const emailSubject = dict['book-email-subj-full'](carName, rentalLocation);
-                const emailBody = dict['book-email-body-full'](carName, carPrice, rentalLocation, pickupDisplay, returnDisplay);
+                // Check if data exists from the search form
+                if (rentalLocation && rentalPickupDate && rentalReturnDate) {
+                    // --- SCENARIO 1: FULL MESSAGE ---
+                    let pickupDisplay = new Date(rentalPickupDate).toLocaleDateString(currentLang, { dateStyle: 'medium' });
+                    let returnDisplay = new Date(rentalReturnDate).toLocaleDateString(currentLang, { dateStyle: 'medium' });
+
+                    whatsappMessage = dict['book-whatsapp-msg-full'](carName, carPrice, rentalLocation, pickupDisplay, returnDisplay);
+                    emailSubject = dict['book-email-subj-full'](carName, rentalLocation);
+                    emailBody = dict['book-email-body-full'](carName, carPrice, rentalLocation, pickupDisplay, returnDisplay);
+                
+                } else {
+                    // --- SCENARIO 2: CONCISE MESSAGE ---
+                    // (User clicked "View All Cars")
+                    whatsappMessage = dict['book-whatsapp-msg-concise'](carName, carPrice);
+                    emailSubject = dict['book-email-subj-concise'](carName);
+                    emailBody = dict['book-email-body-concise'](carName, carPrice);
+                }
             
+                // Set Link HREFs (URL encoding is crucial)
                 whatsappLink.href = `https://wa.me/212602020402?text=${encodeURIComponent(whatsappMessage)}`;
                 emailLink.href = `mailto:blackiriscars@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
             
+                // Display Modal
                 modal.classList.remove('hidden');
                 setTimeout(() => {
                     modalContent.classList.remove('scale-95', 'opacity-0');
