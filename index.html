@@ -4,9 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BLACK IRIS cars - Rent in Morocco</title>
+    
+    <meta name="description" content="Rent a car in Morocco with Black Iris Cars. We offer premium cars for rental in Casablanca, Marrakech, Rabat, and all major cities and airports.">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="data.js"></script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2Y2MG9ZZ46"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-2Y2MG9ZZ46');
+    </script>
+    
     <style>
         /* Custom Font Poppins */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
@@ -455,6 +467,17 @@
             initializeDateFields();
             renderCarGrid('featured-car-grid', 10);
             attachCloseListeners();
+            
+            // === NEW: "View All Cars" Button Logic ===
+            const viewAllBtn = document.getElementById('view-all-cars-btn');
+            if(viewAllBtn) {
+                viewAllBtn.addEventListener('click', () => {
+                    // Clear the stored data before navigating
+                    localStorage.removeItem('rentalLocation');
+                    localStorage.removeItem('rentalPickupDate');
+                    localStorage.removeItem('rentalReturnDate');
+                });
+            }
         }
 
         // Load language preference and initialize dates on page load
@@ -524,7 +547,7 @@
             contactOptions.classList.add('hidden');
             modalBookButton.classList.remove('hidden'); 
             
-            // CRITICAL FIX: Use the CONCISE message template
+            // Use the CONCISE message template (as requested for index.html)
             modalBookButton.onclick = () => showContactOptionsConcise(car.name, `${car.price} DH`);
             
             // Apply current translations to modal text elements
