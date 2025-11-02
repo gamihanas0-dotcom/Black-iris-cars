@@ -37,13 +37,13 @@ const translations = {
         'morocco-desc': 'Vehicles maintained for all Moroccan terrains and climate.', 'h2-testimonials': 'What Our Clients Say',
         'h4-nav': 'Quick Navigation', 'h4-contact': 'Contact & Booking', 'call-text': '', 'whatsapp-text': 'WhatsApp',
         'address-text': '10 rue ouarzazat hassan rabat', 'copy-right': '2024 BLACK IRIS cars. All rights reserved.', 
-        'select-location': 'Select a location', 'manual': 'Manual', 'automatic': 'Automatic', 'btn-book-now': 'Book Now',
+        'select-location': 'Select a location', 'manual': 'Manual', 'automatic': 'Automatic', 'btn-book-now': 'Book Now', // Kept "Book Now"
         'modal-ac-label-short': 'A/C', 'car-seats-label-spaced': ' Seats', 
         'modal-p': 'Choose contact method:', 'btn-whatsapp': 'WhatsApp', 'btn-email': 'Email',
         'car-seats': '5 Seats', 
         'car-seats-6': '6 Seats',
         'h1-available': 'Available Rental Cars', 'h3-filter': 'Filter Options', 'label-price': 'Price Range (DH/day)',
-        'sort-count-text': 'cars available',  // <-- CRITICAL FIX
+        'sort-count-text': 'cars available',
         
         'book-whatsapp-msg-full': (carName, carPrice, city, pickup, dropoff) => `Hello, I am interested in renting the ${carName} (${carPrice}/day).\n\nBooking Details:\n- Location: ${city || 'N/A'}\n- Pickup Date: ${pickup || 'N/A'}\n- Return Date: ${dropoff || 'N/A'}.\n\nPlease confirm availability and help me proceed with the booking.`,
         'book-email-subj-full': (carName, city) => `Car Reservation Inquiry: ${carName} in ${city || 'N/A'}`,
@@ -66,13 +66,13 @@ const translations = {
         'morocco-desc': 'Véhicules entretenus pour tous les terrains et climats marocains.', 'h2-testimonials': 'Ce que disent nos Clients',
         'h4-nav': 'Navigation Rapide', 'h4-contact': 'Contact & Réservation', 'call-text': '', 'whatsapp-text': 'WhatsApp',
         'address-text': '10 rue ouarzazat hassan rabat', 'copy-right': '2024 BLACK IRIS cars. Tous droits réservés.', 
-        'select-location': 'Sélectionnez un emplacement', 'manual': 'Manuelle', 'automatic': 'Automatique', 'btn-book-now': 'Réserver Maintenant',
+        'select-location': 'Sélectionnez un emplacement', 'manual': 'Manuelle', 'automatic': 'Automatique', 'btn-book-now': 'Réserver Maintenant', // Kept "Réserver Maintenant"
         'modal-ac-label-short': 'Climatisation', 'car-seats-label-spaced': ' Sièges', 
         'modal-p': 'Choisissez la méthode de contact:', 'btn-whatsapp': 'WhatsApp', 'btn-email': 'Email',
         'car-seats': '5 Sièges', 
         'car-seats-6': '6 Sièges',
         'h1-available': 'Voitures de Location Disponibles', 'h3-filter': 'Options de Filtre', 'label-price': 'Gamme de Prix (DH/jour)',
-        'sort-count-text': 'voitures disponibles', // <-- CRITICAL FIX
+        'sort-count-text': 'voitures disponibles',
 
         'book-whatsapp-msg-full': (carName, carPrice, city, pickup, dropoff) => `Bonjour, je suis intéressé(e) par la location de ${carName} (${carPrice}/jour).\n\nDétails de la réservation:\n- Lieu : ${city || 'N/A'}\n- Date de prise en charge : ${pickup || 'N/A'}\n- Date de retour : ${dropoff || 'N/A'}.\n\nVeuillez confirmer la disponibilité et m'aider à procéder à la réservation.`,
         'book-email-subj-full': (carName, city) => `Demande de réservation pour ${carName} à ${city || 'N/A'}`,
@@ -95,13 +95,13 @@ const translations = {
         'morocco-desc': 'مركبات مجهزة لجميع التضاريس والمناخات المغربية.', 'h2-testimonials': 'ماذا يقول عملاؤنا',
         'h4-nav': 'روابط سريعة', 'h4-contact': 'الاتصال والحجز', 'call-text': '', 'whatsapp-text': 'واتساب',
         'address-text': '10 شارع ورزازات حسان الرباط', 'copy-right': '2024 BLACK IRIS cars. جميع الحقوق محفوظة.', 
-        'select-location': 'اختر موقعًا', 'manual': 'يدوي', 'automatic': 'أوتوماتيكي', 'btn-book-now': 'احجز الآن',
+        'select-location': 'اختر موقعًا', 'manual': 'يدوي', 'automatic': 'أوتوماتيكي', 'btn-book-now': 'احجز الآن', // Kept "احجز الآن"
         'modal-ac-label-short': 'مكيف', 'car-seats-label-spaced': ' مقاعد',
         'modal-p': 'اختر طريقة الاتصال:', 'btn-whatsapp': 'واتساب', 'btn-email': 'بريد إلكتروني',
         'car-seats': '5 مقاعد', 
         'car-seats-6': '6 مقاعد',
-        'h1-available': 'سيارات الإيجار المتاحة', 'h3-filter': 'Options de Filtre', 'label-price': 'Gamme de Prix (DH/jour)',
-        'sort-count-text': 'سيارة متاحة', // <-- CRITICAL FIX
+        'h1-available': 'سيارات الإيجار المتاحة', 'h3-filter': 'خيارات التصفية', 'label-price': 'نطاق السعر (درهم/يوم)',
+        'sort-count-text': 'سيارة متاحة',
 
         'book-whatsapp-msg-full': (carName, carPrice, city, pickup, dropoff) => `مرحباً، أنا مهتم باستئجار ${carName} (${carPrice}/يوم).\n\nتفاصيل الحجز:\n- الموقع: ${city || 'N/A'}\n- تاريخ الاستلام: ${pickup || 'N/A'}\n- تاريخ الإرجاع: ${dropoff || 'N/A'}.\n\nالرجاء تأكيد التوفر ومساعدتي في متابعة الحجز.`,
         'book-email-subj-full': (carName, city) => `استفسار حجز سيارة لـ ${carName} في ${city || 'N/A'}`,
