@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLACK IRIS cars - Rent in Morocco</title>
-    
-    <meta name="description" content="Rent a car in Morocco with Black Iris Cars. We offer premium cars for rental in Casablanca, Marrakech, Rabat, and all major cities and airports.">
-    
-    <script src="https.cdn.tailwindcss.com"></script>
+    <title>Available Cars | Black Iris Cars</title>
+
+    <meta name="description" content="View our full fleet of available rental cars. From economy hatchbacks to luxury SUVs, find the perfect car for your trip in Morocco.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="data.js"></script>
 
@@ -24,50 +24,51 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #fafafa;
-            transition: all 0.3s ease;
+            background-color: #f4f7f9; 
+            transition: all 0.3s ease; /* For smooth RTL transition */
         }
-        /* Theme Colors */
+        /* Monochrome Theme Colors + Royal Blue Accent */
         .primary-dark { background-color: #1a1a1a; } 
         .text-primary-dark { color: #1a1a1a; } 
-        .accent-blue { background-color: #4169e1; } 
-        .hover\:accent-blue-dark:hover { background-color: #2b4daa; } 
+        .accent-blue { background-color: #4169e1; } /* Royal Blue */
+        .hover\:accent-blue-dark:hover { background-color: #2b4daa; } /* Darker Royal Blue */
         .text-accent-blue { color: #4169e1; }
 
-        #hero-section {
-            background-image: url('https://i.postimg.cc/ZKJ3nbqB/Download-free-moroccan-wallpaper-HD.jpg');
-            background-size: cover;
-            background-position: center;
+        /* Style for filter sidebar on mobile */
+        #filter-sidebar {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(-100%); 
         }
-        .feature-icon { color: #1a1a1a; }
+        #filter-sidebar.open {
+            transform: translateX(0);
+        }
 
-        /* Form Input Styling */
-        input[type="date"], #rental-form select {
-            color: #000000 !important;
-            background-color: #ffffff !important;
-            padding: 8px 12px !important; 
-            height: 44px; 
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
+        /* RTL adjustment for sidebar sliding direction */
+        [dir="rtl"] #filter-sidebar {
+            transform: translateX(100%); 
+            left: auto; 
+            right: 0; 
         }
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(0); 
-        }
-        select option { color: #000000; }
 
-        /* RTL adjustments */
+        [dir="rtl"] #filter-sidebar.open {
+            transform: translateX(0);
+        }
+        
+        input[type="checkbox"]:checked {
+            background-color: #1a1a1a;
+            border-color: #1a1a1a;
+        }
+
+        #contact-modal {
+            transition: opacity 0.3s ease-in-out;
+        }
+
         [dir="rtl"] .ltr\:mr-2 { margin-right: 0; margin-left: 0.5rem; }
         [dir="rtl"] .ltr\:text-left { text-align: right; }
         [dir="rtl"] .ltr\:justify-start { justify-content: flex-end; }
         [dir="rtl"] .md\:ltr\:space-x-8 > * + * { margin-left: 0; margin-right: 2rem; }
-        [dir="rtl"] .ltr\:ml-1 { margin-left: 0; margin-right: 0.25rem; }
-
-        #car-detail-modal {
-            transition: opacity 0.3s ease-in-out;
-        }
         
-        /* === Compact Select Styling === */
+        /* === NEW: Compact Select Styling === */
         .compact-select {
             font-size: 0.875rem; /* 14px */
             font-weight: 600; /* font-semibold */
@@ -78,21 +79,25 @@
             padding: 8px 12px;
             margin: 0;
             cursor: pointer;
+            
+            /* Adds a subtle custom arrow */
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M6 9l4 4 4-4'/%3e%3c/svg%3e");
             background-repeat: no-repeat;
             background-position: right 0.5rem center;
             background-size: 1.2em 1.2em;
+
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
+            
             padding-right: 2.5rem; /* Make space for the new arrow */
         }
         
-        /* Desktop compact selectors */
+        /* Make the desktop ones borderless and cleaner */
         .hidden.md\:flex .compact-select {
              border: none;
-             font-weight: 600; 
-             font-size: 0.875rem; 
+             font-weight: 600; /* font-semibold */
+             font-size: 0.875rem; /* 14px */
              padding: 4px 1.4rem 4px 0;
              background-position: right 0.1rem center;
         }
@@ -109,27 +114,10 @@
             padding-right: 12px;
         }
 
+        /* Target the text inside the option (for black text) */
         .compact-select option {
             color: #000000;
             font-weight: 400;
-        }
-
-        /* Contact Button Colors */
-        .btn-whatsapp-green { background-color: #128C7E; }
-        .hover\:btn-whatsapp-dark:hover { background-color: #075E54; }
-        .btn-email-blue { background-color: #4169e1; }
-        .hover\:btn-email-dark:hover { background-color: #2b4daa; }
-
-        /* === NEW: Responsive Background Image === */
-        /* Mobile: Solid color */
-        #hero-section {
-            background-color: #1a1a1a;
-        }
-        /* Desktop: Load the image */
-        @media (min-width: 768px) {
-            #hero-section {
-                background-image: url('https://i.postimg.cc/ZKJ3nbqB/Download-free-moroccan-wallpaper-HD.jpg');
-            }
         }
     </style>
 </head>
@@ -159,12 +147,15 @@
                     </div>
 
                     <nav class="hidden md:flex md:ltr:space-x-8">
-                        <a href="#featured" class="text-gray-600 hover:text-accent-blue transition duration-150" data-i18n="nav-fleet">Our Fleet</a>
-                        <a href="#why-us" class="text-gray-600 hover:text-accent-blue transition duration-150" data-i18n="nav-why">Why Choose Us</a>
-                        <a href="#testimonials" class="text-gray-600 hover:text-accent-blue transition duration-150" data-i18n="nav-reviews">Reviews</a>
-                        <a href="#contact" class="text-gray-600 hover:text-accent-blue transition duration-150" data-i18n="nav-contact">Contact</a>
+                        <a href="index.html#featured" class="text-gray-600 hover:text-accent-blue transition duration-150" data-i18n="nav-fleet">Our Fleet</a>
+                        <a href="index.html#why-us" class="text-gray-600 hover:text-accent-blue transition duration-150" data-i18n="nav-why">Why Choose Us</a>
+                        <a href="index.html#contact" class="text-gray-600 hover:text-accent-blue transition duration-150" data-i18n="nav-contact">Contact</a>
                     </nav>
 
+                    <button id="filter-menu-button" class="md:hidden text-gray-600 hover:text-accent-blue p-2 rounded-lg transition duration-150">
+                        <i data-lucide="filter" class="w-6 h-6"></i>
+                    </button>
+                    
                     <button id="mobile-menu-button" class="md:hidden text-gray-600 hover:text-accent-blue p-2 rounded-lg transition duration-150">
                         <i data-lucide="menu" class="w-6 h-6"></i>
                     </button>
@@ -188,163 +179,108 @@
                 </div>
                 
                 <div class="space-y-1">
-                    <a href="#featured" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-blue" data-i18n="nav-fleet">Our Fleet</a>
-                    <a href="#why-us" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-blue" data-i18n="nav-why">Why Choose Us</a>
-                    <a href="#testimonials" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-blue" data-i18n="nav-reviews">Reviews</a>
-                    <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-blue" data-i18n="nav-contact">Contact</a>
+                    <a href="index.html#featured" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-blue" data-i18n="nav-fleet">Our Fleet</a>
+                    <a href="index.html#why-us" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-blue" data-i18n="nav-why">Why Choose Us</a>
+                    <a href="index.html#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-blue" data-i18n="nav-contact">Contact</a>
                 </div>
             </div>
         </div>
     </header>
-    <section id="hero-section" class="py-20 md:py-32 relative text-white">
-        <div class="absolute inset-0 primary-dark opacity-60"></div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center">
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4" data-i18n="h1-hero">
-                    Explore Morocco. Drive Quality.
-                </h1>
-                <p class="text-xl sm:text-2xl font-light mb-8" data-i18n="p-hero">
-                    Premium cars available across all major Moroccan cities.
-                </p>
-            </div>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-primary-dark mb-4" data-i18n="h1-available">
+            Available Rental Cars
+        </h1>
+        
+        <div id="filter-backdrop" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
 
-            <div class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl mt-10 max-w-4xl mx-auto">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6" data-i18n="h2-reservation">Quick Reservation</h2>
-                <form id="rental-form" class="space-y-4 md:space-y-0 md:grid md:grid-cols-5 md:gap-4">
-                    <div class="col-span-2">
-                        <label for="location" class="block text-sm font-medium text-gray-700" data-i18n="label-pickup-city">Pick-up City or Airport</label>
-                        <div class="mt-1 relative rounded-md shadow-sm">
-                            <select id="location" name="location" required class="block w-full rounded-lg border-gray-300 focus:ring-gray-700 focus:border-gray-700 border">
-                                <option value="" data-i18n="select-location">Select a location</option>
-                                <option value="Casablanca Airport">Casablanca Mohammed V Airport (CMN)</option>
-                                <option value="Marrakech Airport">Marrakech Menara Airport (RAK)</option>
-                                <option value="Tangier Airport">Tangier Ibn Battouta Airport (TNG)</option>
-                                <option value="Agadir Airport">Agadir Al Massira Airport (AGA)</option>
-                                <option value="Rabat Airport">Rabat–Salé Airport (RBA)</option>
-                                <option value="Fes Airport">Fes-Saïss Airport (FEZ)</option>
-                                <option value="Essaouira Airport">Essaouira-Mogador Airport (ESU)</option>
-                                <option disabled>──────────</option>
-                                <option value="Casablanca">Casablanca City</option>
-                                <option value="Marrakech">Marrakech City</option>
-                                <option value="Rabat">Rabat City</option>
-                                <option value="Tangier">Tangier City</option>
-                                <option value="Agadir">Agadir City</option>
-                                <option value="Fes">Fes City</option>
-                                <option value="Essaouira">Essaouira City</option>
-                                <option value="Kenitra">Kenitra</option>
-                                <option value="Meknes">Meknes</option>
-                                <option value="Salé">Salé</option>
-                                <option value="Temara">Temara</option>
-                                <option value="Tetouan">Tetouan</option>
-                            </select>
+        <div class="md:grid md:grid-cols-4 lg:grid-cols-5 md:gap-8">
+
+            <div id="filter-sidebar" class="fixed top-0 left-0 h-full w-3/4 max-w-xs md:max-w-none bg-white p-6 shadow-2xl z-40 md:relative md:col-span-1 lg:col-span-1 md:h-auto md:p-0 md:shadow-none md:bg-transparent md:transform-none">
+                
+                <button id="filter-close-button" class="md:hidden absolute top-4 right-4 text-gray-800 hover:text-gray-600">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+                
+                <h3 class="text-2xl font-bold text-primary-dark mb-6 border-b pb-3" data-i18n="h3-filter">Filter Options</h3>
+                
+                <form id="filter-form" class="space-y-6">
+                    <div>
+                        <label for="price-range" class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="label-price">Price Range (DH/day)</label>
+                        <input type="range" id="price-range" min="200" max="1500" value="1500" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer text-primary-dark">
+                        <span id="price-value" class="text-sm text-gray-600 mt-1 block">Up to 1500 DH</span>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-semibold text-gray-700 mb-2">Transmission</p>
+                        <div class="space-y-2" id="transmission-filters">
+                            <label class="flex items-center text-gray-600 ltr:justify-start">
+                                <input type="checkbox" name="transmission" value="automatic" class="rounded text-primary-dark focus:ring-primary-dark ltr:mr-2"> <span data-i18n="automatic">Automatic</span>
+                            </label>
+                            <label class="flex items-center text-gray-600 ltr:justify-start">
+                                <input type="checkbox" name="transmission" value="manual" class="rounded text-primary-dark focus:ring-primary-dark ltr:mr-2"> <span data-i18n="manual">Manual</span>
+                            </label>
                         </div>
                     </div>
 
                     <div>
-                        <label for="pickup-date" class="block text-sm font-medium text-gray-700" data-i18n="label-pickup-date">Pick-up Date</label>
-                        <input type="date" id="pickup-date" name="pickup-date" required class="mt-1 block w-full rounded-lg border-gray-300 focus:ring-gray-700 focus:border-gray-700 border">
+                        <p class="text-sm font-semibold text-gray-700 mb-2">Vehicle Type</p>
+                        <div class="space-y-2" id="type-filters">
+                            <label class="flex items-center text-gray-600 ltr:justify-start">
+                                <input type="checkbox" name="car-type" value="sedan" class="rounded text-primary-dark focus:ring-primary-dark ltr:mr-2"> Sedan
+                            </label>
+                            <label class="flex items-center text-gray-600 ltr:justify-start">
+                                <input type="checkbox" name="car-type" value="hatchback" class="rounded text-primary-dark focus:ring-primary-dark ltr:mr-2"> Hatchback
+                            </label>
+                            <label class="flex items-center text-gray-600 ltr:justify-start">
+                                <input type="checkbox" name="car-type" value="suv" class="rounded text-primary-dark focus:ring-primary-dark ltr:mr-2"> SUV / Crossover
+                            </label>
+                            <label class="flex items-center text-gray-600 ltr:justify-start">
+                                <input type="checkbox" name="car-type" value="luxury-suv" class="rounded text-primary-dark focus:ring-primary-dark ltr:mr-2"> Luxury SUV
+                            </label>
+                        </div>
                     </div>
 
-                    <div>
-                        <label for="return-date" class="block text-sm font-medium text-gray-700" data-i18n="label-return-date">Return Date</label>
-                        <input type="date" id="return-date" name="return-date" required class="mt-1 block w-full rounded-lg border-gray-300 focus:ring-gray-700 focus:border-gray-700 border">
-                    </div>
-
-                    <div class="col-span-1 flex items-end">
-                        <button type="submit" class="w-full accent-blue text-white font-semibold py-3 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md" data-i18n="btn-search">
-                            Search Cars
-                        </button>
-                    </div>
+                    <button type="button" id="apply-filters-btn" class="w-full accent-blue text-white font-semibold py-2 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md mt-4">
+                        Apply Filters
+                    </button>
                 </form>
-
-                <div id="result-message" class="hidden mt-6 p-4 rounded-xl text-gray-700 transition duration-500 ease-in-out">
-                    </div>
             </div>
-        </div>
-    </section>
-    
-    ---
 
-    <section id="featured" class="py-16 md:py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-4xl font-extrabold text-primary-dark text-center mb-12" data-i18n="h2-fleet">
-                Our Fleet
-            </h2>
-
-            <div id="featured-car-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="md:col-span-3 lg:col-span-4 space-y-6" id="results-container">
+                
+                <div class="flex justify-between items-center bg-white p-3 rounded-lg shadow-sm border border-gray-100">
+                    <p class="text-sm text-gray-600" id="car-count">Loading cars...</p> 
                 </div>
-            
-            <div class="text-center mt-12">
-                <a href="available_cars.html" id="view-all-cars-btn" class="accent-blue text-white font-semibold py-3 px-8 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md" data-i18n="btn-view-all">
-                    View All Cars
+
+                </div>
+
+        </div>
+    </main>
+
+    <div id="contact-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center hidden">
+        <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md m-4 transform transition-all duration-300 scale-95 opacity-0" id="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-primary-dark" data-i18n="h3-modal">Book Your Car</h3>
+                <button id="close-modal-btn" class="text-gray-500 hover:text-primary-dark">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <p class="text-gray-700 mb-6" data-i18n="modal-p">Please choose your preferred contact method. Your chosen car details will be pre-filled.</p>
+
+            <div class="space-y-4">
+                <a id="whatsapp-link" href="#" target="_blank" class="w-full flex items-center justify-center bg-green-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-700 transition duration-300 shadow-md">
+                    <i data-lucide="message-circle" class="w-5 h-5 ltr:mr-3"></i> <span data-i18n="btn-whatsapp">WhatsApp</span>
+                </a>
+                <a id="email-link" href="#" class="w-full flex items-center justify-center accent-blue text-white font-semibold py-3 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md">
+                    <i data-lucide="mail" class="w-5 h-5 ltr:mr-3"></i> <span data-i18n="btn-email">Email</span>
                 </a>
             </div>
+            <p class="text-xs text-gray-500 mt-6 text-center" data-i18n="modal-footer">We will confirm availability and finalize the booking details.</p>
         </div>
-    </section>
+    </div>
 
-    ---
-    
-    <section id="why-us" class="py-16 md:py-24 primary-dark text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-4xl font-extrabold text-center mb-12" data-i18n="h2-promise">
-                The Black Iris Promise
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-                <div class="p-6 rounded-xl bg-gray-800 shadow-xl border-t-4 border-gray-500">
-                    <i data-lucide="key-round" class="w-12 h-12 mx-auto mb-4 text-accent-blue"></i>
-                    <h3 class="text-xl font-semibold mb-2" data-i18n="pickup-title">Effortless Pickup</h3>
-                    <p class="text-gray-400" data-i18n="pickup-desc">Fast service at all major Moroccan airports.</p>
-                </div>
-                <div class="p-6 rounded-xl bg-gray-800 shadow-xl border-t-4 border-gray-500">
-                    <i data-lucide="shield-check" class="w-12 h-12 mx-auto mb-4 text-accent-blue"></i>
-                    <h3 class="text-xl font-semibold mb-2" data-i18n="insured-title">Insured & Ready</h3>
-                    <p class="text-gray-400" data-i18n="insured-desc">Comprehensive insurance included for peace of mind.</p>
-                </div>
-                <div class="p-6 rounded-xl bg-gray-800 shadow-xl border-t-4 border-gray-500">
-                    <i data-lucide="headset" class="w-12 h-12 mx-auto mb-4 text-accent-blue"></i>
-                    <h3 class="text-xl font-semibold mb-2" data-i18n="support-title">24/7 Local Support</h3>
-                    <p class="text-gray-400" data-i18n="support-desc">Dedicated support line available around the clock.</p>
-                </div>
-                <div class="p-6 rounded-xl bg-gray-800 shadow-xl border-t-4 border-gray-500">
-                    <i data-lucide="map" class="w-12 h-12 mx-auto mb-4 text-accent-blue"></i>
-                    <h3 class="text-xl font-semibold mb-2" data-i18n="morocco-title">Morocco Ready</h3>
-                    <p class="text-gray-400" data-i18n="morocco-desc">Vehicles maintained for all Moroccan terrains and climate.</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    ---
-
-    <section id="testimonials" class="py-16 md:py-24 bg-fafafa">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-4xl font-extrabold text-primary-dark text-center mb-12" data-i18n="h2-testimonials">
-                What Our Clients Say
-            </h2>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-gray-500">
-                    <i data-lucide="quote" class="w-8 h-8 text-gray-300 mb-3"></i>
-                    <p class="text-gray-700 italic mb-4">"Rented from Casablanca airport. The process was smooth, and the car performed flawlessly across the Atlas Mountains. Excellent service!"</p>
-                    <p class="font-semibold text-primary-dark">— Youssef H., Rabat</p>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-gray-500">
-                    <i data-lucide="quote" class="w-8 h-8 text-gray-300 mb-3"></i>
-                    <p class="text-gray-700 italic mb-4">"Friendly staff in Meknes, and the price was transparent—no hidden costs. **BLACK IRIS cars** made my trip worry-free. They delivered the car promptly."</p>
-                    <p class="font-semibold text-primary-dark">— Hino G., Meknes</p>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-gray-500">
-                    <i data-lucide="quote" class="w-8 h-8 text-gray-300 mb-3"></i>
-                    <p class="text-gray-700 italic mb-4">"Needed a last-minute SUV in Tangier. The booking was confirmed instantly. The vehicle was clean and modern. Highly recommend this company."</p>
-                    <p class="font-semibold text-primary-dark">— Amine B., UK</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    ---
-
-    <footer id="contact" class="primary-dark text-white py-12">
+    <footer class="primary-dark text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 border-b border-gray-700 pb-8 mb-8">
                 <div>
@@ -354,125 +290,79 @@
                 <div>
                     <h4 class="text-lg font-semibold mb-4" data-i18n="h4-nav">Quick Navigation</h4>
                     <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#featured" class="hover:text-accent-blue transition duration-150" data-i18n="nav-fleet">Our Fleet</a></li>
-                        <li><a href="#why-us" class="hover:text-accent-blue transition duration-150" data-i18n="nav-why">Our Promise</a></li>
-                        <li><a href="#testimonials" class="hover:text-accent-blue transition duration-150" data-i18n="nav-reviews">Customer Reviews</a></li>
+                        <li><a href="index.html#featured" class="hover:text-accent-blue transition duration-150" data-i18n="nav-fleet">Our Fleet</a></li>
+                        <li><a href="index.html#why-us" class="hover:text-accent-blue transition duration-150" data-i18n="nav-why">Our Promise</a></li>
+                        <li><a href="index.html#contact" class="hover:text-accent-blue transition duration-150" data-i18n="nav-contact">Contact</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="text-lg font-semibold mb-4" data-i18n="h4-contact">Contact & Booking</h4>
-                    <a href="tel:+212602020402" class="text-sm text-gray-400 mb-2 flex items-center ltr:justify-start hover:text-accent-blue transition duration-150">
-                        <i data-lucide="phone" class="w-4 h-4 ltr:mr-2 text-accent-blue ltr:mr-2 ltr:ml-0 ltr:mr-2"></i> 0602020402
-                    </a>
-                    <p class="text-sm text-gray-400 mb-2 flex items-center ltr:justify-start"><i data-lucide="mail" class="w-4 h-4 ltr:mr-2 text-accent-blue ltr:mr-2 ltr:ml-0 ltr:mr-2"></i> <a href="mailto:blackiriscars@gmail.com" class="hover:text-accent-blue">blackiriscars@gmail.com</a></p>
-                    <p class="text-sm text-gray-400 mb-2 flex items-center ltr:justify-start"><i data-lucide="map-pin" class="w-4 h-4 ltr:mr-2 text-accent-blue ltr:mr-2 ltr:ml-0 ltr:mr-2"></i> <span data-i18n="address-text">10 rue ouarzazat hassan rabat</span></p>
-                    <a href="https://wa.me/212602020402" target="_blank" class="text-sm text-white px-3 py-1 mt-2 inline-flex items-center rounded-lg bg-green-600 hover:bg-green-700 transition duration-150">
-                        <i data-lucide="message-circle" class="w-4 h-4 ltr:mr-2 ltr:ml-0 ltr:mr-2"></i> <span data-i18n="whatsapp-text">WhatsApp</span> 0602020402
+                    <p class="text-sm text-gray-400 mb-2 flex items-center ltr:justify-start"><i data-lucide="phone" class="w-4 h-4 ltr:mr-2 text-accent-blue"></i> 0602020402</p>
+                    <p class="text-sm text-gray-400 mb-2 flex items-center ltr:justify-start"><i data-lucide="mail" class="w-4 h-4 ltr:mr-2 text-accent-blue"></i> <a href="mailto:blackiriscars@gmail.com" class="hover:text-accent-blue">blackiriscars@gmail.com</a></p>
+                    <p class="text-sm text-gray-400 mb-2 flex items-center ltr:justify-start"><i data-lucide="map-pin" class="w-4 h-4 ltr:mr-2 text-accent-blue"></i> <span data-i18n="address-text">10 rue ouarzazat hassan rabat</span></p>
+                    <a href="httpsm" class="text-sm text-white px-3 py-1 mt-2 inline-flex items-center rounded-lg bg-green-600 hover:bg-green-700 transition duration-150">
+                        <i data-lucide="message-circle" class="w-4 h-4 ltr:mr-2"></i> <span data-i18n="whatsapp-text">WhatsApp</span> 0602020402
                     </a>
                 </div>
             </div>
             <div class="text-center text-sm text-gray-500 pt-4">
-                &copy; <span data-i18n="copy-right">2024 BLACK IRIS cars. All rights reserved.</span>
+                &copy; <span data-i18n="copy-right">2024 Black Iris Cars. All rights reserved.</span>
             </div>
         </div>
     </footer>
 
-    <div id="car-detail-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center hidden">
-        <div class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg m-4 transform transition-all duration-300 scale-95 opacity-0" id="modal-detail-content">
-            <div class="flex justify-between items-start mb-4">
-                <h3 id="modal-car-name" class="text-2xl font-bold text-primary-dark">Car Name</h3>
-                <button id="close-detail-modal-btn" class="text-gray-500 hover:text-primary-dark">
-                    <i data-lucide="x" class="w-6 h-6"></i>
-                </button>
-            </div>
-            
-            <div class="space-y-4">
-                <img id="modal-car-image" src="" alt="Car Image" class="w-full h-48 object-cover rounded-lg mb-4 border border-gray-200">
-                
-                <div class="grid grid-cols-2 gap-4 text-sm text-gray-700">
-                    
-                    <div class="flex items-center ltr:justify-start">
-                        <i data-lucide="car" class="w-4 h-4 ltr:mr-2 text-accent-blue"></i> 
-                        <span id="modal-transmission" class="font-semibold"></span>
-                    </div>
-
-                    <div class="flex items-center ltr:justify-start">
-                        <i data-lucide="users" class="w-4 h-4 ltr:mr-2 text-accent-blue"></i> 
-                        <span id="modal-seats-value" class="font-semibold"></span> <span data-i18n="car-seats-label-spaced"> Seats</span>
-                    </div>
-
-                    <div class="flex items-center ltr:justify-start">
-                        <i data-lucide="snowflake" class="w-4 h-4 ltr:mr-2 text-accent-blue"></i> 
-                        <span data-i18n="modal-ac-label-short">A/C</span>
-                    </div>
-
-                    <div class="flex items-center ltr:justify-start">
-                        <i data-lucide="paint-bucket" class="w-4 h-4 ltr:mr-2 text-accent-blue"></i> 
-                        <span id="modal-color" class="font-semibold"></span>
-                    </div>
-
-                </div>
-
-                <p id="modal-car-desc" class="text-gray-600 border-t border-gray-100 pt-4" data-i18n="modal-car-desc"></p>
-            </div>
-
-            <div class="flex justify-between items-center mt-6 pt-4 border-t">
-                <span class="text-2xl font-extrabold text-primary-dark"><span id="modal-car-price"></span> <span id="modal-car-currency">DH</span> <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
-                <button id="modal-book-button" class="accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md" data-i18n="btn-book-now">
-                    Book Now
-                </button>
-            </div>
-
-            <div id="contact-options" class="space-y-4 mt-6 border-t pt-4 hidden">
-                <p class="text-gray-700 text-sm font-semibold text-center" data-i18n="modal-p">Choose contact method:</p>
-                <a id="whatsapp-link" href="#" target="_blank" class="w-full flex items-center justify-center btn-whatsapp-green text-white font-semibold py-3 px-6 rounded-lg hover:btn-whatsapp-dark transition duration-300 shadow-md">
-                    <i data-lucide="message-circle" class="w-5 h-5 ltr:mr-3"></i> <span data-i18n="btn-whatsapp">WhatsApp</span>
-                </a>
-                <a id="email-link" href="#" class="w-full flex items-center justify-center btn-email-blue text-white font-semibold py-3 px-6 rounded-lg hover:btn-email-dark transition duration-300 shadow-md">
-                    <i data-lucide="mail" class="w-5 h-5 ltr:mr-3"></i> <span data-i18n="btn-email">Email</span>
-                </a>
-            </div>
-        </div>
-    </div>
-
-
     <script>
+        // === CRITICAL FIX: Wrap all code in DOMContentLoaded ===
         document.addEventListener('DOMContentLoaded', () => {
             
-            // --- 1. Global State ---
+            // --- 1. Global State & Element References ---
             let currentLang = 'en';
-            let currentCurrency = 'DH';
+            let currentCurrency = 'DH'; // NEW
+            let rentalLocation = '';
+            let rentalPickupDate = '';
+            let rentalReturnDate = '';
 
-            // --- 2. Element References ---
             const langSelectors = document.querySelectorAll('#language-selector, #language-selector-mobile');
-            const currencySelectors = document.querySelectorAll('#currency-selector, #currency-selector-mobile');
-            const rentalForm = document.getElementById('rental-form');
-            const resultMessage = document.getElementById('result-message');
-            const viewAllBtn = document.getElementById('view-all-cars-btn');
+            const currencySelectors = document.querySelectorAll('#currency-selector, #currency-selector-mobile'); // NEW
+            const priceRange = document.getElementById('price-range');
+            const priceValue = document.getElementById('price-value');
+            const applyFiltersBtn = document.getElementById('apply-filters-btn');
+            const carCountElement = document.getElementById('car-count');
+            const transmissionFilters = document.querySelectorAll('#transmission-filters input[type="checkbox"]');
+            const typeFilters = document.querySelectorAll('#type-filters input[type="checkbox"]');
             
-            // Modal elements
-            const detailModal = document.getElementById('car-detail-modal');
-            const modalDetailContent = document.getElementById('modal-detail-content');
-            const closeDetailModalBtn = document.getElementById('close-detail-modal-btn');
-            const modalBookButton = document.getElementById('modal-book-button');
-            const contactOptions = document.getElementById('contact-options');
+            const filterButton = document.getElementById('filter-menu-button'); // This is the FILTER button
+            const filterSidebar = document.getElementById('filter-sidebar');
+            const filterCloseButton = document.getElementById('filter-close-button');
+            const filterBackdrop = document.getElementById('filter-backdrop'); 
+            const resultsContainer = document.getElementById('results-container');
+            
+            const modal = document.getElementById('contact-modal');
+            const modalContent = document.getElementById('modal-content');
+            const closeModalBtn = document.getElementById('close-modal-btn');
             const whatsappLink = document.getElementById('whatsapp-link');
             const emailLink = document.getElementById('email-link');
 
-            // Seamless Mobile Menu Elements
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            // === NEW: Seamless Mobile Menu Elements ===
+            const mobileMenuButton = document.getElementById('mobile-menu-button'); // This is the NAV MENU button
             const mobileMenu = document.getElementById('mobile-menu');
+            
+            // These are populated by renderAllCars()
+            let carCards = []; 
+            let bookButtons = [];
 
+            // --- 2. Core Functions ---
 
-            // --- 3. Helper Functions ---
             function getTranslation(key) {
-                const translation = translations[currentLang][key];
-                if (typeof translation === 'function') {
-                    return translation; 
+                // Failsafe in case translations is not ready
+                if (typeof translations === 'undefined' || !translations[currentLang]) {
+                    return key;
                 }
-                return translation || key;
+                const translation = translations[currentLang][key];
+                return (typeof translation === 'function') ? translation : (translation || key);
             }
-
+            
+            // === NEW: Price Calculation Function ===
             function calculatePrice(basePrice) {
                 if (currentCurrency === 'EUR') {
                     return { price: (basePrice / 10).toFixed(0), symbol: '€' };
@@ -483,6 +373,12 @@
                 return { price: basePrice, symbol: '' }; // For DH
             }
 
+            function getLocalStorageData() {
+                rentalLocation = localStorage.getItem('rentalLocation') || '';
+                rentalPickupDate = localStorage.getItem('rentalPickupDate') || '';
+                rentalReturnDate = localStorage.getItem('rentalReturnDate') || '';
+            }
+            
             // Syncs desktop and mobile selectors
             function updateAllSelectors(selector, value) {
                 document.querySelectorAll(selector).forEach(sel => {
@@ -502,9 +398,18 @@
                         element.textContent = dictionary[key];
                     }
                 });
+                
+                if (carCountElement) {
+                    updateCarCount(document.querySelectorAll('.car-card:not([style*="display: none"])').length);
+                }
 
                 document.body.setAttribute('dir', (lang === 'ar') ? 'rtl' : 'ltr');
-                document.title = 'BLACK IRIS cars - ' + (lang === 'ar' ? ' استئجار سيارة' : 'Car Rental');
+                document.title = (getTranslation('h1-available') || 'Available Cars') + (lang === 'ar' ? ' | بلاك آيرس' : ' | Black Iris');
+
+                if (priceRange && priceValue) {
+                    const prefix = lang === 'ar' ? 'يصل إلى' : 'Up to';
+                    priceValue.textContent = `${prefix} ${priceRange.value} DH`;
+                }
 
                 document.querySelectorAll('select option').forEach(option => {
                     const key = option.getAttribute('data-i18n');
@@ -513,79 +418,45 @@
                     }
                 });
                 
-                renderCarGrid('featured-car-grid', 10);
                 lucide.createIcons();
             }
 
+            // === NEW: Set Currency Function ===
             function setCurrency(currency) {
                 currentCurrency = currency;
                 updateAllSelectors('#currency-selector, #currency-selector-mobile', currency);
-                renderCarGrid('featured-car-grid', 10); // Re-render grid with new prices
+                renderAllCars(); // Re-render list with new prices
+                filterCars();    // Re-apply filter
             }
-
-            function getFormattedDate(date) {
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
-                return `${year}-${month}-${day}`;
-            }
-
-            function initializeDateFields() {
-                const pickupInput = document.getElementById('pickup-date');
-                const returnInput = document.getElementById('return-date');
-
-                if (!pickupInput || !returnInput) return; // Exit if not on the right page
-
-                const now = new Date();
-                const minDate = getFormattedDate(now);
-                
-                pickupInput.min = minDate;
-                returnInput.min = minDate;
-
-                pickupInput.addEventListener('change', () => {
-                    const pickupDate = pickupInput.value;
-                    if (!pickupDate) return;
-                    
-                    const pickupTime = new Date(pickupDate).getTime();
-                    const minReturnDateObj = new Date(pickupTime + (24 * 60 * 60 * 1000));
-                    const minReturnDate = getFormattedDate(minReturnDateObj);
-                    
-                    returnInput.min = minReturnDate;
-
-                    if (!returnInput.value || returnInput.value < minReturnDate) {
-                        returnInput.value = minReturnDate;
-                    }
-                });
-            }
-
-            // --- 4. Car Grid & Modal Functions ---
-
+            
             /**
-             * === NEW: Renders "BIG CAR CARDS" ===
-             * This function now builds the larger card design you liked.
-             * The card itself is clickable to open the modal.
+             * Dynamically builds all car cards from data.js
              */
-            function renderCarGrid(gridId, limit) {
-                const carGrid = document.getElementById(gridId);
-                if (!carGrid) return;
+            function renderAllCars() {
+                if (!resultsContainer) return;
 
-                carGrid.innerHTML = '';
-                const carsToDisplay = carData.slice(0, limit);
+                // Clear all child nodes *except* the first one (the car count bar)
+                while (resultsContainer.children.length > 1) {
+                    resultsContainer.removeChild(resultsContainer.lastChild);
+                }
 
-                carsToDisplay.forEach(car => {
+                // Loop through data.js and build cards
+                carData.forEach(car => {
                     const transmissionText = getTranslation(car.transmission.toLowerCase());
                     const seatsKey = car.seats === 6 ? 'car-seats-6' : 'car-seats';
                     const seatsText = getTranslation(seatsKey);
-                    const { price, symbol } = calculatePrice(car.price);
+                    const { price, symbol } = calculatePrice(car.price); // NEW: Calculate price
                     const carPriceString = `${symbol}${price}${currentCurrency === 'DH' ? ' DH' : ''}`;
 
-                    const carCard = document.createElement('div');
-                    // Add .car-card class so the click listener can find it
-                    carCard.className = "car-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300 cursor-pointer";
-                    carCard.setAttribute('data-car-id', car.id);
-                    
-                    carCard.innerHTML = `
-                        <div classimg src="${car.img}" alt="${car.name}" class="w-full md:w-1/3 h-48 md:h-full object-cover">
+                    const card = document.createElement('div');
+                    card.className = "car-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-200 hover:shadow-xl transition duration-300";
+                    card.setAttribute('data-price', car.price); // Filter is always on base DH price
+                    card.setAttribute('data-transmission', car.transmission.toLowerCase());
+                    card.setAttribute('data-type', car.type.toLowerCase());
+
+                    card.innerHTML = `
+                        <div class="md:w-1/3 bg-gray-50 flex items-center justify-center p-4">
+                            <img src="${car.img}" alt="${car.name}" class="w-full h-full object-contain">
                         </div>
                         <div class="p-6 md:w-2/3 flex flex-col justify-between">
                             <div>
@@ -599,112 +470,142 @@
                                 </div>
                             </div>
                             <div class="flex justify-between items-center border-t pt-4">
-                                <span class="text-2xl font-extrabold text-primary-dark">${carPriceString} <span data-i18n="car-day" class="text-base font-normal text-gray-500">/ day</span></span>
-                                <span class="accent-blue text-white font-semibold py-2 px-6 rounded-lg shadow-md" data-i18n="btn-book-now">
+                                <div class="flex flex-col">
+                                    <span class="text-xl font-extrabold text-primary-dark">${carPriceString} <span data-i18n="car-day" class="text-base font-normal text-gray-500">/ day</span></span>
+                                </div>
+                                <button class="book-now-btn accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md"
+                                            data-car-name="${car.name} (${car.color}, ${transmissionText})" 
+                                            data-car-price="${carPriceString}"
+                                            data-i18n="btn-book-now">
                                     Book Now
-                                </span>
+                                </button>
                             </div>
                         </div>
                     `;
-                    
-                    carGrid.appendChild(carCard);
+                    resultsContainer.appendChild(card);
                 });
-                
-                attachCarCardListeners();
+
+                // RE-QUERY buttons and RE-ATTACH listeners
+                attachModalListeners();
                 lucide.createIcons();
             }
 
-            function openCarDetailModal(car) {
-                 const transmissionText = getTranslation(car.transmission.toLowerCase());
-                 const { price, symbol } = calculatePrice(car.price); // Calculate price
+            function updateCarCount(count) {
+                const text = getTranslation('sort-count-text');
+                carCountElement.textContent = `${count} ${text}`;
+            }
 
-                document.getElementById('modal-car-name').textContent = `${car.name} (${transmissionText})`;
-                document.getElementById('modal-car-image').src = car.img;
-                
-                document.getElementById('modal-transmission').textContent = transmissionText;
-                document.getElementById('modal-seats-value').textContent = car.seats;
-                document.getElementById('modal-color').textContent = car.color;
-                document.getElementById('modal-car-desc').textContent = car.desc;
-                
-                // Update price display
-                document.getElementById('modal-car-price').textContent = `${symbol}${price}`;
-                document.getElementById('modal-car-currency').textContent = currentCurrency === 'DH' ? 'DH' : '';
+            function getCheckedValues(checkboxes) {
+                return Array.from(checkboxes)
+                    .filter(cb => cb.checked)
+                    .map(cb => cb.value);
+            }
 
-                contactOptions.classList.add('hidden');
-                modalBookButton.classList.remove('hidden'); 
+            function filterCars() {
+                const maxPrice = parseInt(priceRange.value);
+                const selectedTransmissions = getCheckedValues(transmissionFilters);
+                const selectedTypes = getCheckedValues(typeFilters);
                 
-                // Pass the formatted price (e.g., "€140") to the message function
-                modalBookButton.onclick = () => showContactOptionsConcise(car.name, `${symbol}${price}`);
+                let visibleCount = 0;
                 
-                // Re-set language to apply translations to modal
-                // We must call setLanguage *after* populating, so it doesn't overwrite our text
-                const currentLangOnLoad = currentLang;
-                setLanguage(currentLangOnLoad);
-                document.querySelector('[data-i18n="car-seats-label-spaced"]').textContent = getTranslation('car-seats-label-spaced');
+                // Must re-query carCards here as they are dynamic
+                carCards = document.querySelectorAll('.car-card'); 
 
-                detailModal.classList.remove('hidden');
+                carCards.forEach(card => {
+                    const carPrice = parseInt(card.getAttribute('data-price')); // Always filter on base DH price
+                    const carTransmission = card.getAttribute('data-transmission');
+                    const carType = card.getAttribute('data-type');
+
+                    const priceMatch = carPrice <= maxPrice;
+                    const transmissionMatch = selectedTransmissions.length === 0 || selectedTransmissions.includes(carTransmission);
+                    const typeMatch = selectedTypes.length === 0 || selectedTypes.includes(carType);
+
+                    if (priceMatch && transmissionMatch && typeMatch) {
+                        card.style.display = 'flex'; 
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none'; 
+                    }
+                });
+
+                updateCarCount(visibleCount);
+            }
+
+            function toggleSidebar() {
+                const isSidebarOpen = filterSidebar.classList.toggle('open');
+                document.body.classList.toggle('overflow-hidden');
+                filterBackdrop.classList.toggle('hidden', !isSidebarOpen);
+            }
+
+            /**
+             * === SMART MODAL FUNCTION ===
+             * Checks localStorage and uses the correct message template.
+             */
+            function openModal(carName, carPriceWithSymbol) {
+                const dict = translations[currentLang];
+                let whatsappMessage, emailSubject, emailBody;
+                
+                // carPriceWithSymbol is already formatted (e.g., "€140" or "1400 DH")
+
+                // Check if data exists from the search form
+                if (rentalLocation && rentalPickupDate && rentalReturnDate) {
+                    // --- SCENARIO 1: FULL MESSAGE ---
+                    let pickupDisplay = new Date(rentalPickupDate).toLocaleDateString(currentLang, { dateStyle: 'medium' });
+                    let returnDisplay = new Date(rentalReturnDate).toLocaleDateString(currentLang, { dateStyle: 'medium' });
+
+                    whatsappMessage = dict['book-whatsapp-msg-full'](carName, carPriceWithSymbol, rentalLocation, pickupDisplay, returnDisplay);
+                    emailSubject = dict['book-email-subj-full'](carName, rentalLocation);
+                    emailBody = dict['book-email-body-full'](carName, carPriceWithSymbol, rentalLocation, pickupDisplay, returnDisplay);
+                
+                } else {
+                    // --- SCENARIO 2: CONCISE MESSAGE ---
+                    whatsappMessage = dict['book-whatsapp-msg-concise'](carName, carPriceWithSymbol);
+                    emailSubject = dict['book-email-subj-concise'](carName);
+                    emailBody = dict['book-email-body-concise'](carName, carPriceWithSymbol);
+                }
+            
+                whatsappLink.href = `https://wa.me/212602020402?text=${encodeURIComponent(whatsappMessage)}`;
+                emailLink.href = `mailto:blackiriscars@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+            
+                modal.classList.remove('hidden');
                 setTimeout(() => {
-                    modalDetailContent.classList.remove('scale-95', 'opacity-0');
+                    modalContent.classList.remove('scale-95', 'opacity-0');
                 }, 10);
                 document.body.classList.add('overflow-hidden');
             }
 
-            function showContactOptionsConcise(carName, carPriceWithSymbol) {
-                const dict = translations[currentLang];
-
-                let messagePrice = carPriceWithSymbol;
-                if (currentCurrency === 'DH') {
-                    messagePrice = `${carPriceWithSymbol} DH`;
-                }
-
-                const whatsappMessage = dict['book-whatsapp-msg-concise'](carName, messagePrice);
-                const emailSubject = dict['book-email-subj-concise'](carName);
-                const emailBody = dict['book-email-body-concise'](carName, messagePrice);
-
-                whatsappLink.href = `https://wa.me/212602020402?text=${encodeURIComponent(whatsappMessage)}`;
-                emailLink.href = `mailto:blackiriscars@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-                
-                contactOptions.classList.remove('hidden');
-                modalBookButton.classList.add('hidden');
-            }
-
-            function closeCarDetailModal() {
-                modalDetailContent.classList.add('scale-95', 'opacity-0');
-                modalBookButton.classList.remove('hidden');
+            function closeModal() {
+                modalContent.classList.add('scale-95', 'opacity-0');
                 setTimeout(() => {
-                    detailModal.classList.add('hidden');
+                    modal.classList.add('hidden');
                     document.body.classList.remove('overflow-hidden');
-                }, 300);
+                }, 300); 
             }
-
-            function attachCarCardListeners() {
-                document.querySelectorAll('.car-card').forEach(card => {
-                    card.removeEventListener('click', handleCardClick);
-                    card.addEventListener('click', handleCardClick);
+            
+            /**
+             * Attaches listeners to dynamically created buttons
+             */
+            function attachModalListeners() {
+                // Re-query for book buttons AFTER renderAllCars()
+                bookButtons = document.querySelectorAll('.book-now-btn');
+                
+                bookButtons.forEach(button => {
+                    // Remove old listener to prevent duplicates
+                    button.replaceWith(button.cloneNode(true));
+                });
+                
+                // Re-query again after cloning
+                bookButtons = document.querySelectorAll('.book-now-btn');
+                
+                bookButtons.forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        const carName = event.currentTarget.getAttribute('data-car-name');
+                        const carPrice = event.currentTarget.getAttribute('data-car-price');
+                        openModal(carName, carPrice);
+                    });
                 });
             }
-            
-            function handleCardClick(event) {
-                const carId = parseInt(event.currentTarget.getAttribute('data-car-id'));
-                const car = carData.find(c => c.id === carId);
-                if (car) {
-                    openCarDetailModal(car);
-                }
-            }
-            
-            function attachCloseListeners() {
-                if(closeDetailModalBtn) {
-                    closeDetailModalBtn.addEventListener('click', closeCarDetailModal);
-                }
-                if(detailModal) {
-                    detailModal.addEventListener('click', (e) => {
-                        if (e.target === detailModal) {
-                            closeCarDetailModal();
-                        }
-                    });
-                }
-            }
-            
+
             // --- 5. NEW: Seamless Mobile Menu Logic ---
             function openMobileMenu() {
                 mobileMenu.classList.remove('opacity-0', '-translate-y-2');
@@ -737,93 +638,29 @@
             // Close on click outside
             document.addEventListener('click', (event) => {
                 if (mobileMenu.classList.contains('opacity-0')) {
-                    return; // Menu is already closed, do nothing.
+                    return; // Menu is already closed
                 }
                 const isClickInsideMenu = mobileMenu.contains(event.target);
                 const isClickOnButton = mobileMenuButton.contains(event.target);
+                const isClickOnFilterButton = filterButton.contains(event.target);
 
-                if (!isClickInsideMenu && !isClickOnButton) {
+                if (!isClickInsideMenu && !isClickOnButton && !isClickOnFilterButton) {
                     closeMobileMenu();
                 }
             });
+
+
+            // --- 6. Attach Static Event Listeners ---
             
-            // --- 6. Form Submission Logic ---
-            if(rentalForm) {
-                rentalForm.addEventListener('submit', function(event) {
-                    event.preventDefault(); 
-
-                    const location = document.getElementById('location').value;
-                    const pickupDate = document.getElementById('pickup-date').value;
-                    const returnDate = document.getElementById('return-date').value;
-
-                    const pickupTime = new Date(pickupDate).getTime();
-                    const returnTime = new Date(returnDate).getTime();
-                    const nowTime = new Date(getFormattedDate(new Date())).getTime();
-                    const oneDayInMs = 24 * 60 * 60 * 1000;
-
-                    let errorMessage = '';
-
-                    if (!location || !pickupDate || !returnDate) {
-                        errorMessage = '<strong>Error!</strong> Please select a pick-up city/airport and complete the date range.';
-                    } else if (pickupTime < nowTime) { 
-                        errorMessage = '<strong>Error! Choose an available date.</strong>';
-                    } else if (returnTime < pickupTime + oneDayInMs) {
-                        errorMessage = '<strong>Error! Choose an available date.</strong>';
-                    }
-
-                    if (errorMessage) {
-                        resultMessage.classList.remove('hidden', 'bg-green-100', 'border-green-400', 'text-green-700');
-                        resultMessage.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
-                        resultMessage.innerHTML = errorMessage;
-
-                        setTimeout(() => {
-                            resultMessage.classList.add('hidden');
-                        }, 5000);
-                        return;
-                    }
-                    
-                    const selectedLocationText = document.getElementById('location').options[document.getElementById('location').selectedIndex].text;
-
-                    localStorage.setItem('rentalLocation', selectedLocationText); 
-                    localStorage.setItem('rentalPickupDate', pickupDate);
-                    localStorage.setItem('rentalReturnDate', returnDate);
-
-                    window.location.href = 'available_cars.html';
-                });
-            }
-            
-            // --- 7. Initial Page Load ---
-            lucide.createIcons(); // Run icons once on load
-            
-            const savedLang = localStorage.getItem('languagePreference') || 'en';
-            const savedCurrency = localStorage.getItem('currencyPreference') || 'DH';
-            
-            currentLang = savedLang;
-            currentCurrency = savedCurrency;
-            updateAllSelectors('#language-selector, #language-selector-mobile', savedLang);
-            updateAllSelectors('#currency-selector, #currency-selector-mobile', savedCurrency);
-            
-            setLanguage(savedLang);
-            initializeDateFields();
-            // renderCarGrid('featured-car-grid', 10); // setLanguage() already calls this
-            attachCloseListeners();
-
-            if(viewAllBtn) {
-                viewAllBtn.addEventListener('click', (e) => {
-                    localStorage.removeItem('rentalLocation');
-                    localStorage.removeItem('rentalPickupDate');
-                    localStorage.removeItem('rentalReturnDate');
-                });
-            }
-
-            // Add listeners for language/currency
             langSelectors.forEach(selector => {
                 selector.addEventListener('change', (event) => {
                     setLanguage(event.target.value);
                     localStorage.setItem('languagePreference', event.target.value);
+                    renderAllCars(); // Re-render list with new language
+                    filterCars();    // Re-apply filter
                 });
             });
-            
+
             currencySelectors.forEach(selector => {
                 selector.addEventListener('change', (event) => {
                     setCurrency(event.target.value);
@@ -831,6 +668,57 @@
                 });
             });
 
+            // Filter sidebar listeners
+            filterButton.addEventListener('click', (e) => {
+                e.stopPropagation(); // Stop this from closing the menu if it's open
+                toggleSidebar();
+            });
+            filterCloseButton.addEventListener('click', toggleSidebar);
+            filterBackdrop.addEventListener('click', toggleSidebar);
+            
+            resultsContainer.addEventListener('click', () => {
+                 if (filterSidebar.classList.contains('open') && window.innerWidth < 768) { 
+                     toggleSidebar();
+                 }
+            });
+
+            // Filter action listeners
+            applyFiltersBtn.addEventListener('click', () => {
+                filterCars(); 
+                if (filterSidebar.classList.contains('open')) {
+                     toggleSidebar(); 
+                }
+            });
+
+            priceRange.addEventListener('input', (event) => {
+                 const prefix = currentLang === 'ar' ? 'يصل إلى' : 'Up to';
+                 priceValue.textContent = `${prefix} ${event.target.value} DH`;
+            });
+
+            // Modal close listeners
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // --- 7. Run Initial Page Setup ---
+            lucide.createIcons(); // <<-- CRITICAL FIX: This now runs once the DOM is ready.
+            getLocalStorageData(); // Get data from index page
+            
+            const savedLang = localStorage.getItem('languagePreference') || 'en';
+            const savedCurrency = localStorage.getItem('currencyPreference') || 'DH';
+            
+            // === CRITICAL FIX: Set initial values correctly ===
+            updateAllSelectors('#language-selector, #language-selector-mobile', savedLang);
+            updateAllSelectors('#currency-selector, #currency-selector-mobile', savedCurrency);
+            currentLang = savedLang;
+            currentCurrency = savedCurrency;
+            
+            renderAllCars(); // Build the car list
+            setLanguage(savedLang); // Set all text
+            filterCars(); // Apply initial filter
         });
     </script>
 </body>
