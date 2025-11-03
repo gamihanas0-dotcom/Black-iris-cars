@@ -312,6 +312,7 @@
     </footer>
 
     <script>
+        // === CRITICAL FIX: Wrap all code in DOMContentLoaded ===
         document.addEventListener('DOMContentLoaded', () => {
             
             // --- 1. Global State & Element References ---
@@ -637,8 +638,9 @@
                 }
                 const isClickInsideMenu = mobileMenu.contains(event.target);
                 const isClickOnButton = mobileMenuButton.contains(event.target);
+                const isClickOnFilterButton = filterButton.contains(event.target);
 
-                if (!isClickInsideMenu && !isClickOnButton) {
+                if (!isClickInsideMenu && !isClickOnButton && !isClickOnFilterButton) {
                     closeMobileMenu();
                 }
             });
@@ -698,7 +700,7 @@
             });
 
             // --- 7. Run Initial Page Setup ---
-            lucide.createIcons();
+            lucide.createIcons(); // <<-- CRITICAL FIX: Run icons once on load
             getLocalStorageData(); // Get data from index page
             
             const savedLang = localStorage.getItem('languagePreference') || 'en';
