@@ -25,25 +25,24 @@
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #fafafa;
-            transition: all 0.3s ease; /* For smooth RTL transition */
+            transition: all 0.3s ease;
         }
-        /* Monochrome Theme Colors + Royal Blue Accent */
-        .primary-dark { background-color: #1a1a1a; } /* Blacker Black */
-        .text-primary-dark { color: #1a1a1a; } /* Blacker Black */
-        .accent-blue { background-color: #4169e1; } /* Royal Blue */
-        .hover\:accent-blue-dark:hover { background-color: #2b4daa; } /* Darker Royal Blue */
+        /* Theme Colors */
+        .primary-dark { background-color: #1a1a1a; } 
+        .text-primary-dark { color: #1a1a1a; } 
+        .accent-blue { background-color: #4169e1; } 
+        .hover\:accent-blue-dark:hover { background-color: #2b4daa; } 
         .text-accent-blue { color: #4169e1; }
 
         #hero-section {
-            background-image: url('https://placehold.co/1200x600/1a1a1a/ffffff?text=BLACK+IRIS+CARS+-+Morocco'); /* Updated background color */
+            background-image: url('https://placehold.co/1200x600/1a1a1a/ffffff?text=BLACK+IRIS+CARS+-+Morocco');
             background-size: cover;
             background-position: center;
         }
-        /* Icon color uses the dark text color */
         .feature-icon { color: #1a1a1a; }
 
-        /* CRITICAL: Ensure inputs are visible (black text) and consistent padding */
-        input[type="date"], select {
+        /* Form Input Styling */
+        input[type="date"], #rental-form select {
             color: #000000 !important;
             background-color: #ffffff !important;
             padding: 8px 12px !important; 
@@ -52,32 +51,70 @@
             -webkit-appearance: none;
             -moz-appearance: none;
         }
-        /* Style for input calendar icon (kept for consistency, though 'date' type behavior varies) */
         input[type="date"]::-webkit-calendar-picker-indicator {
             filter: invert(0); 
         }
-        /* Ensure selected city option text is black */
         select option { color: #000000; }
 
-        /* RTL adjustments for Arabic */
+        /* RTL adjustments */
         [dir="rtl"] .ltr\:mr-2 { margin-right: 0; margin-left: 0.5rem; }
         [dir="rtl"] .ltr\:text-left { text-align: right; }
         [dir="rtl"] .ltr\:justify-start { justify-content: flex-end; }
         [dir="rtl"] .md\:ltr\:space-x-8 > * + * { margin-left: 0; margin-right: 2rem; }
         [dir="rtl"] .ltr\:ml-1 { margin-left: 0; margin-right: 0.25rem; }
 
-        /* Modal specific styling for animation */
         #car-detail-modal {
             transition: opacity 0.3s ease-in-out;
         }
         
-        /* Language Selector custom size */
-        #language-selector {
-            padding: 4px 8px !important; /* Smaller padding */
-            font-size: 0.75rem !important; /* text-xs */
+        /* === Compact Select Styling === */
+        .compact-select {
+            font-size: 0.875rem; /* 14px */
+            font-weight: 600; /* font-semibold */
+            color: #1a1a1a; /* text-primary-dark */
+            background-color: transparent;
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            border-radius: 0.375rem; /* rounded-md */
+            padding: 8px 12px;
+            margin: 0;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M6 9l4 4 4-4'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1.2em 1.2em;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            padding-right: 2.5rem; /* Make space for the new arrow */
+        }
+        
+        /* Desktop compact selectors */
+        .hidden.md\:flex .compact-select {
+             border: none;
+             font-weight: 600; 
+             font-size: 0.875rem; 
+             padding: 4px 1.4rem 4px 0;
+             background-position: right 0.1rem center;
         }
 
-        /* Specific styles for contact buttons */
+        [dir="rtl"] .hidden.md\:flex .compact-select {
+            background-position: left 0.1rem center;
+            padding-left: 1.4rem;
+            padding-right: 0;
+        }
+        
+        [dir="rtl"] .compact-select {
+            background-position: left 0.5rem center;
+            padding-left: 2.5rem;
+            padding-right: 12px;
+        }
+
+        .compact-select option {
+            color: #000000;
+            font-weight: 400;
+        }
+
+        /* Contact Button Colors */
         .btn-whatsapp-green { background-color: #128C7E; }
         .hover\:btn-whatsapp-dark:hover { background-color: #075E54; }
         .btn-email-blue { background-color: #4169e1; }
@@ -89,19 +126,27 @@
     <header class="bg-white shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <a href="#" class="flex items-center">
-                    <img src="https://i.postimg.cc/B6LWwXNL/923d79fe-5117-4849-9761-57e1fe5a8d96.jpg" alt="BLACK IRIS cars Logo" class="w-10 h-10 mr-2 rounded-full border border-gray-100">
+                <a href="index.html" class="flex items-center">
+                    <img src="https://i.postimg.cc/B6LWwXNL/923d79fe-5117-4849-9761-57e1fe5a8d96.jpg" alt="Black Iris Cars Logo" class="w-10 h-10 mr-2 rounded-full border border-gray-100">
                     <span class="text-2xl font-extrabold text-primary-dark">BLACK IRIS cars</span>
                 </a>
 
-                <div class="flex items-center space-x-4">
-                    <select id="language-selector" class="rounded-md border-gray-300 focus:ring-primary-dark focus:border-primary-dark text-primary-dark">
-                        <option value="en">English</option>
-                        <option value="fr">Français</option>
-                        <option value="ar">العربية</option>
-                    </select>
+                <div class="flex items-center space-x-3 sm:space-x-4">
+                    
+                    <div class="hidden md:flex items-center space-x-3 border-r border-gray-200 pr-3 sm:pr-4">
+                        <select id="currency-selector" class="compact-select">
+                            <option value="DH">DH</option>
+                            <option value="EUR">EUR</option>
+                            <option value="USD">USD</option>
+                        </select>
+                        <select id="language-selector" class="compact-select">
+                            <option value="en">EN</option>
+                            <option value="fr">FR</option>
+                            <option value="ar">AR</option>
+                        </select>
+                    </div>
 
-                    <nav class="hidden md:flex ltr:mr-2 md:ltr\:space-x-8">
+                    <nav class="hidden md:flex space-x-8">
                         <a href="#featured" class="text-gray-600 hover:text-accent-blue transition duration-150" data-i18n="nav-fleet">Our Fleet</a>
                         <a href="#why-us" class="text-gray-600 hover:text-accent-blue transition duration-150" data-i18n="nav-why">Why Choose Us</a>
                         <a href="#testimonials" class="text-gray-600 hover:text-accent-blue transition duration-150" data-i18n="nav-reviews">Reviews</a>
@@ -114,17 +159,31 @@
                 </div>
             </div>
         </div>
-
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#featured" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-blue" data-i18n="nav-fleet">Our Fleet</a>
-                <a href="#why-us" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-blue" data-i18n="nav-why">Why Choose Us</a>
-                <a href="#testimonials" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-blue" data-i18n="nav-reviews">Reviews</a>
-                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-blue" data-i18n="nav-contact">Contact</a>
+        
+        <div id="mobile-menu" class="md:hidden bg-white border-t border-gray-100 opacity-0 -translate-y-2 transform transition-all duration-300 ease-out fixed top-16 left-0 right-0 z-40" style="pointer-events: none;">
+            <div class="px-4 pt-4 pb-3 space-y-4">
+                <div class="flex items-center space-x-4">
+                    <select id="currency-selector-mobile" class="compact-select w-full">
+                        <option value="DH">DH</option>
+                        <option value="EUR">EUR</option>
+                        <option value="USD">USD</option>
+                    </select>
+                    <select id="language-selector-mobile" class="compact-select w-full">
+                        <option value="en">English</option>
+                        <option value="fr">Français</option>
+                        <option value="ar">العربية</option>
+                    </select>
+                </div>
+                
+                <div class="space-y-1">
+                    <a href="#featured" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-blue" data-i18n="nav-fleet">Our Fleet</a>
+                    <a href="#why-us" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-blue" data-i18n="nav-why">Why Choose Us</a>
+                    <a href="#testimonials" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-blue" data-i18n="nav-reviews">Reviews</a>
+                    <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-accent-blue" data-i18n="nav-contact">Contact</a>
+                </div>
             </div>
         </div>
     </header>
-
     <section id="hero-section" class="py-20 md:py-32 relative text-white">
         <div class="absolute inset-0 primary-dark opacity-70"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -346,7 +405,7 @@
             </div>
 
             <div class="flex justify-between items-center mt-6 pt-4 border-t">
-                <span class="text-2xl font-extrabold text-primary-dark"><span id="modal-car-price"></span> DH <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
+                <span class="text-2xl font-extrabold text-primary-dark"><span id="modal-car-price"></span> <span id="modal-car-currency">DH</span> <span class="text-base font-normal text-gray-500" data-i18n="car-day">/ day</span></span>
                 <button id="modal-book-button" class="accent-blue text-white font-semibold py-2 px-6 rounded-lg hover:accent-blue-dark transition duration-300 shadow-md" data-i18n="btn-book-now">
                     Book Now
                 </button>
@@ -366,321 +425,378 @@
 
 
     <script>
-        // Initialize Lucide Icons
-        lucide.createIcons();
-        
-        // Ensure global variables are set (using data loaded from data.js)
-        let currentLang = 'en';
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- 1. Global State ---
+            let currentLang = 'en';
+            let currentCurrency = 'DH';
 
-        function getTranslation(key) {
-            // Check if key is a string property or a function (template)
-            const translation = translations[currentLang][key];
-            if (typeof translation === 'function') {
-                return translation; 
+            // --- 2. Element References ---
+            const langSelectors = document.querySelectorAll('#language-selector, #language-selector-mobile');
+            const currencySelectors = document.querySelectorAll('#currency-selector, #currency-selector-mobile');
+            const rentalForm = document.getElementById('rental-form');
+            const resultMessage = document.getElementById('result-message');
+            const viewAllBtn = document.getElementById('view-all-cars-btn');
+            
+            // Modal elements
+            const detailModal = document.getElementById('car-detail-modal');
+            const modalDetailContent = document.getElementById('modal-detail-content');
+            const closeDetailModalBtn = document.getElementById('close-detail-modal-btn');
+            const modalBookButton = document.getElementById('modal-book-button');
+            const contactOptions = document.getElementById('contact-options');
+            const whatsappLink = document.getElementById('whatsapp-link');
+            const emailLink = document.getElementById('email-link');
+
+            // === NEW: Seamless Mobile Menu Elements ===
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+
+            // --- 3. Helper Functions ---
+            function getTranslation(key) {
+                const translation = translations[currentLang][key];
+                if (typeof translation === 'function') {
+                    return translation; 
+                }
+                return translation || key;
             }
-            return translation || key;
-        }
 
-        function setLanguage(lang) {
-            currentLang = lang;
-            const dictionary = translations[lang];
-            
-            // 1. Update text content
-            document.querySelectorAll('[data-i18n]').forEach(element => {
-                const key = element.getAttribute('data-i18n');
-                if (dictionary[key] && typeof dictionary[key] === 'string') { // Check if it's a simple string translation
-                    element.textContent = dictionary[key];
+            function calculatePrice(basePrice) {
+                if (currentCurrency === 'EUR') {
+                    return { price: (basePrice / 10).toFixed(0), symbol: '€' };
                 }
-            });
-
-            // 2. Handle RTL (Right-to-Left)
-            const body = document.body;
-            if (lang === 'ar') {
-                body.setAttribute('dir', 'rtl');
-            } else {
-                body.setAttribute('dir', 'ltr');
+                if (currentCurrency === 'USD') {
+                    return { price: (basePrice / 10).toFixed(0), symbol: '$' };
+                }
+                return { price: basePrice, symbol: '' }; // For DH
             }
-            // Update title
-            document.title = 'BLACK IRIS cars - ' + (lang === 'ar' ? ' استئجار سيارة' : 'Car Rental');
 
-            // 3. Reset select options for correct language display
-            document.querySelectorAll('select option').forEach(option => {
-                const key = option.getAttribute('data-i18n');
-                if (key && dictionary[key] && typeof dictionary[key] === 'string') {
-                    option.textContent = dictionary[key];
+            // Syncs desktop and mobile selectors
+            function updateAllSelectors(selector, value) {
+                document.querySelectorAll(selector).forEach(sel => {
+                    sel.value = value;
+                });
+            }
+
+            function setLanguage(lang) {
+                currentLang = lang;
+                updateAllSelectors('#language-selector, #language-selector-mobile', lang);
+                
+                const dictionary = translations[lang];
+                
+                document.querySelectorAll('[data-i18n]').forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (dictionary[key] && typeof dictionary[key] === 'string') {
+                        element.textContent = dictionary[key];
+                    }
+                });
+
+                document.body.setAttribute('dir', (lang === 'ar') ? 'rtl' : 'ltr');
+                document.title = 'BLACK IRIS cars - ' + (lang === 'ar' ? ' استئجار سيارة' : 'Car Rental');
+
+                document.querySelectorAll('select option').forEach(option => {
+                    const key = option.getAttribute('data-i18n');
+                    if (key && dictionary[key] && typeof dictionary[key] === 'string') {
+                        option.textContent = dictionary[key];
+                    }
+                });
+                
+                renderCarGrid('featured-car-grid', 10);
+                lucide.createIcons();
+            }
+
+            function setCurrency(currency) {
+                currentCurrency = currency;
+                updateAllSelectors('#currency-selector, #currency-selector-mobile', currency);
+                renderCarGrid('featured-car-grid', 10); // Re-render grid with new prices
+            }
+
+            function getFormattedDate(date) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+
+            function initializeDateFields() {
+                const pickupInput = document.getElementById('pickup-date');
+                const returnInput = document.getElementById('return-date');
+
+                if (!pickupInput || !returnInput) return; // Exit if not on the right page
+
+                const now = new Date();
+                const minDate = getFormattedDate(now);
+                
+                pickupInput.min = minDate;
+                returnInput.min = minDate;
+
+                pickupInput.addEventListener('change', () => {
+                    const pickupDate = pickupInput.value;
+                    if (!pickupDate) return;
+                    
+                    const pickupTime = new Date(pickupDate).getTime();
+                    const minReturnDateObj = new Date(pickupTime + (24 * 60 * 60 * 1000));
+                    const minReturnDate = getFormattedDate(minReturnDateObj);
+                    
+                    returnInput.min = minReturnDate;
+
+                    if (!returnInput.value || returnInput.value < minReturnDate) {
+                        returnInput.value = minReturnDate;
+                    }
+                });
+            }
+
+            // --- 4. Car Grid & Modal Functions ---
+            function renderCarGrid(gridId, limit) {
+                const carGrid = document.getElementById(gridId);
+                if (!carGrid) return;
+
+                carGrid.innerHTML = '';
+                const carsToDisplay = carData.slice(0, limit);
+
+                carsToDisplay.forEach(car => {
+                    const transmissionText = getTranslation(car.transmission.toLowerCase());
+                    const { price, symbol } = calculatePrice(car.price); // Calculate price
+                    
+                    const carCard = document.createElement('div');
+                    carCard.className = `car-card bg-white rounded-xl shadow-lg overflow-hidden border-2 border-gray-100 cursor-pointer hover:shadow-xl transition duration-200`;
+                    carCard.setAttribute('data-car-id', car.id);
+                    
+                    carCard.innerHTML = `
+                        <img src="${car.img}" alt="${car.name} ${car.color}" class="w-full h-24 sm:h-32 object-cover">
+                        <div class="p-3 text-center">
+                            <h3 class="text-sm font-bold text-gray-800">${car.name} (${transmissionText})</h3>
+                            <p class="text-gray-500 text-xs">${symbol}${price} ${currentCurrency === 'DH' ? 'DH' : ''}<span data-i18n="car-day" class="car-day-text"> ${getTranslation('car-day')}</span></p>
+                        </div>
+                    `;
+                    
+                    carGrid.appendChild(carCard);
+                });
+                
+                attachCarCardListeners();
+                lucide.createIcons();
+            }
+
+            function openCarDetailModal(car) {
+                 const transmissionText = getTranslation(car.transmission.toLowerCase());
+                 const { price, symbol } = calculatePrice(car.price); // Calculate price
+
+                document.getElementById('modal-car-name').textContent = `${car.name} (${transmissionText})`;
+                document.getElementById('modal-car-image').src = car.img;
+                
+                document.getElementById('modal-transmission').textContent = transmissionText;
+                document.getElementById('modal-seats-value').textContent = car.seats;
+                document.getElementById('modal-color').textContent = car.color;
+                document.getElementById('modal-car-desc').textContent = car.desc;
+                
+                // Update price display
+                document.getElementById('modal-car-price').textContent = `${symbol}${price}`;
+                document.getElementById('modal-car-currency').textContent = currentCurrency === 'DH' ? 'DH' : '';
+
+                contactOptions.classList.add('hidden');
+                modalBookButton.classList.remove('hidden'); 
+                
+                // Pass the formatted price (e.g., "€140") to the message function
+                modalBookButton.onclick = () => showContactOptionsConcise(car.name, `${symbol}${price}`);
+                
+                // Re-set language to apply translations to modal
+                setLanguage(currentLang);
+                document.querySelector('[data-i18n="car-seats-label-spaced"]').textContent = getTranslation('car-seats-label-spaced');
+
+                detailModal.classList.remove('hidden');
+                setTimeout(() => {
+                    modalDetailContent.classList.remove('scale-95', 'opacity-0');
+                }, 10);
+                document.body.classList.add('overflow-hidden');
+            }
+
+            function showContactOptionsConcise(carName, carPriceWithSymbol) {
+                const dict = translations[currentLang];
+
+                let messagePrice = carPriceWithSymbol;
+                if (currentCurrency === 'DH') {
+                    messagePrice = `${carPriceWithSymbol} DH`;
+                }
+
+                const whatsappMessage = dict['book-whatsapp-msg-concise'](carName, messagePrice);
+                const emailSubject = dict['book-email-subj-concise'](carName);
+                const emailBody = dict['book-email-body-concise'](carName, messagePrice);
+
+                whatsappLink.href = `https://wa.me/212602020402?text=${encodeURIComponent(whatsappMessage)}`;
+                emailLink.href = `mailto:blackiriscars@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+                
+                contactOptions.classList.remove('hidden');
+                modalBookButton.classList.add('hidden');
+            }
+
+            function closeCarDetailModal() {
+                modalDetailContent.classList.add('scale-95', 'opacity-0');
+                modalBookButton.classList.remove('hidden');
+                setTimeout(() => {
+                    detailModal.classList.add('hidden');
+                    document.body.classList.remove('overflow-hidden');
+                }, 300);
+            }
+
+            function attachCarCardListeners() {
+                document.querySelectorAll('.car-card').forEach(card => {
+                    card.removeEventListener('click', handleCardClick);
+                    card.addEventListener('click', handleCardClick);
+                });
+            }
+            
+            function handleCardClick(event) {
+                const carId = parseInt(event.currentTarget.getAttribute('data-car-id'));
+                const car = carData.find(c => c.id === carId);
+                if (car) {
+                    openCarDetailModal(car);
+                }
+            }
+            
+            function attachCloseListeners() {
+                if(closeDetailModalBtn) {
+                    closeDetailModalBtn.addEventListener('click', closeCarDetailModal);
+                }
+                if(detailModal) {
+                    detailModal.addEventListener('click', (e) => {
+                        if (e.target === detailModal) {
+                            closeCarDetailModal();
+                        }
+                    });
+                }
+            }
+            
+            // --- 5. NEW: Seamless Mobile Menu Logic ---
+            function openMobileMenu() {
+                mobileMenu.classList.remove('opacity-0', '-translate-y-2');
+                mobileMenu.style.pointerEvents = 'auto';
+            }
+
+            function closeMobileMenu() {
+                mobileMenu.classList.add('opacity-0', '-translate-y-2');
+                mobileMenu.style.pointerEvents = 'none';
+            }
+
+            mobileMenuButton.addEventListener('click', (e) => {
+                e.stopPropagation(); // Stop this click from triggering the document listener
+                const isOpen = mobileMenu.classList.contains('opacity-0');
+                if (isOpen) {
+                    openMobileMenu();
+                } else {
+                    closeMobileMenu();
+                }
+            });
+
+            // Close when a link is clicked
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', closeMobileMenu);
+            });
+            
+            // Close on scroll
+            window.addEventListener('scroll', closeMobileMenu);
+
+            // Close on click outside
+            document.addEventListener('click', (event) => {
+                // Check if the menu is open
+                if (mobileMenu.classList.contains('opacity-0')) {
+                    return; // Menu is already closed, do nothing.
+                }
+                
+                // Check if the click was *inside* the menu
+                const isClickInsideMenu = mobileMenu.contains(event.target);
+                // Check if the click was on the menu *button*
+                const isClickOnButton = mobileMenuButton.contains(event.target);
+
+                if (!isClickInsideMenu && !isClickOnButton) {
+                    closeMobileMenu();
                 }
             });
             
-            // Re-render car grids to apply translated transmission text
-            renderCarGrid('featured-car-grid', 10);
+            // --- 6. Form Submission Logic ---
+            if(rentalForm) {
+                rentalForm.addEventListener('submit', function(event) {
+                    event.preventDefault(); 
 
-            // Re-render icons after language change
-            lucide.createIcons();
-        }
+                    const location = document.getElementById('location').value;
+                    const pickupDate = document.getElementById('pickup-date').value;
+                    const returnDate = document.getElementById('return-date').value;
 
-        const languageSelector = document.getElementById('language-selector');
-        languageSelector.addEventListener('change', (event) => {
-            setLanguage(event.target.value);
-            localStorage.setItem('languagePreference', event.target.value);
-        });
+                    const pickupTime = new Date(pickupDate).getTime();
+                    const returnTime = new Date(returnDate).getTime();
+                    const nowTime = new Date(getFormattedDate(new Date())).getTime();
+                    const oneDayInMs = 24 * 60 * 60 * 1000;
 
-        // --- Date Functions (Reusable) ---
-        
-        function getFormattedDate(date) {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        }
+                    let errorMessage = '';
 
-        function initializeDateFields() {
-            const pickupInput = document.getElementById('pickup-date');
-            const returnInput = document.getElementById('return-date');
+                    if (!location || !pickupDate || !returnDate) {
+                        errorMessage = '<strong>Error!</strong> Please select a pick-up city/airport and complete the date range.';
+                    } else if (pickupTime < nowTime) { 
+                        errorMessage = '<strong>Error! Choose an available date.</strong>';
+                    } else if (returnTime < pickupTime + oneDayInMs) {
+                        errorMessage = '<strong>Error! Choose an available date.</strong>';
+                    }
 
-            const now = new Date();
-            const minDate = getFormattedDate(now);
+                    if (errorMessage) {
+                        resultMessage.classList.remove('hidden', 'bg-green-100', 'border-green-400', 'text-green-700');
+                        resultMessage.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
+                        resultMessage.innerHTML = errorMessage;
+
+                        setTimeout(() => {
+                            resultMessage.classList.add('hidden');
+                        }, 5000);
+                        return;
+                    }
+                    
+                    const selectedLocationText = document.getElementById('location').options[document.getElementById('location').selectedIndex].text;
+
+                    localStorage.setItem('rentalLocation', selectedLocationText); 
+                    localStorage.setItem('rentalPickupDate', pickupDate);
+                    localStorage.setItem('rentalReturnDate', returnDate);
+
+                    window.location.href = 'available_cars.html';
+                });
+            }
             
-            pickupInput.min = minDate;
-            returnInput.min = minDate;
-
-            pickupInput.addEventListener('change', () => {
-                const pickupDate = pickupInput.value;
-                if (!pickupDate) return;
-                
-                const pickupTime = new Date(pickupDate).getTime();
-                const minReturnDateObj = new Date(pickupTime + (24 * 60 * 60 * 1000));
-                const minReturnDate = getFormattedDate(minReturnDateObj);
-                
-                returnInput.min = minReturnDate;
-
-                if (!returnInput.value || returnInput.value < minReturnDate) {
-                    returnInput.value = minReturnDate;
-                }
-            });
-        }
-
-        // --- Initialization Function ---
-        function initPage() {
+            // --- 7. Initial Page Load ---
+            lucide.createIcons(); // <<-- CRITICAL FIX: Run icons once on load
+            
             const savedLang = localStorage.getItem('languagePreference') || 'en';
-            languageSelector.value = savedLang;
+            const savedCurrency = localStorage.getItem('currencyPreference') || 'DH';
+            
+            currentLang = savedLang;
+            currentCurrency = savedCurrency;
+            updateAllSelectors('#language-selector, #language-selector-mobile', savedLang);
+            updateAllSelectors('#currency-selector, #currency-selector-mobile', savedCurrency);
+            
             setLanguage(savedLang);
             initializeDateFields();
             renderCarGrid('featured-car-grid', 10);
             attachCloseListeners();
-            
-            // === NEW: "View All Cars" Button Logic ===
-            const viewAllBtn = document.getElementById('view-all-cars-btn');
+
             if(viewAllBtn) {
-                viewAllBtn.addEventListener('click', () => {
-                    // Clear the stored data before navigating
+                viewAllBtn.addEventListener('click', (e) => {
                     localStorage.removeItem('rentalLocation');
                     localStorage.removeItem('rentalPickupDate');
                     localStorage.removeItem('rentalReturnDate');
                 });
             }
-        }
 
-        // Load language preference and initialize dates on page load
-        document.addEventListener('DOMContentLoaded', initPage);
-
-
-        // --- CAR GRID RENDERING (Unified function) ---
-        function renderCarGrid(gridId, limit) {
-            const carGrid = document.getElementById(gridId);
-            if (!carGrid) return;
-
-            carGrid.innerHTML = ''; // Clear existing content
-            
-            const carsToDisplay = carData.slice(0, limit);
-
-            carsToDisplay.forEach(car => {
-                const transmissionText = getTranslation(car.transmission.toLowerCase());
-                
-                const carCard = document.createElement('div');
-                carCard.className = `car-card bg-white rounded-xl shadow-lg overflow-hidden border-2 border-gray-100 cursor-pointer hover:shadow-xl transition duration-200`;
-                carCard.setAttribute('data-car-id', car.id);
-                
-                carCard.innerHTML = `
-                    <img src="${car.img}" alt="${car.name} ${car.color}" class="w-full h-24 sm:h-32 object-cover">
-                    <div class="p-3 text-center">
-                        <h3 class="text-sm font-bold text-gray-800">${car.name} (${transmissionText})</h3>
-                        <p class="text-gray-500 text-xs">${car.price} DH<span data-i18n="car-day" class="car-day-text"> ${getTranslation('car-day')}</span></p>
-                    </div>
-                `;
-                
-                carGrid.appendChild(carCard);
+            // Add listeners for language/currency
+            langSelectors.forEach(selector => {
+                selector.addEventListener('change', (event) => {
+                    setLanguage(event.target.value);
+                    localStorage.setItem('languagePreference', event.target.value);
+                });
             });
             
-            // Only attach new listeners if the card is in the DOM
-            attachCarCardListeners();
-            
-            // Ensure icons are created for the newly added content
-            lucide.createIcons();
-        }
-
-
-        // --- CAR DETAIL MODAL LOGIC ---
-        const detailModal = document.getElementById('car-detail-modal');
-        const modalDetailContent = document.getElementById('modal-detail-content');
-        const closeDetailModalBtn = document.getElementById('close-detail-modal-btn');
-        const modalBookButton = document.getElementById('modal-book-button');
-        const contactOptions = document.getElementById('contact-options');
-        const whatsappLink = document.getElementById('whatsapp-link');
-        const emailLink = document.getElementById('email-link');
-
-        function openCarDetailModal(car) {
-             const currentLang = languageSelector.value;
-
-            // Populate modal content
-            const transmissionText = getTranslation(car.transmission.toLowerCase());
-            document.getElementById('modal-car-name').textContent = `${car.name} (${transmissionText})`;
-            document.getElementById('modal-car-image').src = car.img;
-            
-            // Set dynamic details
-            document.getElementById('modal-transmission').textContent = transmissionText;
-            document.getElementById('modal-seats-value').textContent = car.seats;
-            document.getElementById('modal-color').textContent = car.color;
-            document.getElementById('modal-car-desc').textContent = car.desc;
-            document.getElementById('modal-car-price').textContent = car.price;
-
-            // Hide contact options initially
-            contactOptions.classList.add('hidden');
-            modalBookButton.classList.remove('hidden'); 
-            
-            // Use the CONCISE message template (as requested for index.html)
-            modalBookButton.onclick = () => showContactOptionsConcise(car.name, `${car.price} DH`);
-            
-            // Apply current translations to modal text elements
-            setLanguage(currentLang);
-            document.querySelector('[data-i18n="car-seats-label-spaced"]').textContent = getTranslation('car-seats-label-spaced');
-
-            // Display Modal with animation
-            detailModal.classList.remove('hidden');
-            setTimeout(() => {
-                modalDetailContent.classList.remove('scale-95', 'opacity-0');
-            }, 10);
-            document.body.classList.add('overflow-hidden');
-        }
-
-        // --- CORE LOGIC: Dynamic Message Generator (CONCISE for Index Page) ---
-        function showContactOptionsConcise(carName, carPrice) {
-            const currentLang = languageSelector.value;
-            const dict = translations[currentLang];
-
-            // 1. Use the localized CONCISE template functions (no dates/city needed)
-            const whatsappMessage = dict['book-whatsapp-msg-concise'](carName, carPrice);
-            const emailSubject = dict['book-email-subj-concise'](carName);
-            const emailBody = dict['book-email-body-concise'](carName, carPrice);
-
-            // 2. Set Link HREFs (URL encoding is crucial)
-            whatsappLink.href = `https://wa.me/212602020402?text=${encodeURIComponent(whatsappMessage)}`;
-            emailLink.href = `mailto:blackiriscars@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-            
-            // 3. Update Modal Display
-            contactOptions.classList.remove('hidden');
-            modalBookButton.classList.add('hidden');
-        }
-
-        function closeCarDetailModal() {
-            modalDetailContent.classList.add('scale-95', 'opacity-0');
-            modalBookButton.classList.remove('hidden'); // Reset 'Book Now' button state
-            setTimeout(() => {
-                detailModal.classList.add('hidden');
-                document.body.classList.remove('overflow-hidden');
-            }, 300);
-        }
-
-        function attachCarCardListeners() {
-            document.querySelectorAll('.car-card').forEach(card => {
-                card.removeEventListener('click', handleCardClick);
-                card.addEventListener('click', handleCardClick);
+            currencySelectors.forEach(selector => {
+                selector.addEventListener('change', (event) => {
+                    setCurrency(event.target.value);
+                    localStorage.setItem('currencyPreference', event.target.value);
+                });
             });
-        }
-        
-        function handleCardClick(event) {
-            const carId = parseInt(event.currentTarget.getAttribute('data-car-id'));
-            const car = carData.find(c => c.id === carId);
-            if (car) {
-                openCarDetailModal(car);
-            }
-        }
-        
-        function attachCloseListeners() {
-            // Attach close listeners
-            closeDetailModalBtn.addEventListener('click', closeCarDetailModal);
-            detailModal.addEventListener('click', (e) => {
-                if (e.target === detailModal) {
-                    closeCarDetailModal();
-                }
-            });
-        }
-        
-        // --- MOBILE MENU TOGGLE ---
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
 
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
         });
-
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
-            });
-        });
-
-        // --- FORM SUBMISSION HANDLER (Validation and Instant Redirect) ---
-        const rentalForm = document.getElementById('rental-form');
-        const resultMessage = document.getElementById('result-message');
-
-        rentalForm.addEventListener('submit', function(event) {
-            event.preventDefault(); 
-
-            const location = document.getElementById('location').value;
-            const pickupDate = document.getElementById('pickup-date').value;
-            const returnDate = document.getElementById('return-date').value;
-
-            // ... (validation logic remains the same)
-
-            const pickupTime = new Date(pickupDate).getTime();
-            const returnTime = new Date(returnDate).getTime();
-            const nowTime = new Date(getFormattedDate(new Date())).getTime();
-            const oneDayInMs = 24 * 60 * 60 * 1000;
-
-            let errorMessage = '';
-
-            if (!location || !pickupDate || !returnDate) {
-                errorMessage = '<strong>Error!</strong> Please select a pick-up city/airport and complete the date range.';
-            } else if (pickupTime < nowTime) { 
-                errorMessage = '<strong>Error! Choose an available date.</strong>';
-            } else if (returnTime < pickupTime + oneDayInMs) {
-                errorMessage = '<strong>Error! Choose an available date.</strong>';
-            }
-
-            if (errorMessage) {
-                resultMessage.classList.remove('hidden', 'bg-green-100', 'border-green-400', 'text-green-700');
-                resultMessage.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
-                resultMessage.innerHTML = errorMessage;
-
-                setTimeout(() => {
-                    resultMessage.classList.add('hidden');
-                }, 5000);
-                return;
-            }
-            
-            // --- VALIDATION SUCCESS: INSTANT REDIRECT ---
-            
-            // Store search parameters in localStorage for use on available_cars.html
-            const selectedLocationText = document.getElementById('location').options[document.getElementById('location').selectedIndex].text;
-
-            localStorage.setItem('rentalLocation', selectedLocationText); 
-            localStorage.setItem('rentalPickupDate', pickupDate);
-            localStorage.setItem('rentalReturnDate', returnDate);
-
-            // Corrected Redirect: using available_cars.html
-            window.location.href = 'available_cars.html';
-        });
-
     </script>
 </body>
 </html>
