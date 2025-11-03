@@ -706,8 +706,9 @@
             const savedLang = localStorage.getItem('languagePreference') || 'en';
             const savedCurrency = localStorage.getItem('currencyPreference') || 'DH';
             
-            languageSelector.value = savedLang;
-            currencySelector.value = savedCurrency;
+            // === CRITICAL FIX: Set initial values correctly ===
+            updateAllSelectors('#language-selector, #language-selector-mobile', savedLang);
+            updateAllSelectors('#currency-selector, #currency-selector-mobile', savedCurrency);
             currentLang = savedLang;
             currentCurrency = savedCurrency;
             
