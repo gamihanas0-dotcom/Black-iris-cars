@@ -700,7 +700,7 @@
             });
 
             // --- 7. Run Initial Page Setup ---
-            lucide.createIcons(); // <<-- CRITICAL FIX: Run icons once on load
+            lucide.createIcons(); // <<-- CRITICAL FIX: This now runs once the DOM is ready.
             getLocalStorageData(); // Get data from index page
             
             const savedLang = localStorage.getItem('languagePreference') || 'en';
