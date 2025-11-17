@@ -18,7 +18,7 @@
       gtag('js', new Date());
       gtag('config', 'G-2Y2MG9ZZ46');
     </script>
-    
+
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="192x192"  href="web-app-manifest-192x192.png">
     <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
@@ -30,7 +30,8 @@
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "BLACK IRIS cars",
-      "url": "https://www.blackiriscars.com",  "logo": "https://i.postimg.cc/B6LWwXNL/923d79fe-5117-4849-9761-57e1fe5a8d96.jpg",
+      "url": "https://www.blackiriscars.com",
+      "logo": "https://i.postimg.cc/B6LWwXNL/923d79fe-5117-4849-9761-57e1fe5a8d96.jpg",
       "contactPoint": {
         "@type": "ContactPoint",
         "telephone": "+212-602-020402",
@@ -54,6 +55,11 @@
         .hover\:accent-blue-dark:hover { background-color: #2b4daa; } 
         .text-accent-blue { color: #4169e1; }
 
+        #hero-section {
+            background-image: url('https://i.postimg.cc/ZKJ3nbqB/Download-free-moroccan-wallpaper-HD.jpg');
+            background-size: cover;
+            background-position: center;
+        }
         .feature-icon { color: #1a1a1a; }
 
         /* Form Input Styling */
@@ -144,13 +150,8 @@
         @media (min-width: 768px) {
             #hero-section {
                 background-image: url('https://i.postimg.cc/ZKJ3nbqB/Download-free-moroccan-wallpaper-HD.jpg');
-                /* === NEW: Fixes repeating background & makes it tall === */
                 background-size: cover;
                 background-repeat: no-repeat;
-                background-position: center;
-                min-height: 90vh; /* 90% of the viewport height */
-                display: flex;
-                align-items: center;
             }
         }
     </style>
@@ -218,8 +219,10 @@
             </div>
         </div>
     </header>
-    <section id="hero-section" class="py-20 md:py-0 relative text-white"> <div class="absolute inset-0 primary-dark opacity-60"></div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"> <div class="text-center">
+    <section id="hero-section" class="py-20 md:py-32 relative text-white">
+        <div class="absolute inset-0 primary-dark opacity-60"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center">
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4" data-i18n="h1-hero">
                     Explore Morocco. Drive Quality.
                 </h1>
@@ -544,7 +547,7 @@
             function setCurrency(currency) {
                 currentCurrency = currency;
                 updateAllSelectors('#currency-selector, #currency-selector-mobile', currency);
-                renderCarGrid('featured-car-grid', 9); // Re-render grid with new prices
+                renderCarGrid('featured-car-grid', 9); // Re-render grid with new prices, show 9
             }
 
             function getFormattedDate(date) {
@@ -603,7 +606,7 @@
                     const carPriceString = `${symbol}${price}${currentCurrency === 'DH' ? ' DH' : ''}`;
 
                     const carCard = document.createElement('div');
-                    // === NEW CLASS: Removed flex-col md:flex-row. Added hover effects ===
+                    // === NEW CLASS: Added hover effects ===
                     carCard.className = "car-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 cursor-pointer flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-1";
                     carCard.setAttribute('data-car-id', car.id);
                     
@@ -767,89 +770,25 @@
                 }
                 const isClickInsideMenu = mobileMenu.contains(event.target);
                 const isClickOnButton = mobileMenuButton.contains(event.target);
+                const isClickOnFilterButton = filterButton.contains(event.target);
 
-                if (!isClickInsideMenu && !isClickOnButton) {
+                if (!isClickInsideMenu && !isClickOnButton && !isClickOnFilterButton) {
                     closeMobileMenu();
                 }
             });
+
+
+            // --- 6. Attach Static Event Listeners ---
             
-            // --- 6. Form Submission Logic ---
-            if(rentalForm) {
-                rentalForm.addEventListener('submit', function(event) {
-                    event.preventDefault(); 
-
-                    const location = document.getElementById('location').value;
-                    const pickupDate = document.getElementById('pickup-date').value;
-                    const returnDate = document.getElementById('return-date').value;
-
-                    const pickupTime = new Date(pickupDate).getTime();
-                    const returnTime = new Date(returnDate).getTime();
-                    const nowTime = new Date(getFormattedDate(new Date())).getTime();
-                    const oneDayInMs = 24 * 60 * 60 * 1000;
-
-                    let errorMessage = '';
-
-                    if (!location || !pickupDate || !returnDate) {
-                        errorMessage = '<strong>Error!</strong> Please select a pick-up city/airport and complete the date range.';
-                    } else if (pickupTime < nowTime) { 
-                        errorMessage = '<strong>Error! Choose an available date.</strong>';
-                    } else if (returnTime < pickupTime + oneDayInMs) {
-                        errorMessage = '<strong>Error! Choose an available date.</strong>';
-                    }
-
-                    if (errorMessage) {
-                        resultMessage.classList.remove('hidden', 'bg-green-100', 'border-green-400', 'text-green-700');
-                        resultMessage.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
-                        resultMessage.innerHTML = errorMessage;
-
-                        setTimeout(() => {
-                            resultMessage.classList.add('hidden');
-                        }, 5000);
-                        return;
-                    }
-                    
-                    const selectedLocationText = document.getElementById('location').options[document.getElementById('location').selectedIndex].text;
-
-                    localStorage.setItem('rentalLocation', selectedLocationText); 
-                    localStorage.setItem('rentalPickupDate', pickupDate);
-                    localStorage.setItem('rentalReturnDate', returnDate);
-
-                    window.location.href = 'available_cars.html';
-                });
-            }
-            
-            // --- 7. Initial Page Load ---
-            lucide.createIcons(); // Run icons once on load
-            
-            const savedLang = localStorage.getItem('languagePreference') || 'en';
-            const savedCurrency = localStorage.getItem('currencyPreference') || 'DH';
-            
-            currentLang = savedLang;
-            currentCurrency = savedCurrency;
-            updateAllSelectors('#language-selector, #language-selector-mobile', savedLang);
-            updateAllSelectors('#currency-selector, #currency-selector-mobile', savedCurrency);
-            
-            setLanguage(savedLang);
-            initializeDateFields();
-            // renderCarGrid('featured-car-grid', 9); // setLanguage() already calls this with 9
-            attachCloseListeners();
-
-            if(viewAllBtn) {
-                viewAllBtn.addEventListener('click', (e) => {
-                    localStorage.removeItem('rentalLocation');
-                    localStorage.removeItem('rentalPickupDate');
-                    localStorage.removeItem('rentalReturnDate');
-                });
-            }
-
-            // Add listeners for language/currency
             langSelectors.forEach(selector => {
                 selector.addEventListener('change', (event) => {
                     setLanguage(event.target.value);
                     localStorage.setItem('languagePreference', event.target.value);
+                    renderAllCars(); // Re-render list with new language
+                    filterCars();    // Re-apply filter
                 });
             });
-            
+
             currencySelectors.forEach(selector => {
                 selector.addEventListener('change', (event) => {
                     setCurrency(event.target.value);
@@ -857,6 +796,57 @@
                 });
             });
 
+            // Filter sidebar listeners
+            filterButton.addEventListener('click', (e) => {
+                e.stopPropagation(); // Stop this from closing the menu if it's open
+                toggleSidebar();
+            });
+            filterCloseButton.addEventListener('click', toggleSidebar);
+            filterBackdrop.addEventListener('click', toggleSidebar);
+            
+            resultsContainer.addEventListener('click', () => {
+                 if (filterSidebar.classList.contains('open') && window.innerWidth < 768) { 
+                     toggleSidebar();
+                 }
+            });
+
+            // Filter action listeners
+            applyFiltersBtn.addEventListener('click', () => {
+                filterCars(); 
+                if (filterSidebar.classList.contains('open')) {
+                     toggleSidebar(); 
+                }
+            });
+
+            priceRange.addEventListener('input', (event) => {
+                 const prefix = currentLang === 'ar' ? 'يصل إلى' : 'Up to';
+                 priceValue.textContent = `${prefix} ${event.target.value} DH`;
+            });
+
+            // Modal close listeners
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // --- 7. Run Initial Page Setup ---
+            lucide.createIcons(); // <<-- CRITICAL FIX: This now runs once the DOM is ready.
+            getLocalStorageData(); // Get data from index page
+            
+            const savedLang = localStorage.getItem('languagePreference') || 'en';
+            const savedCurrency = localStorage.getItem('currencyPreference') || 'DH';
+            
+            // === CRITICAL FIX: Set initial values correctly ===
+            updateAllSelectors('#language-selector, #language-selector-mobile', savedLang);
+            updateAllSelectors('#currency-selector, #currency-selector-mobile', savedCurrency);
+            currentLang = savedLang;
+            currentCurrency = savedCurrency;
+            
+            renderAllCars(); // Build the car list
+            setLanguage(savedLang); // Set all text
+            filterCars(); // Apply initial filter
         });
     </script>
 </body>
