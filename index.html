@@ -8,6 +8,7 @@
     <meta name="description" content="Rent a car in Morocco with Black Iris Cars. We offer premium cars for rental in Casablanca, Marrakech, Rabat, and all major cities and airports.">
     
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="data.js"></script>
 
@@ -55,11 +56,6 @@
         .hover\:accent-blue-dark:hover { background-color: #2b4daa; } 
         .text-accent-blue { color: #4169e1; }
 
-        #hero-section {
-            background-image: url('https://i.postimg.cc/ZKJ3nbqB/Download-free-moroccan-wallpaper-HD.jpg');
-            background-size: cover;
-            background-position: center;
-        }
         .feature-icon { color: #1a1a1a; }
 
         /* Form Input Styling */
@@ -141,7 +137,7 @@
         .btn-email-blue { background-color: #4169e1; }
         .hover\:btn-email-dark:hover { background-color: #2b4daa; }
 
-        /* === NEW: Responsive Background Image === */
+        /* === Responsive Background Image === */
         /* Mobile: Solid color */
         #hero-section {
             background-color: #1a1a1a;
@@ -150,8 +146,13 @@
         @media (min-width: 768px) {
             #hero-section {
                 background-image: url('https://i.postimg.cc/ZKJ3nbqB/Download-free-moroccan-wallpaper-HD.jpg');
+                /* Fixes repeating background */
                 background-size: cover;
                 background-repeat: no-repeat;
+                background-position: center;
+                min-height: 90vh; /* 90% of the viewport height */
+                display: flex;
+                align-items: center;
             }
         }
     </style>
@@ -219,7 +220,9 @@
             </div>
         </div>
     </header>
-    <section id="hero-section" class="py-20 md:py-32 relative text-white">
+
+
+    <section id="hero-section" class="py-20 md:py-0 relative text-white">
         <div class="absolute inset-0 primary-dark opacity-60"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center">
@@ -473,7 +476,6 @@
             const resultMessage = document.getElementById('result-message');
             const viewAllBtn = document.getElementById('view-all-cars-btn');
             
-            // Modal elements
             const detailModal = document.getElementById('car-detail-modal');
             const modalDetailContent = document.getElementById('modal-detail-content');
             const closeDetailModalBtn = document.getElementById('close-detail-modal-btn');
@@ -482,14 +484,12 @@
             const whatsappLink = document.getElementById('whatsapp-link');
             const emailLink = document.getElementById('email-link');
 
-            // Seamless Mobile Menu Elements
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
 
 
             // --- 3. Helper Functions ---
             function getTranslation(key) {
-                // Failsafe
                 if (typeof translations === 'undefined' || !translations[currentLang]) {
                     return key;
                 }
@@ -507,10 +507,9 @@
                 if (currentCurrency === 'USD') {
                     return { price: (basePrice / 10).toFixed(0), symbol: '$' };
                 }
-                return { price: basePrice, symbol: '' }; // For DH
+                return { price: basePrice, symbol: '' };
             }
 
-            // Syncs desktop and mobile selectors
             function updateAllSelectors(selector, value) {
                 document.querySelectorAll(selector).forEach(sel => {
                     sel.value = value;
@@ -547,7 +546,7 @@
             function setCurrency(currency) {
                 currentCurrency = currency;
                 updateAllSelectors('#currency-selector, #currency-selector-mobile', currency);
-                renderCarGrid('featured-car-grid', 9); // Re-render grid with new prices, show 9
+                renderCarGrid('featured-car-grid', 9);
             }
 
             function getFormattedDate(date) {
@@ -561,7 +560,7 @@
                 const pickupInput = document.getElementById('pickup-date');
                 const returnInput = document.getElementById('return-date');
 
-                if (!pickupInput || !returnInput) return; // Exit if not on the right page
+                if (!pickupInput || !returnInput) return;
 
                 const now = new Date();
                 const minDate = getFormattedDate(now);
@@ -587,10 +586,6 @@
 
             // --- 4. Car Grid & Modal Functions ---
 
-            /**
-             * === NEW: Renders "BIG CAR CARDS" (Vertical) ===
-             * This function now builds the larger card design you liked.
-             */
             function renderCarGrid(gridId, limit) {
                 const carGrid = document.getElementById(gridId);
                 if (!carGrid) return;
@@ -606,7 +601,7 @@
                     const carPriceString = `${symbol}${price}${currentCurrency === 'DH' ? ' DH' : ''}`;
 
                     const carCard = document.createElement('div');
-                    // === NEW CLASS: Added hover effects ===
+                    // Vertical Card Design with Hover
                     carCard.className = "car-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 cursor-pointer flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-1";
                     carCard.setAttribute('data-car-id', car.id);
                     
@@ -642,7 +637,7 @@
 
             function openCarDetailModal(car) {
                  const transmissionText = getTranslation(car.transmission.toLowerCase());
-                 const { price, symbol } = calculatePrice(car.price); // Calculate price
+                 const { price, symbol } = calculatePrice(car.price);
 
                 document.getElementById('modal-car-name').textContent = `${car.name} (${transmissionText})`;
                 document.getElementById('modal-car-image').src = car.img;
@@ -652,17 +647,14 @@
                 document.getElementById('modal-color').textContent = car.color;
                 document.getElementById('modal-car-desc').textContent = car.desc;
                 
-                // Update price display
                 document.getElementById('modal-car-price').textContent = `${symbol}${price}`;
                 document.getElementById('modal-car-currency').textContent = currentCurrency === 'DH' ? 'DH' : '';
 
                 contactOptions.classList.add('hidden');
                 modalBookButton.classList.remove('hidden'); 
                 
-                // Pass the formatted price (e.g., "€140") to the message function
                 modalBookButton.onclick = () => showContactOptionsConcise(car.name, `${symbol}${price}`);
                 
-                // Re-set language to apply translations to modal
                 const currentLangOnLoad = currentLang;
                 setLanguage(currentLangOnLoad);
                 document.querySelector('[data-i18n="car-seats-label-spaced"]').textContent = getTranslation('car-seats-label-spaced');
@@ -710,7 +702,6 @@
             }
             
             function handleCardClick(event) {
-                // This function ensures the modal opens even if the user clicks the "Book Now" span
                 const card = event.target.closest('.car-card');
                 if (!card) return; 
 
@@ -734,7 +725,7 @@
                 }
             }
             
-            // --- 5. NEW: Seamless Mobile Menu Logic ---
+            // --- 5. Seamless Mobile Menu Logic ---
             function openMobileMenu() {
                 mobileMenu.classList.remove('opacity-0', '-translate-y-2');
                 mobileMenu.style.pointerEvents = 'auto';
@@ -746,7 +737,7 @@
             }
 
             mobileMenuButton.addEventListener('click', (e) => {
-                e.stopPropagation(); // Stop this click from triggering the document listener
+                e.stopPropagation();
                 const isOpen = mobileMenu.classList.contains('opacity-0');
                 if (isOpen) {
                     openMobileMenu();
@@ -755,24 +746,20 @@
                 }
             });
 
-            // Close when a link is clicked
             mobileMenu.querySelectorAll('a').forEach(link => {
                 link.addEventListener('click', closeMobileMenu);
             });
             
-            // Close on scroll
             window.addEventListener('scroll', closeMobileMenu);
 
-            // Close on click outside
             document.addEventListener('click', (event) => {
                 if (mobileMenu.classList.contains('opacity-0')) {
-                    return; // Menu is already closed, do nothing.
+                    return;
                 }
                 const isClickInsideMenu = mobileMenu.contains(event.target);
                 const isClickOnButton = mobileMenuButton.contains(event.target);
-                const isClickOnFilterButton = filterButton.contains(event.target);
 
-                if (!isClickInsideMenu && !isClickOnButton && !isClickOnFilterButton) {
+                if (!isClickInsideMenu && !isClickOnButton) {
                     closeMobileMenu();
                 }
             });
@@ -784,8 +771,6 @@
                 selector.addEventListener('change', (event) => {
                     setLanguage(event.target.value);
                     localStorage.setItem('languagePreference', event.target.value);
-                    renderAllCars(); // Re-render list with new language
-                    filterCars();    // Re-apply filter
                 });
             });
 
@@ -796,57 +781,73 @@
                 });
             });
 
-            // Filter sidebar listeners
-            filterButton.addEventListener('click', (e) => {
-                e.stopPropagation(); // Stop this from closing the menu if it's open
-                toggleSidebar();
-            });
-            filterCloseButton.addEventListener('click', toggleSidebar);
-            filterBackdrop.addEventListener('click', toggleSidebar);
+            if(rentalForm) {
+                rentalForm.addEventListener('submit', function(event) {
+                    event.preventDefault(); 
+
+                    const location = document.getElementById('location').value;
+                    const pickupDate = document.getElementById('pickup-date').value;
+                    const returnDate = document.getElementById('return-date').value;
+
+                    const pickupTime = new Date(pickupDate).getTime();
+                    const returnTime = new Date(returnDate).getTime();
+                    const nowTime = new Date(getFormattedDate(new Date())).getTime();
+                    const oneDayInMs = 24 * 60 * 60 * 1000;
+
+                    let errorMessage = '';
+
+                    if (!location || !pickupDate || !returnDate) {
+                        errorMessage = '<strong>Error!</strong> Please select a pick-up city/airport and complete the date range.';
+                    } else if (pickupTime < nowTime) { 
+                        errorMessage = '<strong>Error! Choose an available date.</strong>';
+                    } else if (returnTime < pickupTime + oneDayInMs) {
+                        errorMessage = '<strong>Error! Choose an available date.</strong>';
+                    }
+
+                    if (errorMessage) {
+                        resultMessage.classList.remove('hidden', 'bg-green-100', 'border-green-400', 'text-green-700');
+                        resultMessage.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
+                        resultMessage.innerHTML = errorMessage;
+
+                        setTimeout(() => {
+                            resultMessage.classList.add('hidden');
+                        }, 5000);
+                        return;
+                    }
+                    
+                    const selectedLocationText = document.getElementById('location').options[document.getElementById('location').selectedIndex].text;
+
+                    localStorage.setItem('rentalLocation', selectedLocationText); 
+                    localStorage.setItem('rentalPickupDate', pickupDate);
+                    localStorage.setItem('rentalReturnDate', returnDate);
+
+                    window.location.href = 'available_cars.html';
+                });
+            }
             
-            resultsContainer.addEventListener('click', () => {
-                 if (filterSidebar.classList.contains('open') && window.innerWidth < 768) { 
-                     toggleSidebar();
-                 }
-            });
-
-            // Filter action listeners
-            applyFiltersBtn.addEventListener('click', () => {
-                filterCars(); 
-                if (filterSidebar.classList.contains('open')) {
-                     toggleSidebar(); 
-                }
-            });
-
-            priceRange.addEventListener('input', (event) => {
-                 const prefix = currentLang === 'ar' ? 'يصل إلى' : 'Up to';
-                 priceValue.textContent = `${prefix} ${event.target.value} DH`;
-            });
-
-            // Modal close listeners
-            closeModalBtn.addEventListener('click', closeModal);
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeModal();
-                }
-            });
+            if(viewAllBtn) {
+                viewAllBtn.addEventListener('click', (e) => {
+                    localStorage.removeItem('rentalLocation');
+                    localStorage.removeItem('rentalPickupDate');
+                    localStorage.removeItem('rentalReturnDate');
+                });
+            }
 
             // --- 7. Run Initial Page Setup ---
-            lucide.createIcons(); // <<-- CRITICAL FIX: This now runs once the DOM is ready.
-            getLocalStorageData(); // Get data from index page
+            lucide.createIcons();
             
             const savedLang = localStorage.getItem('languagePreference') || 'en';
             const savedCurrency = localStorage.getItem('currencyPreference') || 'DH';
             
-            // === CRITICAL FIX: Set initial values correctly ===
             updateAllSelectors('#language-selector, #language-selector-mobile', savedLang);
             updateAllSelectors('#currency-selector, #currency-selector-mobile', savedCurrency);
             currentLang = savedLang;
             currentCurrency = savedCurrency;
             
-            renderAllCars(); // Build the car list
-            setLanguage(savedLang); // Set all text
-            filterCars(); // Apply initial filter
+            setLanguage(savedLang);
+            initializeDateFields();
+            renderCarGrid('featured-car-grid', 9); // Initial render 9 cars
+            attachCloseListeners();
         });
     </script>
 </body>
