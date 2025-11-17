@@ -25,20 +25,6 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="manifest" href="site.webmanifest">
     
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "BLACK IRIS cars",
-      "url": "https://www.blackiriscars.com",  "logo": "https://i.postimg.cc/B6LWwXNL/923d79fe-5117-4849-9761-57e1fe5a8d96.jpg",
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "telephone": "+212-602-020402",
-        "contactType": "Customer Service"
-      }
-    }
-    </script>
-    
     <style>
         /* Custom Font Poppins */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
@@ -166,7 +152,7 @@
                         </select>
                     </div>
 
-                    <nav class="hidden md:flex space-x-8">
+                    <nav class="hidden md:flex md:ltr:space-x-8">
                         <a href="index.html#featured" class="text-gray-600 hover:text-accent-blue transition duration-150" data-i18n="nav-fleet">Our Fleet</a>
                         <a href="index.html#why-us" class="text-gray-600 hover:text-accent-blue transition duration-150" data-i18n="nav-why">Why Choose Us</a>
                         <a href="index.html#contact" class="text-gray-600 hover:text-accent-blue transition duration-150" data-i18n="nav-contact">Contact</a>
@@ -320,7 +306,7 @@
                     <p class="text-sm text-gray-400 mb-2 flex items-center ltr:justify-start"><i data-lucide="phone" class="w-4 h-4 ltr:mr-2 text-accent-blue"></i> 0602020402</p>
                     <p class="text-sm text-gray-400 mb-2 flex items-center ltr:justify-start"><i data-lucide="mail" class="w-4 h-4 ltr:mr-2 text-accent-blue"></i> <a href="mailto:blackiriscars@gmail.com" class="hover:text-accent-blue">blackiriscars@gmail.com</a></p>
                     <p class="text-sm text-gray-400 mb-2 flex items-center ltr:justify-start"><i data-lucide="map-pin" class="w-4 h-4 ltr:mr-2 text-accent-blue"></i> <span data-i18n="address-text">10 rue ouarzazat hassan rabat</span></p>
-                    <a href="httpsm" class="text-sm text-white px-3 py-1 mt-2 inline-flex items-center rounded-lg bg-green-600 hover:bg-green-700 transition duration-150">
+                    <a href="https://wa.me/212602020402" target="_blank" class="text-sm text-white px-3 py-1 mt-2 inline-flex items-center rounded-lg bg-green-600 hover:bg-green-700 transition duration-150">
                         <i data-lucide="message-circle" class="w-4 h-4 ltr:mr-2"></i> <span data-i18n="whatsapp-text">WhatsApp</span> 0602020402
                     </a>
                 </div>
@@ -374,11 +360,17 @@
             // --- 2. Core Functions ---
 
             function getTranslation(key) {
+                // Failsafe
+                if (typeof translations === 'undefined' || !translations[currentLang]) {
+                    return key;
+                }
                 const translation = translations[currentLang][key];
-                return (typeof translation === 'function') ? translation : (translation || key);
+                if (typeof translation === 'function') {
+                    return translation; 
+                }
+                return translation || key;
             }
-            
-            // === NEW: Price Calculation Function ===
+
             function calculatePrice(basePrice) {
                 if (currentCurrency === 'EUR') {
                     return { price: (basePrice / 10).toFixed(0), symbol: '€' };
